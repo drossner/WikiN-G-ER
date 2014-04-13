@@ -41,6 +41,7 @@ public class Gazetter {
 					System.out.println("Stadt " + value + " wird dem gaz hinzugefügt");
 					gaz.put(value, value);
 				}
+				line = reader.readLine();
 			}
 		} catch (IOException e) {
 			System.out.println("Fehler beim Lesen");
@@ -53,7 +54,14 @@ public class Gazetter {
 			System.out.println("File-Close geht nicht !");
 			e.printStackTrace();
 		}
-		return (String[]) gaz.keySet().toArray();
+		
+		Object objArr[] = gaz.values().toArray();
+		String rc[] = new String[objArr.length];
+		
+		for(int i = 0; i<gaz.size(); i++){
+			rc[i] = (String) objArr[i];
+		}
+		return rc;
 	}
 
 	public HashMap<String, String> getGaz() {
