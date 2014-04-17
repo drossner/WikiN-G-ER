@@ -6,12 +6,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class FileInputReader {
+public class FileInput {
 	
 	private BufferedReader reader = null;
 	private String fileName;
 	
-	public FileInputReader(String fileName) {
+	public FileInput(String fileName) {
 		setFileName(fileName);
 	}
 	
@@ -38,6 +38,7 @@ public class FileInputReader {
 				
 				line = reader.readLine();
 			}
+			reader.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("File konnte nicht geöffnet werden!");
 			e.printStackTrace();
