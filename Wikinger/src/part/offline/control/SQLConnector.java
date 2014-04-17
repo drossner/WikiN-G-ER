@@ -1,4 +1,4 @@
-package data.control;
+package part.offline.control;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
