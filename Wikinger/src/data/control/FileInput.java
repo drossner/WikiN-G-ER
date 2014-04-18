@@ -31,8 +31,8 @@ public class FileInput {
 			
 			line = reader.readLine();
 						
-			for(int i = 0; i<end && line != null; i++){
-				if(i>start){
+			for(int i = 0; i<=end && line != null; i++){
+				if(i>=start){
 					rc.add(line);
 				}
 				
