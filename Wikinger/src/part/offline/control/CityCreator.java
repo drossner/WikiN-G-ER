@@ -27,9 +27,10 @@ public class CityCreator {
 		double lon = lonlat[0]+(lonlat[1]*60.0+lonlat[2])/3600.0;
 		double lat = lonlat[3]+(lonlat[4]*60.0+lonlat[5])/3600.0;
 		
-		CrawlerOutput cop = new CrawlerOutput(name, text, lon, lat);
-		
-		return ner.extractEntities(cop);
+		//CrawlerOutput cop = new CrawlerOutput(name, text, lon, lat);
+		//bereits programmieren
+		//return ner.extractEntities(cop);
+		return null;
 	}
 
 	
