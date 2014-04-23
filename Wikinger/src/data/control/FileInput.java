@@ -17,8 +17,11 @@ public class FileInput {
 	
 	//kann sein das eine Zeile ausgelassen wird, da end vll falsch übergeben wird => überprüfen
 	//wenn end = 0 => komplettes File wird geladen
+	
+	//Daniel: Arbeite mit long! || in der for-Schleife i gleich auf start initialisieren? || Ich habe mal die ArrayList durch ein Array ersetzt, wir geben ja eines zurück und die Länge
+	//wissen wir auch!
 	public String[] loadPartFile(int start, int end){
-		ArrayList<String> rc = new ArrayList<String>();
+		String[] rc = new String[end-start];
 		String line = new String("");
 		
 		if(end == 0){
@@ -33,7 +36,7 @@ public class FileInput {
 						
 			for(int i = 0; i<=end && line != null; i++){
 				if(i>=start){
-					rc.add(line);
+					rc.add(line); // wenn du meines machst muss hier sowas hin wie: rc[i-start] = line;
 				}
 				
 				line = reader.readLine();
