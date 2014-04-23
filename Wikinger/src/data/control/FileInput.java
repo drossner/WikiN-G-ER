@@ -50,7 +50,7 @@ public class FileInput {
 			e.printStackTrace();
 		}
 		
-		return rc.toArray(new String[rc.size()]);
+		return rc;
 	}
 	
 	//start = 0, end = 0 => komplettes File wird geladen
