@@ -21,7 +21,7 @@ public class FileInput {
 	//Daniel: Arbeite mit long! || in der for-Schleife i gleich auf start initialisieren? || Ich habe mal die ArrayList durch ein Array ersetzt, wir geben ja eines zurück und die Länge
 	//wissen wir auch!
 	public String[] loadPartFile(int start, int end){
-		String[] rc = new String[Math.abs(end-start)];		//Math.abs wenn end = 0 und start = 5000
+		String[] rc = new String[Math.abs(end-start)];		//Math.abs wenn end = 0 und start = 5000; vll doch unnötig :D
 		String line = new String("");
 		
 		if(end == 0){
@@ -46,7 +46,7 @@ public class FileInput {
 				
 				line = reader.readLine();
 			}
-			reader.close();
+			//reader.close(); 				//denke nicht, das es sinnvoll ist reader zu closen, wenn der reader nur 1 mal erzeugt wird
 		} catch (FileNotFoundException e) {
 			System.out.println("File konnte nicht geöffnet werden!");
 			e.printStackTrace();
