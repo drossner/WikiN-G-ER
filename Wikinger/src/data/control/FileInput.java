@@ -15,7 +15,7 @@ public class FileInput {
 		setFileName(fileName);
 	}
 	
-	//kann sein das eine Zeile ausgelassen wird, da end vll falsch übergeben wird => überprüfen
+	//kann sein das eine Zeile ausgelassen wird, da end vll falsch übergeben wird => überprüfen; überprüft mit InputOutputTest
 	//wenn end = 0 => komplettes File wird geladen
 	
 	//Daniel: Arbeite mit long! || in der for-Schleife i gleich auf start initialisieren? || Ich habe mal die ArrayList durch ein Array ersetzt, wir geben ja eines zurück und die Länge
@@ -40,7 +40,7 @@ public class FileInput {
 						
 			for(long i = 0; i<=end && line != null; i++){
 				if(i>=start){
-					//rc.add(line);					// wenn du meines machst muss hier sowas hin wie: rc[i-start] = line;
+					//rc.add(line);					//wenn du meines machst muss hier sowas hin wie: rc[i-start] = line;
 					rc[(int) (i-start)] = line;		//vll doch kein long bei i 
 				}
 				
