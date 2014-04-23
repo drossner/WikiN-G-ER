@@ -1,6 +1,8 @@
 package data.control;
 
 import java.util.ArrayList;
+
+import data.Entity;
 import edu.stanford.nlp.ie.AbstractSequenceClassifier;
 import edu.stanford.nlp.ie.crf.CRFClassifier;
 
