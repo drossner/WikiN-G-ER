@@ -21,7 +21,7 @@ public class FileInput {
 	//Daniel: Arbeite mit long! || in der for-Schleife i gleich auf start initialisieren? || Ich habe mal die ArrayList durch ein Array ersetzt, wir geben ja eines zurück und die Länge
 	//wissen wir auch!
 	public String[] loadPartFile(int start, int end){
-		String[] rc = new String[end-start];
+		String[] rc = new String[Math.abs(end-start)];		//Math.abs wenn end = 0 und start = 5000
 		String line = new String("");
 		
 		if(end == 0){
@@ -30,7 +30,11 @@ public class FileInput {
 		}
 		
 		try {
-			reader = new BufferedReader(new FileReader(fileName));
+			
+			//Florian: muss nur 1 Objekt erzeugt werden
+			if(reader == null){
+				reader = new BufferedReader(new FileReader(fileName));
+			}
 			
 			line = reader.readLine();
 						

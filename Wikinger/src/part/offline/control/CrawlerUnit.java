@@ -49,7 +49,7 @@ public class CrawlerUnit implements Runnable{
 					System.out.println(city.getName()+" wurde dem Gazetteer hinzugefügt");
 				}
 			}
-			if(cityList.size()>0);//in datei schreiben!
+			if(cityList.size()>0); //in datei schreiben!
 			
 			}
 		}
