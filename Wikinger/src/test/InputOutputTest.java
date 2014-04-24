@@ -12,7 +12,14 @@ public class InputOutputTest {
 				"u", "v", "w", "x", "y", "z" };
 		out.writeToFile(temp);
 		
-		FileInput in = new FileInput("test.txt");
+		FileInput in;
+		in = null;
+		try {
+			in = new FileInput("test.txt");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		temp = in.loadPartFile(0, 13);
 		for(int i = 0; i<temp.length;i++){
 			System.out.print(temp[i]);
