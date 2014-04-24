@@ -28,6 +28,8 @@ public class FileInput {
 		String[] rc = new String[(int)(end-start)];		//Math.abs wenn end = 0 und start = 5000; vll doch unnötig :D
 		String line = new String("");
 		
+		System.out.println(rc.length);
+		
 		if(end < 0){
 			//funzt nicht wenn wir File über 63^2 Zeilen haben
 			end = Long.MAX_VALUE;
@@ -42,10 +44,11 @@ public class FileInput {
 			
 			line = reader.readLine();
 						
-			for(long i = 0; i<=end && line != null; i++){
-				if(i>=start){
-					rc[(int) (i-start)] = line;		 
-				}
+			for(long i = 0; i<end-start && line != null; i++){
+				//if(i>=start){
+				System.out.println(i-start + ": " + line);
+				rc[(int) (i)] = line;		 
+				//}
 				
 				line = reader.readLine();
 			}
