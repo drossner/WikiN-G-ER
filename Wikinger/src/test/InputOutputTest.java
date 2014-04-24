@@ -14,6 +14,7 @@ public class InputOutputTest {
 		
 		FileInput in;
 		in = null;
+		
 		try {
 			in = new FileInput("test.txt");
 		} catch (Exception e) {

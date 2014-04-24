@@ -24,16 +24,19 @@ public class FileInput {
 	
 	//Daniel: Arbeite mit long! || in der for-Schleife i gleich auf start initialisieren? || Ich habe mal die ArrayList durch ein Array ersetzt, wir geben ja eines zurück und die Länge
 	//wissen wir auch!
-	public String[] loadPartFile(long start, long end){
-		String[] rc = new String[(int)(end-start)];		//Math.abs wenn end = 0 und start = 5000; vll doch unnötig :D
+	
+	/**
+	 * Lädt von einem File x Zeilen. Bei erneutem Aufruf wird bei der aktuellen Zeile fortgesetzt
+	 * @param range
+	 * @return String Array der Größe range. Muss nicht komplett gefüllt sein (range>zeilen)
+	 */
+	public String[] loadPartFile(int range){
+		String[] rc = new String[range];		//Math.abs wenn end = 0 und start = 5000; vll doch unnötig :D
 		String line = new String("");
 		
 		System.out.println(rc.length);
 		
-		if(end < 0){
-			//funzt nicht wenn wir File über 63^2 Zeilen haben
-			end = Long.MAX_VALUE;
-		}
+
 		
 		try {
 			
@@ -44,10 +47,10 @@ public class FileInput {
 			
 			line = reader.readLine();
 						
-			for(long i = 0; i<end-start && line != null; i++){
+			for(int i = 0; i<range && line != null; i++){
 				//if(i>=start){
-				System.out.println(i-start + ": " + line);
-				rc[(int) (i)] = line;		 
+				//System.out.println(i-start + ": " + line);
+				rc[i] = line;		 
 				//}
 				
 				line = reader.readLine();
@@ -64,9 +67,9 @@ public class FileInput {
 		return rc;
 	}
 	
-	//start = 0, end < 0 => komplettes File wird geladen
+	//end < 0 => komplettes File wird geladen
 	public String[] loadCompleteFile(){
-		return loadPartFile(0, -1);
+		return loadPartFile(-1);
 	}
 	
 
