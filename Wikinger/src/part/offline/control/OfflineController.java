@@ -72,7 +72,13 @@ public class OfflineController {
 
 	private String[] loadGazetter(String fileName) {
 		HashMap<String, String> rc = new HashMap<String, String>();
-		FileInput in = new FileInput(fileName);
+		FileInput in = null;
+		try {
+			in = new FileInput(fileName);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String[] temp = in.loadCompleteFile();
 		String[] line = null;
 		String value = new String();
