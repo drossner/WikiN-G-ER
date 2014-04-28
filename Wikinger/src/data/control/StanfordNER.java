@@ -1,6 +1,24 @@
 package data.control;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import data.City;
 import data.Entity;
@@ -33,6 +51,7 @@ public class StanfordNER
 	 * OFFLINE-PART: extracts the Entities from the Output of the Crawler-Component
 	 * @param crawlerOutput
 	 */
+	/**
 	public City extractEntities(CrawlerOutput crawlerOutput)
 	{
 		StringBuffer buffer = new StringBuffer();
@@ -43,19 +62,32 @@ public class StanfordNER
 				crawlerOutput.getLongitude(), crawlerOutput.getLatitude());
 		
 		return cityWithEntities;
-	}
+	}*/
 	
 	/**
 	 * ONLINE-PART: extracts all Entities using the Stanford NER and sends them to CWS Component
 	 * @param textDoc
 	 * @return ArrayList<Entity>
+	 * @throws JAXBException 
+	 * @throws ParserConfigurationException 
+	 * @throws IOException 
+	 * @throws SAXException 
+	 * @throws XPathExpressionException 
 	 */
-	public ArrayList<Entity> extractEntities(StringBuffer textDoc){
+	public String extractEntities(StringBuffer textDoc) throws JAXBException{
 
-		ArrayList<Entity> entities;
+		ArrayList<String> entities;
 		String text  = textDoc.toString();
 		String resultInXml = classifier.classifyToString(text, "xml", false);
-		entities = new ArrayList<Entity>();
+		
+		 JAXBContext jc = JAXBContext.newInstance(String.class);
+	     Unmarshaller unmarshaller = jc.createUnmarshaller();
+	     StreamSource xmlSource = new StreamSource(new StringReader(resultInXml));
+	     JAXBElement<String> je = unmarshaller.unmarshal(xmlSource, String.class);
+	     System.out.println(je.getValue());
+
+		/*
+		entities = new ArrayList<String>();
 		String category, name, oldName, oldCategory;
 		int categoryEnd;
 		
@@ -89,16 +121,8 @@ public class StanfordNER
 			}
 			oldCategory = category;
 			
-		}
-		return filter.filter(entities);
-	}
-	 
-	/**
-	 * sets the ArrayList with dummies for the Entity Filter
-	 * @param dummies
-	 */
-	public void setDummies(ArrayList<EntityDummie> dummies){
-		filter = new EntityFilter(dummies);
+		}*/
+		return resultInXml;
 	}
 	
 	/**
