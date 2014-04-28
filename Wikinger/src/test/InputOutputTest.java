@@ -21,13 +21,13 @@ public class InputOutputTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		temp = in.loadPartFile(13);
+		temp = in.loadPartFile(0, 13);
 		for(int i = 0; i<temp.length;i++){
 			System.out.print(temp[i]);
 		}
 		System.out.println("\n__________________________________ : " + temp.length);
 		
-		temp = in.loadPartFile(13);
+		temp = in.loadPartFile(14, 26);
 		for(int i = 0; i<temp.length;i++){
 			System.out.print(temp[i]);
 		}

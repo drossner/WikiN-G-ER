@@ -5,13 +5,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class FileInput {
 	
 	private BufferedReader reader = null;
-	//private String fileName;
 	private File file;
 	
+	/**
+	 * 
+	 * @param fileName Name des Files welches gelesen werden soll.
+	 * @throws Exception Exception wenn Datei nicht vorhanden, Datei ein Verzeichnis, Datei nicht readable.
+	 */
 	public FileInput(String fileName) throws Exception {
 		if(!setFile(fileName)){
 			System.err.println("Datei nicht vorhanden, Datei ein Verzeichnis, Datei nicht readable");
@@ -19,24 +24,17 @@ public class FileInput {
 		}
 	}
 	
-	//kann sein das eine Zeile ausgelassen wird, da end vll falsch übergeben wird => überprüfen; überprüft mit InputOutputTest
-	//wenn end = 0 => komplettes File wird geladen
-	
-	//Daniel: Arbeite mit long! || in der for-Schleife i gleich auf start initialisieren? || Ich habe mal die ArrayList durch ein Array ersetzt, wir geben ja eines zurück und die Länge
-	//wissen wir auch!
-	
 	/**
-	 * Lädt von einem File x Zeilen. Bei erneutem Aufruf wird bei der aktuellen Zeile fortgesetzt
+	 * Lädt von einem File x Zeilen. Bei erneutem Aufruf wird bei der aktuellen Zeile fortgesetzt.
+	 * Aufrufe von getLines() und loadCompleteFile() setzen den Stream zurück.
 	 * @param range
 	 * @return String Array der Größe range. Muss nicht komplett gefüllt sein (range>zeilen)
 	 */
 	public String[] loadPartFile(int range){
-		String[] rc = new String[range];		//Math.abs wenn end = 0 und start = 5000; vll doch unnötig :D
+		String[] rc = new String[range];		
 		String line = new String("");
 		
-		System.out.println(rc.length);
-		
-
+		// System.out.println(rc.length);		
 		
 		try {
 			
@@ -44,16 +42,10 @@ public class FileInput {
 			if(reader == null){
 				reader = new BufferedReader(new FileReader(file));
 			}
-			
-			line = reader.readLine();
 						
 			for(int i = 0; i<range && line != null; i++){
-				//if(i>=start){
-				//System.out.println(i-start + ": " + line);
-				rc[i] = line;		 
-				//}
-				
 				line = reader.readLine();
+				rc[i] = line;		 			
 			}
 			
 		} catch (FileNotFoundException e) {
@@ -63,13 +55,64 @@ public class FileInput {
 			System.err.println("Read Line Fehler!");
 			e.printStackTrace();
 		}
-		
 		return rc;
 	}
 	
-	//end < 0 => komplettes File wird geladen
+	/**
+	 * Liest ein komplettes File zeilenweise ein. Setzt den Stream fürloadPartFile() zurück.
+	 * @return line 0 = index 0 usw.
+	 */
 	public String[] loadCompleteFile(){
-		return loadPartFile(-1);
+		ArrayList<String> rc = new ArrayList<String>();
+		String line = new String("");
+		try{
+			
+			reader = new BufferedReader(new FileReader(file));
+			
+			line = reader.readLine();
+			while(line!=null){
+				rc.add(line);
+				line = reader.readLine();
+
+			}
+		} catch (FileNotFoundException e) {
+			System.err.println("File konnte nicht geöffnet werden!");
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			closeReader();
+		}
+		
+		return rc.toArray(new String[rc.size()]);
+	}
+	
+	/**
+	 * Setzt Stream für loadPartFile() zurück.
+	 * @return Anzahl der Zeilen des Dokumentes
+	 */
+	public long getLines(){
+		String line;
+		long rc = 0;
+		try{
+			
+			reader = new BufferedReader(new FileReader(file));
+			
+			line = reader.readLine();
+			while(line!=null){
+				rc++;
+				line = reader.readLine();
+			}
+		} catch (FileNotFoundException e) {
+			System.err.println("File konnte nicht geöffnet werden!");
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			closeReader();
+		}
+		
+		return rc;
 	}
 	
 
@@ -93,6 +136,7 @@ public class FileInput {
 	private void closeReader() {
 		try {
 			reader.close();
+			reader = null;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
