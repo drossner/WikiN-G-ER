@@ -13,7 +13,7 @@ public class StanfordNER
 	//	_________________________________Variables______________________________________
 	private AbstractSequenceClassifier<?> classifier;
 	private String serializedClassifier;
-	private EntityFilter filter;
+	//private EntityFilter filter;
 
 //	_________________________________Constructors___________________________________
 	
