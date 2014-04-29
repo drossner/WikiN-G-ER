@@ -1,27 +1,15 @@
 package data.control;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
+import javax.swing.text.Document;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.xpath.XPath;
+import javax.xml.parsers.SAXParser;
 import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import data.City;
-import data.Entity;
 import edu.stanford.nlp.ie.AbstractSequenceClassifier;
 import edu.stanford.nlp.ie.crf.CRFClassifier;
 
@@ -79,13 +67,12 @@ public class StanfordNER
 		ArrayList<String> entities;
 		String text  = textDoc.toString();
 		String resultInXml = classifier.classifyToString(text, "xml", false);
+		StringBuffer buffer = new StringBuffer("<root>");
+		buffer.append(resultInXml);
+		buffer.append("</root>");
+		System.out.println(buffer);
 		
-		 JAXBContext jc = JAXBContext.newInstance(String.class);
-	     Unmarshaller unmarshaller = jc.createUnmarshaller();
-	     StreamSource xmlSource = new StreamSource(new StringReader(resultInXml));
-	     JAXBElement<String> je = unmarshaller.unmarshal(xmlSource, String.class);
-	     System.out.println(je.getValue());
-
+		
 		/*
 		entities = new ArrayList<String>();
 		String category, name, oldName, oldCategory;
