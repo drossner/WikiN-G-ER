@@ -1,14 +1,16 @@
 package data.control;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Properties;
 
-import javax.swing.text.Document;
-import javax.xml.bind.JAXBException;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.xpath.XPathExpressionException;
+import javax.xml.parsers.*;
+
+import org.xml.sax.*;
+import org.w3c.dom.*;
+
+import java.io.*;
 
 import edu.stanford.nlp.ie.AbstractSequenceClassifier;
 import edu.stanford.nlp.ie.crf.CRFClassifier;
@@ -56,22 +58,35 @@ public class StanfordNER
 	 * ONLINE-PART: extracts all Entities using the Stanford NER and sends them to CWS Component
 	 * @param textDoc
 	 * @return ArrayList<Entity>
-	 * @throws JAXBException 
 	 * @throws ParserConfigurationException 
 	 * @throws IOException 
-	 * @throws SAXException 
-	 * @throws XPathExpressionException 
+	 * @throws SAXException
 	 */
-	public String extractEntities(StringBuffer textDoc) throws JAXBException{
+	public ArrayList<String> extractEntities(StringBuffer textDoc) throws IOException, ParserConfigurationException, SAXException{
 
-		ArrayList<String> entities;
+		ArrayList<String> entities = new ArrayList<String>();
 		String text  = textDoc.toString();
 		String resultInXml = classifier.classifyToString(text, "xml", false);
 		StringBuffer buffer = new StringBuffer("<root>");
 		buffer.append(resultInXml);
 		buffer.append("</root>");
-		System.out.println(buffer);
 		
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		InputSource is = new InputSource();
+		is.setCharacterStream(new StringReader(buffer.toString()));
+		
+		Document doc = db.parse(is);
+		NodeList nodes = doc.getElementsByTagName("wi");
+		
+		for (int i = 0; i < nodes.getLength(); i++){
+			Element element = (Element) nodes.item(i);
+			
+			if(!element.getAttribute("entity").equals("O")){
+				entities.add(element.getAttribute("entity") + ";" + element.getTextContent());
+			}
+			
+		}
 		
 		/*
 		entities = new ArrayList<String>();
@@ -109,7 +124,7 @@ public class StanfordNER
 			oldCategory = category;
 			
 		}*/
-		return resultInXml;
+		return entities;
 	}
 	
 	/**
