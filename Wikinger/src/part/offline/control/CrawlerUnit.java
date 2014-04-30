@@ -23,7 +23,7 @@ public class CrawlerUnit implements Runnable{
 		this.start = start;
 		this.end = end;
 		this.connector = connector;
-		this.ner = ner;
+//		this.ner = ner;
 		this.id = id;
 	}
 
