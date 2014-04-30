@@ -16,8 +16,13 @@ public class LonLatParserTextcrawler {
 		
 		fo = new FileOutput(false, "Crawlertexte");
 		
-		String[] cities = {"Berlin", "Paris", "Hof", "Ney York", "Dheli", "Beijing", "Moskow", };
+		String[] cities = {"Berlin", "Paris", "Hof", "Ney York", "Dheli", "Beijing", "Moskow", "Saint-Martin-du-Mont", "Aliquippa", "Daugai" };
 		crawler = new CrawlerUnit(cities, 0, cities.length, connector, null, 1);
+	}
+	
+	
+	public void start(){
+		fo.writeToFile(crawler.doIt());
 	}
 	
 	

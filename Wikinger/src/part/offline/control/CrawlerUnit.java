@@ -28,10 +28,15 @@ public class CrawlerUnit implements Runnable{
 	}
 
 	@Override
-	public void run() {
+	public void run(){
+		
+	}
+	
+	public String[] doIt() {
+		ArrayList<String> list = new ArrayList<String>();
 		for (int i = this.start; i <= this.end ; i++) {
 			System.out.println(cities[i]+" i:"+i);
-			CityCreator cc = new CityCreator(ner, this.cities[i]);
+		
 			int[] pageIDs = connector.getPageIDs(cities[i], id);
 			
 			int[] revIDs = null;
@@ -41,18 +46,17 @@ public class CrawlerUnit implements Runnable{
 			
 			if(revIDs != null){
 			String[] text = connector.getTexts(revIDs);
-			ArrayList<City> cityList = new ArrayList<City>();
+			
 			for (int j = 0; j < text.length; j++) {
-				City city = cc.getCities(text[j]);
-				if(city != null){
-					cityList.add(city);
-					System.out.println(city.getName()+" wurde dem Gazetteer hinzugefügt");
+				if(text[j].contains("|population")){
+					list.add(text[j]);
 				}
 			}
-			if(cityList.size()>0); //in datei schreiben!
 			
 			}
 		}
+		
+		return (String[]) list.toArray();
 	}
 	
 	/**
