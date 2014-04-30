@@ -1,6 +1,8 @@
 package part.offline.view;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.LayoutManager;
 
 import javax.swing.Box;
@@ -41,7 +43,7 @@ public class OfflineGui extends JFrame{
 	}
 
 	private void createOfflineFrame(){
-		this.setSize(new Dimension(550, 400));
+		this.setSize(new Dimension(400, 300));
 		this.mainPanel = new JPanel();
 		this.northpanel = new JPanel();
 		this.southpanel = new JPanel();
@@ -60,11 +62,13 @@ public class OfflineGui extends JFrame{
 		this.add(mainPanel);
 		mainPanel.add(northpanel);
 		mainPanel.add(southpanel);
+		northpanel.setLayout(new GridLayout(5, 1, 15, 25));
 		northpanel.add(startButton);
 		northpanel.add(dbselector);
 		northpanel.add(crawlDB);
 		northpanel.add(crawlProgress);
-		southpanel.add(successfulCrawl);
+		northpanel.add(successfulCrawl);
+		southpanel.setLayout(new GridLayout(4, 1));
 		southpanel.add(successfulCreateFile);
 		southpanel.add(readAndAddFiletoDB);
 		southpanel.add(addingProgress);
