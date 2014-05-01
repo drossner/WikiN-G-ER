@@ -22,12 +22,8 @@ public class LatitudeLongitudeParser {
 		success = parseText(text, "|latitude=", latlon, 0) && parseText(text, "|longitude=", latlon, 1);
 		
 		
-		if(success) {  // die Suche nach der ersten Variante war erfolgreich, negative stehen für süd bzw west
-			if(latlon[0] < 0) latlon[0] =  latlon[0] * (-1.0);
-			if(latlon[1] < 0) latlon[1] =  latlon[1] * (-1.0); 
-			
-			return latlon;
-		}
+		if(success) return latlon; // die Suche nach der ersten Variante war erfolgreich, negative stehen für süd bzw west
+						
 		
 		success = parseText(text, "|latd=", latDeg, 0) && parseText(text, "|longd=", lonDeg, 0);
 		
@@ -117,11 +113,11 @@ public class LatitudeLongitudeParser {
 			StringBuffer buf = new StringBuffer(12);
 			
 		
-			while(Character.isDigit(current) || current == '.'){
+			while(Character.isDigit(current) || current == '.' || current == '-'){
 				buf.append(current);
 				current = text.charAt(++start);
 			}
-			
+
 			if(buf.length() == 0){
 				a[index] = 0.0;
 			} else {

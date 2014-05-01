@@ -28,6 +28,16 @@ public class Test {
 		for (int i = 0; i < erg3.length; i++) {
 			System.out.println(erg3[i]);
 		}
+		
+		System.out.println("");
+		
+		double[] erg4 = p.parseLatLon(ParseTestStrings.Paris);
+		
+		for (int i = 0; i < erg4.length; i++) {
+			System.out.println(erg4[i]);
+		}
+		
+		
 	}
 
 }

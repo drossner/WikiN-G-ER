@@ -6,6 +6,7 @@ public class ParseTestStrings {
 
 	public static String Morogoro = "|coor_type              =|latd=6 |latm=49 |lats= |latNS=S|longd=37 |longm=40 |longs= |longEW=E|coordinates_display=d|postal_code_type       =";
 	
+	public static String Paris = "|city motto = ''[[Fluctuat nec mergitur]]''<br />(Latin: It is tossed by the waves, but does not sink)|latitude = 48.8567|longitude = 2.3508|time zone = [[Central European Time|CET]] <small>(UTC +1)</small>";
 	
 	public static String Beijing = "|coor_type              =|latd=39 |latm=54 |lats=50 |latNS=N|longd=116 |longm=23 |longs=30 |longEW=E|postal_code_type       = [[Postal code of China|Postal code]]|postal_code            = '''1000'''00–'''1026'''29|area_code              = [[Telephone numbers in China|10]]";
 }
