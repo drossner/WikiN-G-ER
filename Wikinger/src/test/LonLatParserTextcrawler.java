@@ -12,17 +12,23 @@ public class LonLatParserTextcrawler {
 	
 	public void init(){
 		connector = new SQLConnector();
-		connector.init("localhost", 3306, "wiki", "root", "");
+		connector.init("localhost", 3306, "wikiDump", "root", "sner");
 		
-		fo = new FileOutput(false, "Crawlertexte");
+		fo = new FileOutput(false, "Crawlertexte.txt");
+		
+		System.out.println("erzeuge Crawlerunit!");
 		
 		String[] cities = {"Berlin", "Paris", "Hof", "Ney York", "Dheli", "Beijing", "Moskow", "Saint-Martin-du-Mont", "Aliquippa", "Daugai" };
 		crawler = new CrawlerUnit(cities, 0, cities.length, connector, null, 1);
+		
+		System.out.println("Starte Crawling");
+		start();
 	}
 	
 	
 	public void start(){
 		fo.writeToFile(crawler.doIt());
+		System.out.println("Fertig");
 	}
 	
 	

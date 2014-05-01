@@ -49,6 +49,7 @@ public class CrawlerUnit implements Runnable{
 			
 			for (int j = 0; j < text.length; j++) {
 				if(text[j].contains("|population")){
+					System.out.println("Füge stadt hinzu");
 					list.add(text[j]);
 				}
 			}
