@@ -57,7 +57,7 @@ public class CrawlerUnit implements Runnable{
 			}
 		}
 		
-		return (String[]) list.toArray();
+		return list.toArray(new String[list.size()]);
 	}
 	
 	/**

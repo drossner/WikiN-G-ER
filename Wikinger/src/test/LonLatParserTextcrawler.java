@@ -22,7 +22,7 @@ public class LonLatParserTextcrawler {
 		crawler = new CrawlerUnit(cities, 0, cities.length, connector, null, 1);
 		
 		System.out.println("Starte Crawling");
-		start();
+		
 	}
 	
 	
@@ -35,7 +35,7 @@ public class LonLatParserTextcrawler {
 	public static void main(String[] args) {
 		LonLatParserTextcrawler test = new LonLatParserTextcrawler();
 		test.init();
-		
+		test.start();
 	}
 
 }
