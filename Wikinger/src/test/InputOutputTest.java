@@ -21,7 +21,6 @@ public class InputOutputTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		System.out.println("Zeilen insgesamt: "+in.getLines());
 		temp = in.loadPartFile(13);
 		for(int i = 0; i<temp.length;i++){
