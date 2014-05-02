@@ -7,6 +7,7 @@ import java.util.Set;
 import data.control.FileInput;
 import data.control.StanfordNER;
 
+@Deprecated
 public class OfflineController {
 	
 	String[] uniqueCityNames;

@@ -1,5 +1,6 @@
 package part.offline.control;
 
+@Deprecated
 public class LonLatParser {
 
 	public LonLatParser() {
