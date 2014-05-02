@@ -1,22 +1,25 @@
 package part.offline.control;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-
-import data.control.FileInput;
+import part.offline.data.Gazetteer;
 import data.control.StanfordNER;
 
 public class OfflineController {
 	
-	String[] uniqueCityNames;
-	int cities;
-	StanfordNER ner;
+	private String[] uniqueCityNames;
+	private int cityCount;
+	private StanfordNER ner;
+	private Gazetteer gaz;
 	
 	public OfflineController(StanfordNER ner, String fileNameOldGazetteer){
-		String [] uniqueCityNames = loadGazetter(fileNameOldGazetteer);
-		cities = uniqueCityNames.length;
+		this.setGaz(new Gazetteer(fileNameOldGazetteer));
 		this.ner = ner;
+	}
+	
+	/**
+	 * initialize the load of the old gazetteer
+	 */
+	public void init(){
+		String [] uniqueCityNames = gaz.loadGazetter();
+		setCityCount(uniqueCityNames.length);
 	}
 
 	/**
@@ -34,16 +37,14 @@ public class OfflineController {
 //		Connector connector = new Connector();
 //		connector.init(host, port, database, user, passwd, threads);
 		
-		
-		
 		for (int i = 0; i < connectors.length; i++) {
 			connectors[i] = new SQLConnector();
 			connectors[i].init(host, port, database, user, passwd);
 		}
 		
-		int step = cities/threads;
+		int step = cityCount/threads;
 		int counter = 0;
-		int rest = cities%threads;
+		int rest = cityCount%threads;
 		
 			for (int i = 0; i < threads-1; i++) {
 				CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1, connectors[i], ner, i);
@@ -66,33 +67,21 @@ public class OfflineController {
 			}
 		}
 		
-		
-	}
-	
-
-	private String[] loadGazetter(String fileName) {
-		HashMap<String, String> rc = new HashMap<String, String>();
-		FileInput in = null;
-		try {
-			in = new FileInput(fileName);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String[] temp = in.loadCompleteFile();
-		String[] line = null;
-		String value = new String();
-		
-		for(int i = 0; i<temp.length; i++){
-			line = temp[i].split(",");	//Gazetteer speziell
-			value = line[1];			//Gazetteer speziell
-			
-			if(rc.containsKey(value)){
-				rc.put(value, value);
-			}
-		}
-		
-		return rc.keySet().toArray(new String[rc.size()]);
 	}
 
+	public Gazetteer getGaz() {
+		return gaz;
+	}
+
+	public void setGaz(Gazetteer gaz) {
+		this.gaz = gaz;
+	}
+
+	public int getCityCount() {
+		return cityCount;
+	}
+
+	public void setCityCount(int cityCount) {
+		this.cityCount = cityCount;
+	}
 }
