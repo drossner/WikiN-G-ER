@@ -1,5 +1,6 @@
 package part.offline.control;
 import part.offline.data.Gazetteer;
+import data.control.FileOutput;
 import data.control.StanfordNER;
 
 public class OfflineController {
@@ -47,22 +48,20 @@ public class OfflineController {
 		int rest = cityCount%threads;
 		
 			for (int i = 0; i < threads-1; i++) {
-				CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1, connectors[i], ner, i);
+				CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1, connectors[i], ner, i, new FileOutput(false, "CrawlerOutPut" + i +".txt"));
 				threadList[i] = new Thread(temp);
 				threadList[i].start();
 				counter += step;	
 			}
 			
-			CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1+rest, connectors[threads-1], ner, threads-1);
+			CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1+rest, connectors[threads-1], ner, threads-1, new FileOutput(false, "CrawlerOutPut" + (threads-1) +".txt"));
 			threadList[threads-1] = new Thread(temp);
 			threadList[threads-1].start();
-			
 			
 		for (int i = 0; i < threadList.length; i++) {
 			try {
 				threadList[i].join();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

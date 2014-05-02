@@ -1,17 +1,26 @@
 package part.offline.control;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
 import data.City;
+import data.DataDump;
+import data.Entity;
 import data.control.StanfordNER;
 
 public class CityCreator {
 	StanfordNER ner;
 	String name;
-	LonLatParser llp;
+	LatitudeLongitudeParser llp;
 	
-	public CityCreator(StanfordNER ner, String name){
+	public CityCreator(StanfordNER ner, String name, LatitudeLongitudeParser llp){
 		this.ner = ner;
 		this.name = name;
-		this.llp = new LonLatParser();
+		this.llp = llp;
 	}
 	
 	/**
@@ -19,18 +28,33 @@ public class CityCreator {
 	 * @param text text extracted of the wikidump
 	 * @return returns a City-object or null if the given text is not a city
 	 */
-	public City getCities(String text){
+	public DataDump getCity(String text){
+		ArrayList<Entity> temp = null;
+		double[] coords;
+		City city;
+		DataDump rc = null;
+		
 		if(!checkIfCity(text)) return null;
 		System.out.println("CityCreator: "+this.name);
-		double[] lonlat = llp.getLonLat(text);
-		if(lonlat == null) return null;
-		double lon = lonlat[0]+(lonlat[1]*60.0+lonlat[2])/3600.0;
-		double lat = lonlat[3]+(lonlat[4]*60.0+lonlat[5])/3600.0;
+	
+		try {
+			temp = ner.extractEntities(new StringBuffer(text));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
 		
-		//CrawlerOutput cop = new CrawlerOutput(name, text, lon, lat);
-		//bereits programmieren
-		//return ner.extractEntities(cop);
-		return null;
+		coords = llp.parseLatLon(text);
+		
+		if(coords != null){
+			city = new City(name, coords[1], coords[0]);
+			rc = new DataDump(city, temp);
+		}
+		
+		return rc;
 	}
 
 	
