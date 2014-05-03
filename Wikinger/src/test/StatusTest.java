@@ -18,7 +18,7 @@ public class StatusTest {
 		
 		t.calcStatus();
 		
-		System.out.println("Prozent abgeschlossen: "+t.getPercent()+"   TimeRemaining: "+t.getTimeRemaining()/1000);
+		System.out.println("Prozent abgeschlossen: "+t.getPercent()+"   TimeRemaining: "+t.getTimeRemaining()/1000+"s");
 		
 		
 	}
