@@ -29,6 +29,7 @@ public class CrawlerUnit implements Runnable{
 	}
 
 	public void run() {
+		System.out.println("Thread " + id + " läuft! " + this.start + ";" + this.end);
 		LatitudeLongitudeParser llp = new LatitudeLongitudeParser();
 		StringBuffer temp = new StringBuffer();
 		for (int i = this.start; i <= this.end ; i++) {

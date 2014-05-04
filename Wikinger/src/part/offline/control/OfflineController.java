@@ -39,6 +39,7 @@ public class OfflineController {
 //		connector.init(host, port, database, user, passwd, threads);
 		
 		for (int i = 0; i < connectors.length; i++) {
+			System.out.println("Ertelle Connector " + i);
 			connectors[i] = new SQLConnector();
 			connectors[i].init(host, port, database, user, passwd);
 		}
@@ -47,16 +48,17 @@ public class OfflineController {
 		int counter = 0;
 		int rest = cityCount%threads;
 		
-			for (int i = 0; i < threads-1; i++) {
-				CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1, connectors[i], ner, i, new FileOutput(false, "CrawlerOutPut" + i +".txt"));
-				threadList[i] = new Thread(temp);
-				threadList[i].start();
-				counter += step;	
-			}
-			
-			CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1+rest, connectors[threads-1], ner, threads-1, new FileOutput(false, "CrawlerOutPut" + (threads-1) +".txt"));
-			threadList[threads-1] = new Thread(temp);
-			threadList[threads-1].start();
+		for (int i = 0; i < threads-1; i++) {
+			System.out.println("Starte Thread " + i);
+			CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1, connectors[i], ner, i, new FileOutput(false, "CrawlerOutPut" + i +".txt"));
+			threadList[i] = new Thread(temp);
+			threadList[i].start();
+			counter += step;	
+		}
+		
+		CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1+rest, connectors[threads-1], ner, threads-1, new FileOutput(false, "CrawlerOutPut" + (threads-1) +".txt"));
+		threadList[threads-1] = new Thread(temp);
+		threadList[threads-1].start();
 			
 		for (int i = 0; i < threadList.length; i++) {
 			try {
@@ -65,6 +67,7 @@ public class OfflineController {
 				e.printStackTrace();
 			}
 		}
+		System.out.println("Alle gejoint und fertig !");
 		
 	}
 
