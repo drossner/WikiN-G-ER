@@ -29,7 +29,9 @@ public class Gazetteer {
 			line = temp[i].split(",");	//Gazetteer speziell
 			value = line[1];			//Gazetteer speziell
 			
-			if(rc.containsKey(value)){
+			System.out.println("Lade " + value);
+			
+			if(!rc.containsKey(value)){
 				rc.put(value, value);
 			}
 		}
