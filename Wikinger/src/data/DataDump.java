@@ -1,19 +1,39 @@
 package data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class DataDump {
+public class DataDump{
 	
 	private City city;
-	private ArrayList<Entity> entities;
+	private Entity[] entityList;
 	
-	public DataDump(City city){
+	public DataDump(City city, ArrayList<Entity> entities){
 		this.setCity(city);
-		entities = new ArrayList<Entity>();
+		extractEntities(entities);
 	}
-	
-	public void addEntity(Entity ent){
-		entities.add(ent);
+
+	/**
+	 * muss getestet werden!
+	 * @param entities
+	 */
+	private void extractEntities(ArrayList<Entity> entities) {
+		HashMap<String, Entity> temp = new HashMap<String, Entity>();	
+		Entity entity = null;
+		int count;
+		
+		for(Entity ent : entities){
+			if(temp.containsKey(ent.getName())){
+				entity = temp.get(ent.getName());
+				count = ent.getCount();
+				entity.setCount(count++);
+				temp.remove(ent.getName());
+				temp.put(entity.getName(), entity);
+			}else{
+				temp.put(ent.getName(), ent);
+			}
+		}
+		entityList = temp.values().toArray(new Entity[temp.values().size()]);
 	}
 
 	public City getCity() {
@@ -24,14 +44,12 @@ public class DataDump {
 		this.city = city;
 	}
 
-	public ArrayList<Entity> getEntities() {
-		return entities;
+	public Entity[] getEntityList() {
+		return entityList;
 	}
 
-	public void setEntities(ArrayList<Entity> entities) {
-		this.entities = entities;
+	public void setEntityList(Entity[] entityList) {
+		this.entityList = entityList;
 	}
-	
-	
 
 }
