@@ -14,7 +14,7 @@ public class StatusTest {
 		
 		t.setWorkForEachDone(150, 0);
 		t.setWorkForEachDone(128, 1);
-		t.setWorkForEachDone(298, 2);
+		t.setWorkForEachDone(1000, 2);
 		
 		t.calcStatus();
 		
