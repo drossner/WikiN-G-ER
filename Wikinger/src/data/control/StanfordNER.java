@@ -11,8 +11,6 @@ import javax.xml.parsers.*;
 import org.xml.sax.*;
 import org.w3c.dom.*;
 
-import java.io.*;
-
 import edu.stanford.nlp.ie.AbstractSequenceClassifier;
 import edu.stanford.nlp.ie.crf.CRFClassifier;
 
