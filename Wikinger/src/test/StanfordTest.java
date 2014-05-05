@@ -3,13 +3,10 @@ package test;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
-
-import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
 
+import data.Entity;
 import data.control.StanfordNER;
 
 public class StanfordTest
@@ -21,13 +18,13 @@ public class StanfordTest
 		
 		
 		StanfordNER ner = new StanfordNER("./classifiers/english.all.3class.distsim.crf.ser.gz");
-		ArrayList<String> temp = null;
+		ArrayList<Entity> temp = null;
 			
 		try
 		{
 			temp = ner.extractEntities(textDoc);
-			for (String string : temp){
-				System.out.println(string);
+			for (Entity string : temp){
+				System.out.println(string.getName());
 			}
 		} catch (IOException | ParserConfigurationException | SAXException e)
 		{

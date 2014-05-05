@@ -1,6 +1,6 @@
 package part.offline.test;
 
-import part.offline.data.Gazetter;
+import part.offline.data.Gazetteer;
 
 public class GazetterLoadTest {
 	
@@ -10,7 +10,7 @@ public class GazetterLoadTest {
 	
 	public GazetterLoadTest() {
 		String arr[];
-		Gazetter gaz = new Gazetter("./gazetteer.csv");
+		Gazetteer gaz = new Gazetteer("./gazetteer.csv");
 	}
 
 }

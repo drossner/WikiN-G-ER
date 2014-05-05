@@ -5,12 +5,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class SQLConnector {
 	
 	private Connection con;
-	PreparedStatement prepStmt;
+	PreparedStatement prepStmtPage;
+	PreparedStatement prepStmtRev;
+	PreparedStatement prepStmtText;
 	
 	/**
 	 * Init the connection to the given database
@@ -42,12 +43,13 @@ public class SQLConnector {
 		    System.out.println("Verbindung ist fehlgeschlagen: " + sqle.getMessage()); 
 		}
 		try {
-			prepStmt = con.prepareStatement("SELECT page_id FROM page WHERE page_title = ? OR page_title = ? OR page_title = ?;");
+			prepStmtPage = con.prepareStatement("SELECT page_id FROM page WHERE page_title = ? OR page_title = ? OR page_title = ?;");
+			prepStmtRev = con.prepareStatement("SELECT rev_id FROM revision WHERE rev_page = ?;");
+			prepStmtText = con.prepareStatement("SELECT old_text FROM text WHERE old_id = ?;");
 //			for (int i = 0; i < prepStmt.length; i++) {
 //				prepStmt[i] = con.prepareStatement("SELECT page_id FROM page WHERE page_title = ? OR page_title = ? OR page_title = ?;");
 //			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -61,7 +63,7 @@ public class SQLConnector {
 	 * @param threadID deprecated parameter, if you use threads, use their id, otherwise use something else
 	 * @return
 	 */
-	public int[] getPageIDs(String cityName, int threadID){
+	public int[] getPageIDs(String cityName){
 		//Statement stmt;
 		cityName = cityName.replaceAll(" ", "_");
 		cityName = cityName.replaceAll("\'", "%");
@@ -71,10 +73,10 @@ public class SQLConnector {
 			//ResultSet rs = stmt.executeQuery("SELECT page_id FROM page WHERE page_title = '"+cityName+"' OR page_title = '"+cityName+",_%'"+" OR page_title = '"+cityName+"_%';");
 			//ResultSet rs = stmt.executeQuery("SELECT page_id FROM page WHERE page_title LIKE '"+cityName+"';");
 		//	System.out.println("rc erhalten");
-			prepStmt.setString(1, cityName);
-			prepStmt.setString(2, cityName+"\\_");
-			prepStmt.setString(3, cityName+",\\_");
-			ResultSet rs = prepStmt.executeQuery();
+			prepStmtPage.setString(1, cityName);
+			prepStmtPage.setString(2, cityName+"\\_");
+			prepStmtPage.setString(3, cityName+",\\_");
+			ResultSet rs = prepStmtPage.executeQuery();
 			rs.last();
 			int[] rc = new int[rs.getRow()];
 			int i = 0;
@@ -82,11 +84,9 @@ public class SQLConnector {
 			while(rs.next()){
 				rc[i++]=rs.getInt(1);
 			}
-			
 			return rc;
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
@@ -98,17 +98,14 @@ public class SQLConnector {
 	 * @return
 	 */
 	public int[] getRevIDs(int[] pageIDs){
-		Statement stmt;
 		StringBuffer query = new StringBuffer(150);
-		query.append("SELECT rev_id FROM revision WHERE rev_page = '"+pageIDs[0]+"'");
+		query.append("'"+pageIDs[0]+"'");
 		for (int i = 1; i < pageIDs.length; i++) {
 			query.append(" OR rev_page = '"+pageIDs[i]+"'");
 		}
-		query.append(";");
 		try {
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query.toString());
-			
+			prepStmtRev.setString(1, query.toString());
+			ResultSet rs = prepStmtRev.executeQuery();
 			rs.last();
 			int[] rc = new int[rs.getRow()];
 			int i = 0;
@@ -116,11 +113,9 @@ public class SQLConnector {
 			while(rs.next()){
 				rc[i++]=rs.getInt(1);
 			}
-			
 			return rc;
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
@@ -132,17 +127,14 @@ public class SQLConnector {
 	 * @return
 	 */
 	public String[] getTexts(int[] revIDs){
-		Statement stmt;
 		StringBuffer query = new StringBuffer(150);
-		query.append("SELECT old_text FROM text WHERE old_id = '"+revIDs[0]+"'");
+		query.append("'"+revIDs[0]+"'");
 		for (int i = 1; i < revIDs.length; i++) {
 			query.append(" OR old_id = '"+revIDs[i]+"'");
 		}
-		query.append(";");
 		try {
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query.toString());
-			
+			prepStmtText.setString(1, query.toString());
+			ResultSet rs = prepStmtText.executeQuery();
 			rs.last();
 			String[] rc = new String[rs.getRow()];
 			int i = 0;
@@ -150,13 +142,9 @@ public class SQLConnector {
 			while(rs.next()){
 				rc[i++]=rs.getString(1);
 			}
-			
-			rs.close();
-			stmt.close();
 			return rc;
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
