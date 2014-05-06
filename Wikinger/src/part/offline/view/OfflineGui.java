@@ -19,7 +19,7 @@ import edu.stanford.nlp.ling.CoreAnnotations.YearAnnotation;
 public class OfflineGui extends JFrame{
 
 	/**
-	 * Computed by JVM
+	 * Deprecated Version!!!
 	 */
 	private static final long serialVersionUID = -1729904057278086015L;
 	private JPanel mainPanel, northpanel, southpanel;
