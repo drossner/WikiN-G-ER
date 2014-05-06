@@ -15,6 +15,12 @@ public class Entity {
 		return type;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "Entity [name=" + name + ", type=" + type + "]";
+	}
+
 	public void setType(String type){
 		this.type = type;
 	}
