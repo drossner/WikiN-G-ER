@@ -149,9 +149,9 @@ public class OnlineView
 		tabbedPane.addTab("Settings", null, panel_1, null);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
 		gbl_panel_1.columnWidths = new int[]{68, 288, 0};
-		gbl_panel_1.rowHeights = new int[]{24, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panel_1.rowHeights = new int[]{24, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_panel_1.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel_1.setLayout(gbl_panel_1);
 		
 		JPanel panel_2 = new JPanel();
@@ -270,18 +270,26 @@ public class OnlineView
 		JLabel lblTime = new JLabel("Time");
 		GridBagConstraints gbc_lblTime = new GridBagConstraints();
 		gbc_lblTime.anchor = GridBagConstraints.EAST;
-		gbc_lblTime.insets = new Insets(0, 0, 0, 5);
+		gbc_lblTime.insets = new Insets(0, 0, 5, 5);
 		gbc_lblTime.gridx = 0;
 		gbc_lblTime.gridy = 7;
 		panel_1.add(lblTime, gbc_lblTime);
 		
 		textField_7 = new JTextField();
 		GridBagConstraints gbc_textField_7 = new GridBagConstraints();
+		gbc_textField_7.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_7.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_7.gridx = 1;
 		gbc_textField_7.gridy = 7;
 		panel_1.add(textField_7, gbc_textField_7);
 		textField_7.setColumns(10);
+		
+		JButton btnSubmit = new JButton("Submit Values");
+		btnSubmit.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		GridBagConstraints gbc_btnSubmit = new GridBagConstraints();
+		gbc_btnSubmit.gridx = 1;
+		gbc_btnSubmit.gridy = 8;
+		panel_1.add(btnSubmit, gbc_btnSubmit);
 		
 		internalFrame.setVisible(true);
 		
