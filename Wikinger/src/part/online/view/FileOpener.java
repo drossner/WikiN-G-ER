@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class FileOpener implements ActionListener{
 
@@ -25,12 +26,11 @@ public class FileOpener implements ActionListener{
 	}
 
 	private void showFileChooser(){
-		JFileChooser chooser = new JFileChooser();
+		JFileChooser chooser = new JFileChooser("./");
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		chooser.setFileFilter(new FileNameExtensionFilter("Textfiles (*.txt)", "txt"));
 		
-		chooser.showOpenDialog(null);
-		System.out.println(chooser.getSelectedFile().getAbsolutePath());
-		
+		chooser.showOpenDialog(null);		
 		String absPath = chooser.getSelectedFile().getAbsolutePath();
 		onlineView.getTextField().setText(absPath);
 	}
