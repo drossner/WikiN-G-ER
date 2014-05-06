@@ -4,22 +4,37 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+
 import java.awt.BorderLayout;
 import java.awt.Font;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+
 import javax.swing.JTextField;
+
 import java.awt.Insets;
+
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.JSeparator;
+
 import java.awt.GridLayout;
+
 import javax.swing.BoxLayout;
+import javax.swing.JTree;
+import javax.swing.AbstractAction;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.Action;
 
 public class OnlineView
 {
@@ -83,9 +98,9 @@ public class OnlineView
 		tabbedPane.addTab("General", null, panel, null);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{0, 0, 0, 0};
-		gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
-		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panel.columnWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 		
 		JSeparator separator = new JSeparator();
@@ -104,22 +119,26 @@ public class OnlineView
 		gbc_lblInputTextFor.gridy = 1;
 		panel.add(lblInputTextFor, gbc_lblInputTextFor);
 		
-		textField = new JTextField();
+		setTextField(new JTextField());
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField.insets = new Insets(0, 0, 5, 5);
 		gbc_textField.gridx = 1;
 		gbc_textField.gridy = 2;
-		panel.add(textField, gbc_textField);
-		textField.setColumns(10);
+		panel.add(getTextField(), gbc_textField);
+		getTextField().setColumns(10);
 		
-		JButton btnReadFile = new JButton("Read File");
-		btnReadFile.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		GridBagConstraints gbc_btnReadFile = new GridBagConstraints();
-		gbc_btnReadFile.insets = new Insets(0, 0, 5, 0);
-		gbc_btnReadFile.gridx = 2;
-		gbc_btnReadFile.gridy = 2;
-		panel.add(btnReadFile, gbc_btnReadFile);
+		JButton btnBrowse = new JButton("Browse");
+		btnBrowse.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		GridBagConstraints gbc_btnBrowse = new GridBagConstraints();
+		gbc_btnBrowse.insets = new Insets(0, 0, 5, 0);
+		gbc_btnBrowse.gridx = 2;
+		gbc_btnBrowse.gridy = 2;
+		panel.add(btnBrowse, gbc_btnBrowse);
+		
+		btnBrowse.setActionCommand("browse");
+		FileOpener open = new FileOpener(this);
+		btnBrowse.addActionListener(open);
 		
 		JSeparator separator_1 = new JSeparator();
 		GridBagConstraints gbc_separator_1 = new GridBagConstraints();
@@ -128,12 +147,21 @@ public class OnlineView
 		gbc_separator_1.gridy = 3;
 		panel.add(separator_1, gbc_separator_1);
 		
+		JButton btnReadFile = new JButton("Read File");
+		btnReadFile.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		GridBagConstraints gbc_btnReadFile = new GridBagConstraints();
+		gbc_btnReadFile.insets = new Insets(0, 0, 5, 5);
+		gbc_btnReadFile.gridx = 1;
+		gbc_btnReadFile.gridy = 4;
+		panel.add(btnReadFile, gbc_btnReadFile);
+		
+		
 		JLabel lblFileReadAnd = new JLabel("File read and processing...");
 		lblFileReadAnd.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		GridBagConstraints gbc_lblFileReadAnd = new GridBagConstraints();
 		gbc_lblFileReadAnd.insets = new Insets(0, 0, 5, 5);
 		gbc_lblFileReadAnd.gridx = 1;
-		gbc_lblFileReadAnd.gridy = 4;
+		gbc_lblFileReadAnd.gridy = 5;
 		panel.add(lblFileReadAnd, gbc_lblFileReadAnd);
 		
 		JInternalFrame internalFrame = new JInternalFrame("Result in OpenStreetMap");
@@ -142,7 +170,7 @@ public class OnlineView
 		gbc_internalFrame.gridwidth = 2;
 		gbc_internalFrame.fill = GridBagConstraints.HORIZONTAL;
 		gbc_internalFrame.gridx = 1;
-		gbc_internalFrame.gridy = 5;
+		gbc_internalFrame.gridy = 6;
 		panel.add(internalFrame, gbc_internalFrame);
 		
 		JPanel panel_1 = new JPanel();
@@ -293,6 +321,16 @@ public class OnlineView
 		
 		internalFrame.setVisible(true);
 		
+	}
+
+	public JTextField getTextField()
+	{
+		return textField;
+	}
+
+	public void setTextField(JTextField textField)
+	{
+		this.textField = textField;
 	}
 
 }
