@@ -11,7 +11,6 @@ public class FileOpener implements ActionListener{
 	private OnlineView onlineView;
 	
 	public FileOpener(OnlineView onlineView){
-		System.out.println("Im opener drinne");
 		this.onlineView = onlineView;
 	}
 
@@ -30,9 +29,16 @@ public class FileOpener implements ActionListener{
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setFileFilter(new FileNameExtensionFilter("Textfiles (*.txt)", "txt"));
 		
-		chooser.showOpenDialog(null);		
-		String absPath = chooser.getSelectedFile().getAbsolutePath();
-		onlineView.getTextField().setText(absPath);
+		int resultOpen = chooser.showOpenDialog(null);
+		
+		if(resultOpen == JFileChooser.APPROVE_OPTION){
+			String absPath = chooser.getSelectedFile().getAbsolutePath();
+			onlineView.getTextField().setText(absPath);
+		}
+		else if(resultOpen == JFileChooser.CANCEL_OPTION){
+			chooser.cancelSelection();
+		}
+		
 	}
 	
 

@@ -136,6 +136,7 @@ public class OnlineView
 		gbc_btnBrowse.gridy = 2;
 		panel.add(btnBrowse, gbc_btnBrowse);
 		
+		//Add action to btnBrowse
 		btnBrowse.setActionCommand("browse");
 		FileOpener open = new FileOpener(this);
 		btnBrowse.addActionListener(open);
@@ -154,6 +155,11 @@ public class OnlineView
 		gbc_btnReadFile.gridx = 1;
 		gbc_btnReadFile.gridy = 4;
 		panel.add(btnReadFile, gbc_btnReadFile);
+		
+		//adding action to btnReadFile
+		btnReadFile.setActionCommand("read");
+		FileReaderAction read = new FileReaderAction(this);
+		btnReadFile.addActionListener(read);
 		
 		
 		JLabel lblFileReadAnd = new JLabel("File read and processing...");
