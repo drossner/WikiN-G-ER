@@ -25,6 +25,8 @@ public class FileReaderAction implements ActionListener{
 
 	private void readIncText(String incPath){
 		controller = new ViewController(incPath);
+		controller.readIncTextFile();
+		controller.handleEntities();
 	}
 
 }

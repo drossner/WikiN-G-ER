@@ -1,7 +1,5 @@
 package part.online.view;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
@@ -21,20 +19,7 @@ import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.border.EtchedBorder;
-import javax.swing.JComboBox;
-import javax.swing.JSpinner;
 import javax.swing.JSeparator;
-
-import java.awt.GridLayout;
-
-import javax.swing.BoxLayout;
-import javax.swing.JTree;
-import javax.swing.AbstractAction;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.Action;
 
 public class OnlineView
 {
@@ -48,26 +33,7 @@ public class OnlineView
 	private JTextField textField_5;
 	private JTextField textField_6;
 	private JTextField textField_7;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args)
-	{
-		EventQueue.invokeLater(new Runnable() {
-			public void run()
-			{
-				try
-				{
-					OnlineView window = new OnlineView();
-					window.frmWikinerOnlinepart.setVisible(true);
-				} catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JTextField classifierTextField;
 
 	/**
 	 * Create the application.
@@ -86,6 +52,7 @@ public class OnlineView
 		frmWikinerOnlinepart.setTitle("Wiki-NER --- OnlinePart");
 		frmWikinerOnlinepart.setBounds(100, 100, 450, 322);
 		frmWikinerOnlinepart.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmWikinerOnlinepart.setVisible(true);
 		
 		JLabel lblWelcomeToWikiner = new JLabel("Welcome to Wiki-NER Online!");
 		lblWelcomeToWikiner.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -98,9 +65,9 @@ public class OnlineView
 		tabbedPane.addTab("General", null, panel, null);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{0, 0, 0, 0};
-		gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_panel.columnWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panel.columnWeights = new double[]{0.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 		
 		JSeparator separator = new JSeparator();
@@ -141,19 +108,12 @@ public class OnlineView
 		FileOpener open = new FileOpener(this);
 		btnBrowse.addActionListener(open);
 		
-		JSeparator separator_1 = new JSeparator();
-		GridBagConstraints gbc_separator_1 = new GridBagConstraints();
-		gbc_separator_1.insets = new Insets(0, 0, 5, 5);
-		gbc_separator_1.gridx = 0;
-		gbc_separator_1.gridy = 3;
-		panel.add(separator_1, gbc_separator_1);
-		
 		JButton btnReadFile = new JButton("Read File");
 		btnReadFile.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		GridBagConstraints gbc_btnReadFile = new GridBagConstraints();
-		gbc_btnReadFile.insets = new Insets(0, 0, 5, 5);
-		gbc_btnReadFile.gridx = 1;
-		gbc_btnReadFile.gridy = 4;
+		gbc_btnReadFile.insets = new Insets(0, 0, 5, 0);
+		gbc_btnReadFile.gridx = 2;
+		gbc_btnReadFile.gridy = 3;
 		panel.add(btnReadFile, gbc_btnReadFile);
 		
 		//adding action to btnReadFile
@@ -161,13 +121,40 @@ public class OnlineView
 		FileReaderAction read = new FileReaderAction(this);
 		btnReadFile.addActionListener(read);
 		
+		JSeparator separator_1 = new JSeparator();
+		GridBagConstraints gbc_separator_1 = new GridBagConstraints();
+		gbc_separator_1.insets = new Insets(0, 0, 5, 5);
+		gbc_separator_1.gridx = 0;
+		gbc_separator_1.gridy = 4;
+		panel.add(separator_1, gbc_separator_1);
+		
+		classifierTextField = new JTextField();
+		GridBagConstraints gbc_classifierTextField = new GridBagConstraints();
+		gbc_classifierTextField.insets = new Insets(0, 0, 5, 5);
+		gbc_classifierTextField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_classifierTextField.gridx = 1;
+		gbc_classifierTextField.gridy = 5;
+		panel.add(classifierTextField, gbc_classifierTextField);
+		classifierTextField.setColumns(10);
+		
+		JButton btnReadClassifier = new JButton("Read Classifier");
+		btnReadClassifier.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		GridBagConstraints gbc_btnReadClassifier = new GridBagConstraints();
+		gbc_btnReadClassifier.insets = new Insets(0, 0, 5, 0);
+		gbc_btnReadClassifier.gridx = 2;
+		gbc_btnReadClassifier.gridy = 5;
+		panel.add(btnReadClassifier, gbc_btnReadClassifier);
+		
+		btnReadClassifier.setActionCommand("readclassifier");
+		FileOpener openClf = new FileOpener(this);
+		btnReadClassifier.addActionListener(openClf);
 		
 		JLabel lblFileReadAnd = new JLabel("File read and processing...");
 		lblFileReadAnd.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		GridBagConstraints gbc_lblFileReadAnd = new GridBagConstraints();
 		gbc_lblFileReadAnd.insets = new Insets(0, 0, 5, 5);
 		gbc_lblFileReadAnd.gridx = 1;
-		gbc_lblFileReadAnd.gridy = 5;
+		gbc_lblFileReadAnd.gridy = 6;
 		panel.add(lblFileReadAnd, gbc_lblFileReadAnd);
 		
 		JInternalFrame internalFrame = new JInternalFrame("Result in OpenStreetMap");
@@ -176,7 +163,7 @@ public class OnlineView
 		gbc_internalFrame.gridwidth = 2;
 		gbc_internalFrame.fill = GridBagConstraints.HORIZONTAL;
 		gbc_internalFrame.gridx = 1;
-		gbc_internalFrame.gridy = 6;
+		gbc_internalFrame.gridy = 8;
 		panel.add(internalFrame, gbc_internalFrame);
 		
 		JPanel panel_1 = new JPanel();
@@ -327,6 +314,16 @@ public class OnlineView
 		
 		internalFrame.setVisible(true);
 		
+	}
+
+	public JTextField getClassifierTextField()
+	{
+		return classifierTextField;
+	}
+
+	public void setClassifierTextField(JTextField classifierTextField)
+	{
+		this.classifierTextField = classifierTextField;
 	}
 
 	public JTextField getTextField()

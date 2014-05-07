@@ -21,6 +21,10 @@ public class FileOpener implements ActionListener{
 			showFileChooser();
 		}
 		
+		//TODO geht so nicht!!
+		else if(actionTodo.equals("readclassifier")){
+			showFileChooser();
+		}
 		
 	}
 
