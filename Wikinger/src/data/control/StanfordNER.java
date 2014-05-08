@@ -10,6 +10,13 @@ import javax.xml.parsers.*;
 
 import org.xml.sax.*;
 import org.w3c.dom.*;
+<<<<<<< HEAD
+=======
+
+import data.Entity;
+
+import java.io.*;
+>>>>>>> refs/remotes/origin/stanfordNer
 
 import edu.stanford.nlp.ie.AbstractSequenceClassifier;
 import edu.stanford.nlp.ie.crf.CRFClassifier;
@@ -61,9 +68,9 @@ public class StanfordNER
 	 * @throws IOException 
 	 * @throws SAXException
 	 */
-	public ArrayList<String> extractEntities(StringBuffer textDoc) throws IOException, ParserConfigurationException, SAXException{
+	public ArrayList<Entity> extractEntities(StringBuffer textDoc) throws IOException, ParserConfigurationException, SAXException{
 
-		ArrayList<String> entities = new ArrayList<String>();
+		ArrayList<Entity> entities = new ArrayList<Entity>();
 		String text  = textDoc.toString();
 		String resultInXml = classifier.classifyToString(text, "xml", false);
 		StringBuffer buffer = new StringBuffer("<root>");
@@ -82,7 +89,7 @@ public class StanfordNER
 			Element element = (Element) nodes.item(i);
 			
 			if(!element.getAttribute("entity").equals("O")){
-				entities.add(element.getAttribute("entity") + ";" + element.getTextContent());
+				entities.add(new Entity(element.getTextContent(), element.getAttribute("entity")));
 			}
 			
 		}
