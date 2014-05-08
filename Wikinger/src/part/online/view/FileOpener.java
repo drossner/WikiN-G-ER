@@ -9,10 +9,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class FileOpener implements ActionListener{
 
-	private JTextField textFeld;
+	private JTextField textField;
 	
 	public FileOpener(JTextField textFeld){
-		this.textFeld = textFeld;
+		this.textField = textFeld;
 	}
 
 	@Override
@@ -22,7 +22,6 @@ public class FileOpener implements ActionListener{
 			showFileChooser(new FileNameExtensionFilter("Textfiles (*.txt)", "txt"));
 		}
 		
-		//TODO geht so nicht!!
 		else if(actionTodo.equals("readclassifier")){
 			showFileChooser(new FileNameExtensionFilter("Classifiers Files (*.tar)", "gz"));
 		}
@@ -38,7 +37,7 @@ public class FileOpener implements ActionListener{
 		
 		if(resultOpen == JFileChooser.APPROVE_OPTION){
 			String absPath = chooser.getSelectedFile().getAbsolutePath();
-			textFeld.setText(absPath);
+			textField.setText(absPath);
 		}
 		else if(resultOpen == JFileChooser.CANCEL_OPTION){
 			chooser.cancelSelection();

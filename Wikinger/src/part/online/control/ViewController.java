@@ -8,6 +8,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import data.Entity;
 import data.control.FileInput;
 import data.control.StanfordNER;
 
@@ -16,7 +17,7 @@ public class ViewController{
 	private String filePath;
 	private FileInput fileReader;
 	private String[] fileContent;
-	private StanfordNER ner = new StanfordNER("./classifiers/english.all.3class.distsim.crf.ser.gz");
+	private StanfordNER ner;
 	
 	public ViewController(String incPath){
 		this.filePath = incPath;
@@ -35,13 +36,14 @@ public class ViewController{
 	}
 	
 	public void handleEntities(){
-		ArrayList<String> allEntities;
+		ner = new StanfordNER(filePath);
+		ArrayList<Entity> allEntities;
 		StringBuffer incText = new StringBuffer(Arrays.toString(fileContent));
 		try{
 			allEntities = ner.extractEntities(incText);
 			
-			for (String string : allEntities){
-				System.out.println(string);
+			for (Entity entity : allEntities){
+				System.out.println(entity.toString());
 			}
 		} catch (IOException | ParserConfigurationException | SAXException e){
 			e.printStackTrace();

@@ -10,13 +10,10 @@ import javax.xml.parsers.*;
 
 import org.xml.sax.*;
 import org.w3c.dom.*;
-<<<<<<< HEAD
-=======
 
 import data.Entity;
 
 import java.io.*;
->>>>>>> refs/remotes/origin/stanfordNer
 
 import edu.stanford.nlp.ie.AbstractSequenceClassifier;
 import edu.stanford.nlp.ie.crf.CRFClassifier;
