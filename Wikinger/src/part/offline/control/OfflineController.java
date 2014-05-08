@@ -20,6 +20,7 @@ public class OfflineController {
 	 */
 	public void init(){
 		String [] uniqueCityNames = gaz.loadGazetter();
+		this.uniqueCityNames = uniqueCityNames;
 		setCityCount(uniqueCityNames.length);
 	}
 
@@ -50,13 +51,13 @@ public class OfflineController {
 		
 		for (int i = 0; i < threads-1; i++) {
 			System.out.println("Starte Thread " + i);
-			CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1, connectors[i], ner, i, new FileOutput(false, "CrawlerOutPut" + i +".txt"));
+			CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1, connectors[i], ner, i, new FileOutput(true, "CrawlerOutPut" + i +".txt"));
 			threadList[i] = new Thread(temp);
 			threadList[i].start();
 			counter += step;	
 		}
 		
-		CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1+rest, connectors[threads-1], ner, threads-1, new FileOutput(false, "CrawlerOutPut" + (threads-1) +".txt"));
+		CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1+rest, connectors[threads-1], ner, threads-1, new FileOutput(true, "CrawlerOutPut" + (threads-1) +".txt"));
 		threadList[threads-1] = new Thread(temp);
 		threadList[threads-1].start();
 			
