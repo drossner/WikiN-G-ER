@@ -105,7 +105,7 @@ public class OnlineView
 		
 		//Add action to btnBrowse
 		btnBrowse.setActionCommand("browse");
-		FileOpener open = new FileOpener(this);
+		FileOpener open = new FileOpener(textField);
 		btnBrowse.addActionListener(open);
 		
 		JButton btnReadFile = new JButton("Read File");
@@ -146,7 +146,7 @@ public class OnlineView
 		panel.add(btnReadClassifier, gbc_btnReadClassifier);
 		
 		btnReadClassifier.setActionCommand("readclassifier");
-		FileOpener openClf = new FileOpener(this);
+		FileOpener openClf = new FileOpener(classifierTextField);
 		btnReadClassifier.addActionListener(openClf);
 		
 		JLabel lblFileReadAnd = new JLabel("File read and processing...");
