@@ -6,10 +6,10 @@ public class City {
 	private double longi;
 	private double lati;
 	
-	public City(String name, double longi, double lati){
+	public City(String name, double latitude, double longitude){
 		setName(name);
-		setLongi(longi);
-		setLati(lati);
+		setLongi(longitude);
+		setLati(latitude);
 	}
 	
 	public String cityToString(){
