@@ -59,12 +59,39 @@ public class LatitudeLongitudeParser {
 		int start = text.indexOf("{{coord");
 		int end = text.indexOf("}}", start);
 		
-		if(start == -1 || end <= start) return;
+		if(start == -1 || end <= start) return; //Abbruch, tag nicht gefunden
 		
 		String coordTag = text.substring(start+1, end);
 		String[] coordFields = coordTag.split("|");
+		//Siehe Lesezeichen für Aufbau, display = title oder displat = title,inline sollte gesetzt sein -> google earth überspringt inline coords ebenso
 		
-		//Siehe Lesezeichen für Aufbau, display = title oder displat = title,inline sollte gesetzt sein
+		//suche und werte Display Attribut aus
+		int i;
+		for(i = 0; i < coordFields.length; i++){
+			if(coordFields[i].startsWith("display")) break; //display attribut an der stelle i
+		}
+		
+		if(!coordFields[i].split("=")[1].matches("title")) return; //display ist nicht title oder inline/title
+		
+		boolean done = false;
+		boolean dec; //Koordinate ist dann Dezimal wenn die Zahl einen Punkt beinhaltet um den Nachkommabereich anzudeuten. Im Grad Format nur ganze Zahlen
+					// Hemisphäre implizit (N/E) oder explizit möglich. Im Grad Format NUR explizit
+		char current;
+		i = 1;	// erstes Datenfeld, i wird wiederverwendet
+		while(!done){
+			int k = 0; //Zeiger auf die einzelnen chars
+			StringBuffer buf = new StringBuffer();
+			current = coordFields[i].charAt(k);
+			int size = coordFields[i].length();
+			
+			while(k < size-1 && (Character.isDigit(current) || current == '.' || current == '-')){
+				if(current == '.') dec = true;
+				buf.append(current);
+				current = text.charAt(++k);
+			}
+		}
+		
+		
 	}
 
 	private double[] normalize(double[] latlon, String text) {
