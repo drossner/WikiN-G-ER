@@ -17,6 +17,7 @@ public class LatitudeLongitudeParser {
 		
 		text = text.toLowerCase();
 		text = text.replaceAll("\\s", "");
+		text = text.replaceAll("_", "");
 	
 		
 		success = parseText(text, "|latitude=", latlon, 0) && parseText(text, "|longitude=", latlon, 1);
@@ -36,22 +37,36 @@ public class LatitudeLongitudeParser {
 				success = parseText(text, "|lats=", latDeg, 2) | parseText(text, "|longs=", lonDeg, 2);
 			}
 			
-		} else {
-			return null; // weder die Suche nach |latitude / |longitude noch |latd / longd war erfolgreich
-		}
+			
+			//Umrechnung von Grad in Dezimal
+			latlon[0] = latDeg[0]+(latDeg[1]*60.0+latDeg[2])/3600.0;
+			latlon[1] = lonDeg[0]+(lonDeg[1]*60.0+lonDeg[2])/3600.0;
+			
+			normalize(latlon, text); // überprüfen ob übergeben der Referenz langt!!
+			
+		} 
+			
+		if(!success || (latlon[0]==0 && latlon[1]==0)){
+			// weder die Suche nach |latitude / |longitude noch |latd / longd war erfolgreich
+			// suche nach der {{coord}} variante
+			parseCoordTag(latlon, text); // überprüfen ob Übergabe genug ist
+		} 		
 		
-		
-		//Umrechnung von Grad in Dezimal
-		latlon[0] = latDeg[0]+(latDeg[1]*60.0+latDeg[2])/3600.0;
-		latlon[1] = lonDeg[0]+(lonDeg[1]*60.0+lonDeg[2])/3600.0;
-		
-		
-		return normalize(latlon, text);
-		
-		
-		
+		return latlon;
 	}
 	
+	private void parseCoordTag(double[] latlon, String text) {
+		int start = text.indexOf("{{coord");
+		int end = text.indexOf("}}", start);
+		
+		if(start == -1 || end <= start) return;
+		
+		String coordTag = text.substring(start+1, end);
+		String[] coordFields = coordTag.split("|");
+		
+		//Siehe Lesezeichen für Aufbau, display = title oder displat = title,inline sollte gesetzt sein
+	}
+
 	private double[] normalize(double[] latlon, String text) {
 		boolean south = isSouth(text);
 		boolean west = isWest(text);
