@@ -31,7 +31,6 @@ public class CrawlerUnit implements Runnable{
 	}
 
 	public void run() {
-		System.out.println("Thread " + id + " läuft! " + this.start + ";" + this.end);
 		LatitudeLongitudeParser llp = new LatitudeLongitudeParser();
 		StringBuffer temp = new StringBuffer();
 		for (int i = this.start; i <= this.end ; i++) {
@@ -51,7 +50,6 @@ public class CrawlerUnit implements Runnable{
 				DataDump dump = cc.getCity(text[j]);
 				if(dump != null){
 					dumpList.add(dump);
-					System.out.println(dump.getCity().getName()+" wurde der CityList hinzugefügt");
 				}
 			}
 			if(dumpList.size()>0){

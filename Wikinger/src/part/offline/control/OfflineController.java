@@ -36,11 +36,8 @@ public class OfflineController {
 	public void startCrawling(int threads, String host, int port, String database, String user, String passwd){
 		Thread[] threadList = new Thread[threads];
 		SQLConnector[] connectors = new SQLConnector[threads];
-//		Connector connector = new Connector();
-//		connector.init(host, port, database, user, passwd, threads);
 		
 		for (int i = 0; i < connectors.length; i++) {
-			System.out.println("Ertelle Connector " + i);
 			connectors[i] = new SQLConnector();
 			connectors[i].init(host, port, database, user, passwd);
 		}
