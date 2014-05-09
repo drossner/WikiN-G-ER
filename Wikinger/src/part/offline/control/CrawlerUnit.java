@@ -34,7 +34,7 @@ public class CrawlerUnit implements Runnable{
 		LatitudeLongitudeParser llp = new LatitudeLongitudeParser();
 		StringBuffer temp = new StringBuffer();
 		for (int i = this.start; i <= this.end ; i++) {
-			System.out.println(cities[i]+" i:"+i);
+			//System.out.println(cities[i]+" i:"+i);
 			CityCreator cc = new CityCreator(ner, this.cities[i], llp);
 			int[] pageIDs = connector.getPageIDs(cities[i]);
 			
@@ -72,7 +72,7 @@ public class CrawlerUnit implements Runnable{
 			}
 			setAcPos(end - start + i);
 		}
-		System.out.println("Mein längster StringBuffer war " + maxLength + " lang!");
+		//System.out.println("Mein längster StringBuffer war " + maxLength + " lang!");
 	}
 	
 	private String entitesToString(DataDump dump, StringBuffer temp) {

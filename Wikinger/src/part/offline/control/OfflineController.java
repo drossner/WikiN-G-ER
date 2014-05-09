@@ -3,7 +3,6 @@ import part.offline.data.Gazetteer;
 import data.control.FileOutput;
 import data.control.StanfordNER;
 
-@Deprecated
 public class OfflineController {
 	
 	private String[] uniqueCityNames;
@@ -48,7 +47,7 @@ public class OfflineController {
 		int rest = cityCount%threads;
 		
 		for (int i = 0; i < threads-1; i++) {
-			System.out.println("Starte Thread " + i);
+			//System.out.println("Starte Thread " + i);
 			CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1, connectors[i], ner, i, new FileOutput(true, "CrawlerOutPut" + i +".txt"));
 			threadList[i] = new Thread(temp);
 			threadList[i].start();
@@ -66,7 +65,7 @@ public class OfflineController {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Alle gejoint und fertig !");
+		//System.out.println("Alle gejoint und fertig !");
 		
 	}
 

@@ -49,6 +49,10 @@ public class CityCreator {
 		
 		coords = llp.parseLatLon(text);
 		
+		if(coords[0] == 0.0 && coords[1] == 0.0){
+			System.out.println(name + ": " + coords[0] + "; " + coords[1]);
+		}
+		
 		if(coords != null){
 			city = new City(name, coords[1], coords[0]);
 			rc = new DataDump(city, temp);
