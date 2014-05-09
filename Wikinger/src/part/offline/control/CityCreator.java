@@ -35,7 +35,7 @@ public class CityCreator {
 		DataDump rc = null;
 		
 		if(!checkIfCity(text)) return null;
-		System.out.println("CityCreator: "+this.name);
+		//System.out.println("CityCreator: "+this.name);
 	
 		try {
 			temp = ner.extractEntities(new StringBuffer(text));
@@ -49,7 +49,11 @@ public class CityCreator {
 		
 		coords = llp.parseLatLon(text);
 		
-		if(coords[0] == 0.0 && coords[1] == 0.0){
+		if(coords == null){
+			System.out.println(name);
+		}
+		
+		if((coords[0] == 0.0 && coords[1] == 0.0) && coords != null){
 			System.out.println(name + ": " + coords[0] + "; " + coords[1]);
 		}
 		
