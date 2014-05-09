@@ -13,7 +13,7 @@ public class City {
 	}
 	
 	public String cityToString(){
-		return getName() + "; " + getLongi() + ";" + getLati();
+		return getName() + "; " + getLati() + ";" + getLongi();
 	}
 
 	public String getName() {

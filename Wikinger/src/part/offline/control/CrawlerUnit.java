@@ -16,6 +16,8 @@ public class CrawlerUnit implements Runnable{
 	private SQLConnector connector;
 	private StanfordNER ner;
 	private FileOutput out;
+	private int maxLength = 0;
+	private String splitSymbol = ";#/";
 	
 	
 	public CrawlerUnit(String[] cities, int start, int end, SQLConnector connector, StanfordNER ner, int id, FileOutput out){
@@ -29,7 +31,6 @@ public class CrawlerUnit implements Runnable{
 	}
 
 	public void run() {
-		System.out.println("Thread " + id + " läuft! " + this.start + ";" + this.end);
 		LatitudeLongitudeParser llp = new LatitudeLongitudeParser();
 		StringBuffer temp = new StringBuffer();
 		for (int i = this.start; i <= this.end ; i++) {
@@ -49,7 +50,6 @@ public class CrawlerUnit implements Runnable{
 				DataDump dump = cc.getCity(text[j]);
 				if(dump != null){
 					dumpList.add(dump);
-					System.out.println(dump.getCity().getName()+" wurde der CityList hinzugefügt");
 				}
 			}
 			if(dumpList.size()>0){
@@ -60,6 +60,11 @@ public class CrawlerUnit implements Runnable{
 					temp.append(entitesToString(dump, temp));
 					writeList[c] = temp.toString();
 					c++;
+					
+					if(maxLength < temp.length()){
+						maxLength = temp.length();
+					}
+					temp = new StringBuffer(maxLength);
 				}
 				out.writeToFile(writeList);
 			}
@@ -67,18 +72,19 @@ public class CrawlerUnit implements Runnable{
 			}
 			setAcPos(end - start + i);
 		}
+		System.out.println("Mein längster StringBuffer war " + maxLength + " lang!");
 	}
 	
 	private String entitesToString(DataDump dump, StringBuffer temp) {
 		for(Entity ent : dump.getEntityList()){
-			temp.append(";");
+			temp.append(splitSymbol);
 			temp.append(ent.getName());
-			temp.append(";");
+			temp.append(splitSymbol);
 			temp.append(ent.getType());
-			temp.append(";");
+			temp.append(splitSymbol);
 			temp.append(ent.getCount());
 		}
-		temp.append(";");
+		temp.append(splitSymbol);
 		return temp.toString();
 	}
 
