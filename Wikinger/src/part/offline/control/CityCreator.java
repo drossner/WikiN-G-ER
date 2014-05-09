@@ -51,9 +51,7 @@ public class CityCreator {
 		
 		if(coords == null){
 			System.out.println(name);
-		}
-		
-		if((coords[0] == 0.0 && coords[1] == 0.0) && coords != null){
+		}else if((coords[0] == 0.0 && coords[1] == 0.0)){
 			System.out.println(name + ": " + coords[0] + "; " + coords[1]);
 		}
 		
