@@ -61,37 +61,132 @@ public class LatitudeLongitudeParser {
 		
 		if(start == -1 || end <= start) return; //Abbruch, tag nicht gefunden
 		
-		String coordTag = text.substring(start+1, end);
-		String[] coordFields = coordTag.split("|");
+		String coordTag = text.substring(start+2, end);
+		//System.out.println(coordTag);
+		String[] coordFields = coordTag.split("\\|");
+
 		//Siehe Lesezeichen für Aufbau, display = title oder displat = title,inline sollte gesetzt sein -> google earth überspringt inline coords ebenso
 		
 		//suche und werte Display Attribut aus
+		boolean display = false;
 		int i;
 		for(i = 0; i < coordFields.length; i++){
-			if(coordFields[i].startsWith("display")) break; //display attribut an der stelle i
-		}
-		
-		if(!coordFields[i].split("=")[1].matches("title")) return; //display ist nicht title oder inline/title
-		
-		boolean done = false;
-		boolean dec; //Koordinate ist dann Dezimal wenn die Zahl einen Punkt beinhaltet um den Nachkommabereich anzudeuten. Im Grad Format nur ganze Zahlen
-					// Hemisphäre implizit (N/E) oder explizit möglich. Im Grad Format NUR explizit
-		char current;
-		i = 1;	// erstes Datenfeld, i wird wiederverwendet
-		while(!done){
-			int k = 0; //Zeiger auf die einzelnen chars
-			StringBuffer buf = new StringBuffer();
-			current = coordFields[i].charAt(k);
-			int size = coordFields[i].length();
-			
-			while(k < size-1 && (Character.isDigit(current) || current == '.' || current == '-')){
-				if(current == '.') dec = true;
-				buf.append(current);
-				current = text.charAt(++k);
+			if(coordFields[i].startsWith("display")){
+				display = true;
+				break; //display attribut an der stelle i
 			}
 		}
 		
+		if(!display || !coordFields[i].split("=")[1].contains("title")) return; //display ist nicht title oder inline/title
+
+		boolean dec = false; //Koordinate ist dann Dezimal wenn die Zahl einen Punkt beinhaltet um den Nachkommabereich anzudeuten. Im Grad Format nur ganze Zahlen
+					// Hemisphäre implizit (N/E) oder explizit möglich. Im Grad Format NUR explizit
+		boolean hemiTags = false;
+
+		int posNS = -1;
+		int posEW = -1;
 		
+		//Suche ob Hemisphärentags gesetzt sind und wenn ja, wo
+		// i resycelt von weiter oben
+		String current;
+		for(i = 0; i < coordFields.length; i++){
+			current = coordFields[i];
+			if(current.equals("n") || current.equals("s")) posNS = i;
+			if(current.equals("e") || current.equals("w")) posEW = i;
+		}
+		
+		if(posNS > 0 && posEW > 0) hemiTags = true;
+		
+		// Nun wird überprüft ob es sich um eine dezimale Angabe handelt, in dem beim ersten Wert
+		// exemplarisch überprüft wird, ob ein Punkt vorhanden ist
+		// sicherere Unterscheidung gewünscht...
+		
+		int digitLength = coordFields[1].length();
+		char currentChar;
+		for(i = 0; i < digitLength; i++){
+			currentChar = coordFields[1].charAt(i);
+			if(currentChar == '.') dec = true;
+		}
+		
+		if(dec){
+			parseCoordDec(coordFields, hemiTags, posNS, posEW, latlon);
+		} else {
+			parseCoordGrad(coordFields, hemiTags, posNS, posEW, latlon);
+		}
+	}
+
+	private void parseCoordGrad(String[] coordFields, boolean hemiTags, int posNS, int posEW, double[] latlon) {
+		//Hemisphären Tags MÜSSEN gesetzt sein wenn die Angaben in Grad erfolgen!
+		if(!hemiTags){
+			System.err.println("Fehler beim Parsen von:");
+			for (int i = 0; i < coordFields.length; i++) {
+				System.out.println(coordFields[i]);
+			}
+			return;
+		}
+		
+//		int anzahlLat = posNS - 1; // Wie viel Latitudeangaben sind vorhanden (nur D oder D/M usw)
+//		int anzahlLon = posEW - posNS - 1;
+//		System.out.println(anzahlLat+" "+anzahlLon);
+		boolean north = coordFields[posNS].equals("n") ? true : false;
+		boolean east = coordFields[posEW].equals("e") ? true : false;
+		
+		int[] lat = new int[3];
+		int[] lon = new int[3];
+		int index = 0;
+		for(int i = 1; i < posNS; i++){
+			lat[index++] = Integer.parseInt(coordFields[i]);
+		}
+		
+		index = 0;
+		for(int i = posNS + 1; i < posEW; i++){
+			lon[index++] = Integer.parseInt(coordFields[i]);
+		}
+		
+		//Umrechnung von Grad in Dezimal
+		latlon[0] = lat[0]+(lat[1]*60.0+lat[2])/3600.0;
+		latlon[1] = lon[0]+(lon[1]*60.0+lon[2])/3600.0;
+		
+		if(!north) latlon[0] *= -1;
+		if(!east) latlon[1] *= -1;
+	}
+
+	private void parseCoordDec(String[] coordFields, boolean hemiTags,
+			int posNS, int posEW, double[] latlon) {
+		
+		int startLat = 1;
+		int startLon = hemiTags ? 3 : 2;
+		
+		StringBuffer buf = new StringBuffer();
+		char current;
+		
+		int index = 0;
+		int end = coordFields[startLat].length();
+		
+		
+		do{
+			current = coordFields[startLat].charAt(index++);
+			buf.append(current);
+		}while((index < end) && (current == '.' || current == '-' || Character.isDigit(current)));
+		
+		latlon[0] = Double.parseDouble(buf.toString());
+		
+		buf = new StringBuffer();
+		index = 0;
+		end = coordFields[startLon].length();
+		
+		do{
+			current = coordFields[startLon].charAt(index++);
+			buf.append(current);
+		}while((index < end) && (current == '.' || current == '-' || Character.isDigit(current)));
+		
+		latlon[1] = Double.parseDouble(buf.toString());
+		
+		if(hemiTags){
+			latlon[0] = coordFields[posNS].equals("n") ? latlon[0] : latlon[0] * -1;
+			latlon[1] = coordFields[posEW].equals("e") ? latlon[1] : latlon[1] * -1;
+
+		}
 	}
 
 	private double[] normalize(double[] latlon, String text) {
