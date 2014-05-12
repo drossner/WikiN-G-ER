@@ -12,6 +12,12 @@ public class Entity {
 		this.count = 1;
 	}
 	
+	public Entity(String name, String type, String count){
+		this.name = name;
+		this.type = type;
+		this.count = Integer.parseInt(count);
+	}
+	
 	public String getName() {
 		return name;
 	}
