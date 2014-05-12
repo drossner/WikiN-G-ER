@@ -35,7 +35,6 @@ public class CityCreator {
 		DataDump rc = null;
 		
 		if(!checkIfCity(text)) return null;
-		//System.out.println("CityCreator: "+this.name);
 	
 		try {
 			temp = ner.extractEntities(new StringBuffer(text));
