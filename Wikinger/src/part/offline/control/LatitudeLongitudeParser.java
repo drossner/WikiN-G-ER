@@ -21,13 +21,11 @@ public class LatitudeLongitudeParser {
 	
 		
 		success = parseText(text, "|latitude=", latlon, 0) && parseText(text, "|longitude=", latlon, 1);
-		
-		
+		success = success && (latlon[0] != 0.0 || latlon[1] != 0.0); //leere Tags abfangen, Wiki stinkt
 		if(success) return latlon; // die Suche nach der ersten Variante war erfolgreich, negative stehen für süd bzw west
 						
 		
 		success = parseText(text, "|latd=", latDeg, 0) && parseText(text, "|longd=", lonDeg, 0);
-		
 		if(success){
 			
 			success = parseText(text, "|latm=", latDeg, 1) | parseText(text, "|longm=", lonDeg, 1);
@@ -46,11 +44,35 @@ public class LatitudeLongitudeParser {
 			
 		} 
 			
-		if(!success || (latlon[0]==0 && latlon[1]==0)){
+		
+		//!success || 
+		if((Math.abs(latlon[0]) < 0.000000001 && Math.abs(latlon[1]) < 0.000000001 )){
 			// weder die Suche nach |latitude / |longitude noch |latd / longd war erfolgreich
 			// suche nach der {{coord}} variante
 			parseCoordTag(latlon, text); // überprüfen ob Übergabe genug ist
 		} 		
+		
+		//Alte Tags, Wikipedia stinkt immer mehr..
+		if((Math.abs(latlon[0]) < 0.000000001 && Math.abs(latlon[1]) < 0.000000001 )){
+			success = parseText(text, "|latdeg=", latDeg, 0) && parseText(text, "|londeg=", lonDeg, 0);
+			if(success){
+				
+				success = parseText(text, "|latmin=", latDeg, 1) | parseText(text, "|lonmin=", lonDeg, 1);
+				
+				if(success){
+					
+					success = parseText(text, "|latsec=", latDeg, 2) | parseText(text, "|lonsec=", lonDeg, 2);
+				}
+				
+				
+				//Umrechnung von Grad in Dezimal
+				latlon[0] = latDeg[0]+(latDeg[1]*60.0+latDeg[2])/3600.0;
+				latlon[1] = lonDeg[0]+(lonDeg[1]*60.0+lonDeg[2])/3600.0;
+				
+				normalizeOld(latlon, text); // überprüfen ob übergeben der Referenz langt!!
+				
+			} 
+		}
 		
 		return latlon;
 	}
@@ -131,16 +153,16 @@ public class LatitudeLongitudeParser {
 		boolean north = coordFields[posNS].equals("n") ? true : false;
 		boolean east = coordFields[posEW].equals("e") ? true : false;
 		
-		int[] lat = new int[3];
-		int[] lon = new int[3];
+		double[] lat = new double[3];
+		double[] lon = new double[3];
 		int index = 0;
 		for(int i = 1; i < posNS; i++){
-			lat[index++] = Integer.parseInt(coordFields[i]);
+			lat[index++] = Double.parseDouble(coordFields[i]);
 		}
 		
 		index = 0;
 		for(int i = posNS + 1; i < posEW; i++){
-			lon[index++] = Integer.parseInt(coordFields[i]);
+			lon[index++] = Double.parseDouble(coordFields[i]);
 		}
 		
 		//Umrechnung von Grad in Dezimal
@@ -199,6 +221,17 @@ public class LatitudeLongitudeParser {
 		
 		return latlon;
 	}
+	
+	private double[] normalizeOld(double[] latlon, String text) {
+		boolean south = isSouthOld(text);
+		boolean west = isWestOld(text);
+			
+		//Vorzeichenwechsel da Basis-System immer N/E sein soll
+		if(south) latlon[0] = latlon[0]* (-1.0);
+		if(west) latlon[1] = latlon[1]* (-1.0);
+		
+		return latlon;
+	}
 
 	//longEW=E/W
 	private boolean isWest(String text) {
@@ -238,6 +271,43 @@ public class LatitudeLongitudeParser {
 		return false;
 	}
 
+	//lonhem=E/W
+	private boolean isWestOld(String text) {
+		int start = text.indexOf("|lonhem=");
+		if(start == -1) return false;
+		
+		start += 8;
+		
+		//int end = text.indexOf('|', start);
+		
+	//	if(end == -1) end = text.indexOf('}', start);
+		
+		String sub = text.substring(start, start+1);
+		
+		
+		if(sub.equals("w")) return true;
+		
+		return false;
+		
+	}
+
+	//lathem=S/N
+	private boolean isSouthOld(String text) {
+		int start = text.indexOf("|lathem=");
+		if(start == -1) return false;
+		
+		start += 8;
+		
+		//int end = text.indexOf('|', start);
+		
+		//if(end == -1) end = text.indexOf('}', start);
+		
+		String sub = text.substring(start, start+1);
+		
+		if(sub.equals("s")) return true;
+		
+		return false;
+	}
 
 	private boolean parseText(String text, String criterion, double[] a, int index){
 		int start = text.indexOf(criterion);

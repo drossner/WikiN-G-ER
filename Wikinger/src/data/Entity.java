@@ -9,6 +9,7 @@ public class Entity {
 	public Entity(String name, String type){
 		this.name = name;
 		this.type = type;
+		this.count = 1;
 	}
 	
 	public String getName() {

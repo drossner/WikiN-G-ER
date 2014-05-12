@@ -18,9 +18,10 @@ public class CrawlerUnit implements Runnable{
 	private FileOutput out;
 	private int maxLength = 0;
 	private String splitSymbol = ";#/";
+	private Status status;
 	
 	
-	public CrawlerUnit(String[] cities, int start, int end, SQLConnector connector, StanfordNER ner, int id, FileOutput out){
+	public CrawlerUnit(String[] cities, int start, int end, SQLConnector connector, StanfordNER ner, int id, FileOutput out, Status status){
 		this.cities = cities;
 		this.start = start;
 		this.end = end;
@@ -28,12 +29,14 @@ public class CrawlerUnit implements Runnable{
 		this.ner = ner;
 		this.setId(id);
 		this.out = out;
+		this.status = status;
 	}
 
 	public void run() {
 		LatitudeLongitudeParser llp = new LatitudeLongitudeParser();
 		StringBuffer temp = new StringBuffer();
 		for (int i = this.start; i <= this.end ; i++) {
+			status.setWorkForEachDone(i, id);
 			//System.out.println(cities[i]+" i:"+i);
 			CityCreator cc = new CityCreator(ner, this.cities[i], llp);
 			int[] pageIDs = connector.getPageIDs(cities[i]);
@@ -84,7 +87,6 @@ public class CrawlerUnit implements Runnable{
 			temp.append(splitSymbol);
 			temp.append(ent.getCount());
 		}
-		temp.append(splitSymbol);
 	}
 
 	/**
