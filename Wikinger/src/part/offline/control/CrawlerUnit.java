@@ -57,7 +57,7 @@ public class CrawlerUnit implements Runnable{
 				int c = 0;
 				for(DataDump dump : dumpList){
 					temp.append(dump.getCity().cityToString());
-					temp.append(entitesToString(dump, temp));
+					entitesToString(dump, temp);
 					writeList[c] = temp.toString();
 					c++;
 					
@@ -75,7 +75,7 @@ public class CrawlerUnit implements Runnable{
 		//System.out.println("Mein längster StringBuffer war " + maxLength + " lang!");
 	}
 	
-	private String entitesToString(DataDump dump, StringBuffer temp) {
+	private void entitesToString(DataDump dump, StringBuffer temp) {
 		for(Entity ent : dump.getEntityList()){
 			temp.append(splitSymbol);
 			temp.append(ent.getName());
@@ -84,8 +84,6 @@ public class CrawlerUnit implements Runnable{
 			temp.append(splitSymbol);
 			temp.append(ent.getCount());
 		}
-		temp.append(splitSymbol);
-		return temp.toString();
 	}
 
 	/**
