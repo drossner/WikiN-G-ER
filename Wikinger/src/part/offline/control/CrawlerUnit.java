@@ -36,7 +36,7 @@ public class CrawlerUnit implements Runnable{
 		LatitudeLongitudeParser llp = new LatitudeLongitudeParser();
 		StringBuffer temp = new StringBuffer();
 		for (int i = this.start; i <= this.end ; i++) {
-			status.setWorkForEachDone(i, id);
+			status.setWorkForEachDone(i - start, id);
 			//System.out.println(cities[i]+" i:"+i);
 			CityCreator cc = new CityCreator(ner, this.cities[i], llp);
 			int[] pageIDs = connector.getPageIDs(cities[i]);
