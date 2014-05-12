@@ -69,6 +69,22 @@ public class Test {
 			System.out.println(erg8[i]);
 		}
 		
+		System.out.println("");
+		
+		double[] erg9 = p.parseLatLon(ParseTestStrings.Coord5);
+		
+		for (int i = 0; i < erg9.length; i++) {
+			System.out.println(erg9[i]);
+		}
+		
+		System.out.println("");
+		
+		double[] erg10 = p.parseLatLon(ParseTestStrings.Villarluengo);
+		System.out.println("Villarluengo");
+		for (int i = 0; i < erg10.length; i++) {
+			System.out.println(erg10[i]);
+		}
+		
 		
 	}
 
