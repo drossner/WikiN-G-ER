@@ -12,6 +12,12 @@ public class City {
 		setLati(latitude);
 	}
 	
+	public City(String name, String latitude, String longitude) {
+		setName(name);
+		setLati(Double.parseDouble(latitude));
+		setLongi(Double.parseDouble(longitude));
+	}
+
 	public String cityToString(){
 		return getName() + "; " + getLati() + ";" + getLongi();
 	}

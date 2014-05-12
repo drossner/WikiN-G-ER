@@ -5,7 +5,7 @@ import java.sql.*;
 public class SQLConnector {
 	
 	private Connection con;
-	PreparedStatement prepStmt;
+	private PreparedStatement prepStmt;
 	
 	/**
 	 * Init the connection to the given database

@@ -11,12 +11,16 @@ public class DBWriterUnit extends Thread{
 	private String coordsSplitSymbol;
 	private DBSQLConnector connector;
 	private FileInput in;
+	private int id;
+	private Status status;
 	
-	public DBWriterUnit(String fileName, DBSQLConnector connector, String entitySplitSymbol, String coordsSplitSymbol) {
+	public DBWriterUnit(int id, String fileName, DBSQLConnector connector, String entitySplitSymbol, String coordsSplitSymbol, Status status) {
 		this.connector = connector;
 		this.coordsSplitSymbol = coordsSplitSymbol;
 		this.entitySplitSymbol = entitySplitSymbol;
-		this.fileName = fileName;
+		this.setFileName(fileName);
+		this.id = id;
+		this.status = status;
 		
 		try {
 			this.in = new FileInput(fileName);
@@ -33,10 +37,11 @@ public class DBWriterUnit extends Thread{
 		String[] dataArr = in.loadCompleteFile();
 		
 		for (int i = 0; i < dataArr.length; i++) {
+			status.setWorkForEachDone(i, id);
 			entities = dataArr[i].split(entitySplitSymbol);
 			city = entities[0].split(coordsSplitSymbol);
 			
-			cityID = connector.writeCity(new City(city[0], Double.parseDouble(city[1]), Double.parseDouble(city[2])));
+			cityID = connector.writeCity(new City(city[0], city[1], city[2]));
 			
 			for (int j = 1; j < entities.length; j++) {
 				temp = new Entity(entities[j], entities[j++], entities[j++]);
@@ -45,6 +50,14 @@ public class DBWriterUnit extends Thread{
 				connector.writeConnection(cityID, entityID, temp.getCount());
 			}
 		}
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 }
