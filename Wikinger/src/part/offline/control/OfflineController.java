@@ -9,6 +9,8 @@ public class OfflineController {
 	private int cityCount;
 	private StanfordNER ner;
 	private Gazetteer gaz;
+	private Status status;
+	private int threads;
 	
 	public OfflineController(StanfordNER ner, String fileNameOldGazetteer){
 		this.setGaz(new Gazetteer(fileNameOldGazetteer));
@@ -18,10 +20,14 @@ public class OfflineController {
 	/**
 	 * initialize the load of the old gazetteer
 	 */
-	public void init(){
+	public Status init(int threads){
 		String [] uniqueCityNames = gaz.loadGazetter();
 		this.uniqueCityNames = uniqueCityNames;
 		setCityCount(uniqueCityNames.length);
+		this.threads = threads;
+		Status rc = new Status(threads, getCityCount()/threads);
+		status = rc;
+		return rc;
 	}
 
 	/**
@@ -33,7 +39,7 @@ public class OfflineController {
 	 * @param user user
 	 * @param passwd password
 	 */
-	public void startCrawling(int threads, String host, int port, String database, String user, String passwd){
+	public void startCrawling(String host, int port, String database, String user, String passwd){
 		Thread[] threadList = new Thread[threads];
 		SQLConnector[] connectors = new SQLConnector[threads];
 		
@@ -48,13 +54,13 @@ public class OfflineController {
 		
 		for (int i = 0; i < threads-1; i++) {
 			//System.out.println("Starte Thread " + i);
-			CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1, connectors[i], ner, i, new FileOutput(true, "CrawlerOutPut" + i +".txt"));
+			CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1, connectors[i], ner, i, new FileOutput(true, "CrawlerOutPut" + i +".txt"), status);
 			threadList[i] = new Thread(temp);
 			threadList[i].start();
 			counter += step;	
 		}
 		
-		CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1+rest, connectors[threads-1], ner, threads-1, new FileOutput(true, "CrawlerOutPut" + (threads-1) +".txt"));
+		CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1+rest, connectors[threads-1], ner, threads-1, new FileOutput(true, "CrawlerOutPut" + (threads-1) +".txt"), status);
 		threadList[threads-1] = new Thread(temp);
 		threadList[threads-1].start();
 			

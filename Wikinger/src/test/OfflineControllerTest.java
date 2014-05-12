@@ -2,15 +2,18 @@ package test;
 
 import data.control.StanfordNER;
 import part.offline.control.OfflineController;
+import part.offline.control.Status;
 
 public class OfflineControllerTest {
 
 	public static void main(String[] args) {
 		OfflineController off = new OfflineController(new StanfordNER("./classifiers/english.all.3class.distsim.crf.ser.gz"), "./gazetteer.csv");
 		System.out.println("Init Crawling");
-		off.init();
+		Status s = off.init(5);
 		System.out.println("Start Crawling");
-		off.startCrawling(1, "localhost", 3306, "wiki", "root", "");
+		OfflineControllerTestGui gui = new OfflineControllerTestGui(s);
+		gui.init();
+		off.startCrawling("localhost", 3306, "wiki", "root", "");
 		
 	}
 

@@ -5,11 +5,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import part.offline.control.Status;
+
 public class FileOutput {
 
 	private BufferedWriter writer = null;
 	private String fileName;
 	private boolean sameFile;
+	private Status status;
 	
 	//sameFile = true => append to File, false => new File
 	public FileOutput(boolean sameFile, String fileName) {
