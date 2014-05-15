@@ -37,6 +37,38 @@ public class Test {
 			System.out.println(erg4[i]);
 		}
 		
+		System.out.println("");
+		
+		double[] erg5 = p.parseLatLon(ParseTestStrings.Coord1);
+		
+		for (int i = 0; i < erg5.length; i++) {
+			System.out.println(erg5[i]);
+		}
+		
+		System.out.println("");
+		
+		double[] erg6 = p.parseLatLon(ParseTestStrings.Coord2);
+		
+		for (int i = 0; i < erg6.length; i++) {
+			System.out.println(erg6[i]);
+		}
+		
+		System.out.println("");
+		
+		double[] erg7 = p.parseLatLon(ParseTestStrings.Coord3);
+		
+		for (int i = 0; i < erg7.length; i++) {
+			System.out.println(erg7[i]);
+		}
+		
+		System.out.println("");
+		
+		double[] erg8 = p.parseLatLon(ParseTestStrings.Coord4);
+		
+		for (int i = 0; i < erg8.length; i++) {
+			System.out.println(erg8[i]);
+		}
+		
 		
 	}
 

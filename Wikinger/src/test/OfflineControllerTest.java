@@ -10,7 +10,7 @@ public class OfflineControllerTest {
 		System.out.println("Init Crawling");
 		off.init();
 		System.out.println("Start Crawling");
-		off.startCrawling(10, "localhost", 3306, "wikiDump", "root", "sner");
+		off.startCrawling(1, "localhost", 3306, "wiki", "root", "");
 		
 	}
 
