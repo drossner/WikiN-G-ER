@@ -92,6 +92,15 @@ public class Status {
 	
 	/**
 	 * 
+	 * @return startTime
+	 */
+	
+	public long getStartTime(){
+		return startTime;
+	}
+	
+	/**
+	 * 
 	 * @param done
 	 * @param threadID
 	 */
