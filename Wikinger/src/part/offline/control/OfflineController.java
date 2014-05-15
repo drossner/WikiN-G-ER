@@ -11,6 +11,7 @@ public class OfflineController {
 	private Gazetteer gaz;
 	private Status status;
 	private int threads;
+	private String clf_path;
 	
 	public OfflineController(StanfordNER ner, String fileNameOldGazetteer){
 		this.setGaz(new Gazetteer(fileNameOldGazetteer));

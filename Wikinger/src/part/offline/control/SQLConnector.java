@@ -37,13 +37,38 @@ public class SQLConnector {
 		    System.out.println("Verbindung ist fehlgeschlagen: " + sqle.getMessage()); 
 		}
 		try {
-			prepStmt = con.prepareStatement("SELECT page_id FROM page WHERE page_title = ? OR page_title = ? OR page_title = ?;");
+			prepStmt = con.prepareStatement("SELECT page_id FROM page WHERE page_title = ? OR page_title like ? OR page_title like ?;");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
 	
 		
+	
+	}
+	
+	public static void main(String[] args) {
+		SQLConnector s = new SQLConnector();
+		s.init("localhost", 3306, "wiki", "root", "");
+		int[] rc = s.getPageIDs("Paris");
+		
+		System.out.println("Page ID");
+		for (int i = 0; i < rc.length; i++) {
+			System.out.println(rc[i]);
+		}
+		
+		int[] rc2 = s.getRevIDs(rc);
+		System.out.println("\nRev ID");
+		for (int i = 0; i < rc2.length; i++) {
+			System.out.println(rc2[i]);
+		}
+		
+		String[] texte = s.getTexts(rc2);
+		System.out.println("\nTexte: "+texte.length);
+		
+		for (int i = 0; i < texte.length; i++) {
+			System.out.println(texte[i]+"\n---------------------------------------------------------\n");
+		}
 	}
 	
 	/**
@@ -54,11 +79,11 @@ public class SQLConnector {
 	 */
 	public int[] getPageIDs(String cityName){
 		cityName = cityName.replaceAll(" ", "_");
-		cityName = cityName.replaceAll("\'", "%");
+		cityName = cityName.replaceAll("\'", "\\%");
 		try {
 			prepStmt.setString(1, cityName);
-			prepStmt.setString(2, cityName+"\\_");
-			prepStmt.setString(3, cityName+",\\_");
+			prepStmt.setString(2, cityName+"\\_%");
+			prepStmt.setString(3, cityName+",\\_%");
 			ResultSet rs = prepStmt.executeQuery();
 			rs.last();
 			int[] rc = new int[rs.getRow()];
@@ -67,7 +92,7 @@ public class SQLConnector {
 			while(rs.next()){
 				rc[i++]=rs.getInt(1);
 			}
-			
+		
 			return rc;
 			
 		} catch (SQLException e) {
