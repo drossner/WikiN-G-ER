@@ -40,7 +40,7 @@ public class OfflineControllerTestGui extends JFrame{
 	
 	public void setProgress(double percent, long timeRem){
 		progress.setValue((int) (1000*percent));
-		time.setText("<html>"+timeRem/1000+"<body>s<br><br>"+(int)(1000*percent)+"promille"+"</body></html>");
+		time.setText("<html>"+timeRem/1000+"<body>s<br><br>"+(int)(1000*percent)+" promille"+"</body></html>");
 	}
 
 }
