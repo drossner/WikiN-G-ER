@@ -1,7 +1,7 @@
 package data;
 
 public class Entity {
-	
+
 	private String name;
 	private int count;
 	private String type;
@@ -10,6 +10,12 @@ public class Entity {
 		this.name = name;
 		this.type = type;
 		this.count = 1;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "Entity [name=" + name + ", type=" + type + "]";
 	}
 	
 	public String getName() {

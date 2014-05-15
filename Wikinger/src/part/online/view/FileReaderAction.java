@@ -18,13 +18,14 @@ public class FileReaderAction implements ActionListener{
 	public void actionPerformed(ActionEvent event){
 		String actionTodo = event.getActionCommand();
 		String outPath = onlineView.getTextField().getText();
-		if (actionTodo.equals("read")){
-			readIncText(outPath);
+		String outClassifier = onlineView.getClassifierTextField().getText();
+		if (actionTodo.equals("startProcess")){
+			initViewController(outPath, outClassifier);
 		}
 	}
 
-	private void readIncText(String incPath){
-		controller = new ViewController(incPath);
+	private void initViewController(String incPath, String incClassifier){
+		controller = new ViewController(incPath, incClassifier);
 		controller.readIncTextFile();
 		controller.handleEntities();
 	}

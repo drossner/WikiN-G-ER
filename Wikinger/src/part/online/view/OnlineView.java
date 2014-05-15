@@ -154,7 +154,7 @@ public class OnlineView
 		panel.add(btnReadFile, gbc_btnReadFile);
 		
 		//adding action to btnReadFile
-		btnReadFile.setActionCommand("read");
+		btnReadFile.setActionCommand("startProcess");
 		btnReadFile.addActionListener(read);
 		
 		JInternalFrame internalFrame = new JInternalFrame("Result in OpenStreetMap");

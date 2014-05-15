@@ -36,23 +36,7 @@ public class StanfordNER
 
 	
 //	_______________________________Methods_________________________________________
-	/**
-	 * OFFLINE-PART: extracts the Entities from the Output of the Crawler-Component
-	 * @param crawlerOutput
-	 */
-	/**
-	public City extractEntities(CrawlerOutput crawlerOutput)
-	{
-		StringBuffer buffer = new StringBuffer();
-		buffer.append(crawlerOutput.getContent());
-		ArrayList<Entity> entities = extractEntities(buffer);
-		
-		City cityWithEntities = new City(entities, crawlerOutput.getName(), 
-				crawlerOutput.getLongitude(), crawlerOutput.getLatitude());
-		
-		return cityWithEntities;
-	}*/
-	
+
 	/**
 	 * ONLINE-PART: extracts all Entities using the Stanford NER and sends them to CWS Component
 	 * @param textDoc

@@ -15,28 +15,29 @@ import data.control.StanfordNER;
 public class ViewController{
 
 	private String filePath;
+	private String classifierPath;
 	private FileInput fileReader;
 	private String[] fileContent;
 	private StanfordNER ner;
 	
-	public ViewController(String incPath){
+	public ViewController(String incPath, String classifierPath){
 		this.filePath = incPath;
+		this.classifierPath = classifierPath;
 	}
 	
 	public void readIncTextFile(){
 		try{
 			fileReader = new FileInput(filePath);
+//			System.out.println(filePath);
 			fileContent = fileReader.loadCompleteFile();
 			
-			//TEST Output!
-			//System.out.println(Arrays.toString(fileContent));
 		} catch (Exception e){
 			e.printStackTrace();
 		}
 	}
 	
 	public void handleEntities(){
-		ner = new StanfordNER(filePath);
+		ner = new StanfordNER(classifierPath);
 		ArrayList<Entity> allEntities;
 		StringBuffer incText = new StringBuffer(Arrays.toString(fileContent));
 		try{
