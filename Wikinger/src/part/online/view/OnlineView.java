@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.JLabel;
@@ -20,6 +21,10 @@ import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JSeparator;
+
+import org.jdesktop.swingx.JXMapKit;
+import org.jdesktop.swingx.JXMapKit.DefaultProviders;
+import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 public class OnlineView
 {
@@ -50,7 +55,7 @@ public class OnlineView
 	{
 		frmWikinerOnlinepart = new JFrame();
 		frmWikinerOnlinepart.setTitle("Wiki-NER --- OnlinePart");
-		frmWikinerOnlinepart.setBounds(100, 100, 450, 322);
+		frmWikinerOnlinepart.setBounds(100, 100, 618, 516);
 		frmWikinerOnlinepart.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmWikinerOnlinepart.setVisible(true);
 		
@@ -160,11 +165,18 @@ public class OnlineView
 		JInternalFrame internalFrame = new JInternalFrame("Result in OpenStreetMap");
 		internalFrame.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		GridBagConstraints gbc_internalFrame = new GridBagConstraints();
+		gbc_internalFrame.gridheight = 3;
 		gbc_internalFrame.gridwidth = 2;
-		gbc_internalFrame.fill = GridBagConstraints.HORIZONTAL;
+		gbc_internalFrame.fill = GridBagConstraints.BOTH;
 		gbc_internalFrame.gridx = 1;
-		gbc_internalFrame.gridy = 8;
+		gbc_internalFrame.gridy = 6;
 		panel.add(internalFrame, gbc_internalFrame);
+		
+		//visualize OpenStreetMap in InternalFrame
+		JXMapKit openMap = new JXMapKit();
+		openMap.setDefaultProvider(DefaultProviders.OpenStreetMaps);
+		openMap.setAddressLocation(new GeoPosition(50.241111, 11.328056));
+		internalFrame.add(openMap);
 		
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Settings", null, panel_1, null);
