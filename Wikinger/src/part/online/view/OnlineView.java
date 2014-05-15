@@ -25,7 +25,7 @@ public class OnlineView
 {
 
 	private JFrame frmWikinerOnlinepart;
-	private JTextField textField;
+	private JTextField fileTextField;
 	private JTextField setLocationText;
 	private JTextField setPersonText;
 	private JTextField setOrganizationText;
@@ -87,12 +87,12 @@ public class OnlineView
 		panel.add(lblInputTextFor, gbc_lblInputTextFor);
 		
 		setTextField(new JTextField());
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.gridx = 1;
-		gbc_textField.gridy = 2;
-		panel.add(getTextField(), gbc_textField);
+		GridBagConstraints gbc_fileTextField = new GridBagConstraints();
+		gbc_fileTextField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_fileTextField.insets = new Insets(0, 0, 5, 5);
+		gbc_fileTextField.gridx = 1;
+		gbc_fileTextField.gridy = 2;
+		panel.add(getTextField(), gbc_fileTextField);
 		getTextField().setColumns(10);
 		
 		JButton btnBrowse = new JButton("Browse");
@@ -105,7 +105,7 @@ public class OnlineView
 		
 		//Add action to btnBrowse
 		btnBrowse.setActionCommand("browse");
-		FileOpener open = new FileOpener(textField);
+		FileOpener open = new FileOpener(fileTextField);
 		btnBrowse.addActionListener(open);
 		FileReaderAction read = new FileReaderAction(this);
 		
@@ -145,17 +145,17 @@ public class OnlineView
 		gbc_lblFileReadAnd.gridy = 5;
 		panel.add(lblFileReadAnd, gbc_lblFileReadAnd);
 		
-		JButton btnReadFile = new JButton("Start Process");
-		btnReadFile.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		GridBagConstraints gbc_btnReadFile = new GridBagConstraints();
-		gbc_btnReadFile.insets = new Insets(0, 0, 5, 0);
-		gbc_btnReadFile.gridx = 2;
-		gbc_btnReadFile.gridy = 5;
-		panel.add(btnReadFile, gbc_btnReadFile);
+		JButton btnStartProcess = new JButton("Start Process");
+		btnStartProcess.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		GridBagConstraints gbc_btnStartProcess = new GridBagConstraints();
+		gbc_btnStartProcess.insets = new Insets(0, 0, 5, 0);
+		gbc_btnStartProcess.gridx = 2;
+		gbc_btnStartProcess.gridy = 5;
+		panel.add(btnStartProcess, gbc_btnStartProcess);
 		
 		//adding action to btnReadFile
-		btnReadFile.setActionCommand("startProcess");
-		btnReadFile.addActionListener(read);
+		btnStartProcess.setActionCommand("startProcess");
+		btnStartProcess.addActionListener(read);
 		
 		JInternalFrame internalFrame = new JInternalFrame("Result in OpenStreetMap");
 		internalFrame.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -325,11 +325,11 @@ public class OnlineView
 	}
 
 	public JTextField getTextField(){
-		return textField;
+		return fileTextField;
 	}
 
 	public void setTextField(JTextField textField){
-		this.textField = textField;
+		this.fileTextField = textField;
 	}
 
 }
