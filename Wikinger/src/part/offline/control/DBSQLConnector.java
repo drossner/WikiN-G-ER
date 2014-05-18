@@ -48,18 +48,18 @@ public class DBSQLConnector {
 		query.append("INSERT INTO TABLE city VALUES (");
 		query.append(city.getName());
 		query.append(",");
-		query.append(city.getLongi());
-		query.append(",");
 		query.append(city.getLati());
+		query.append(",");
+		query.append(city.getLongi());
 		query.append(");");
 		
 		writeCommand(query.toString());
 		
 		query = new StringBuffer(150);
 		
-		query.append("SELECT id FROM city WHERE name = ");
+		query.append("SELECT id FROM city WHERE name = '");
 		query.append(city.getName());
-		query.append(";");
+		query.append("';");
 		
 		return writeCommand(query.toString())[0];
 	}
@@ -81,7 +81,7 @@ public class DBSQLConnector {
 	public void writeConnection(int cityID, int entityID, int count) {
 		StringBuffer query = new StringBuffer(150);
 		
-		query.append("INSERT INTO TABLE city VALUES (");
+		query.append("INSERT INTO TABLE cityEntityConnection VALUES (");
 		query.append(cityID);
 		query.append(",");
 		query.append(entityID);
