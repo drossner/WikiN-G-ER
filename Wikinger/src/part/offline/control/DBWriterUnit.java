@@ -14,13 +14,13 @@ public class DBWriterUnit extends Thread{
 	private int id;
 	private Status status;
 	
-	public DBWriterUnit(int id, String fileName, DBSQLConnector connector, String entitySplitSymbol, String coordsSplitSymbol, Status status) {
+	public DBWriterUnit(int id, String fileName, DBSQLConnector connector, String entitySplitSymbol, String coordsSplitSymbol) {
 		this.connector = connector;
 		this.coordsSplitSymbol = coordsSplitSymbol;
 		this.entitySplitSymbol = entitySplitSymbol;
 		this.setFileName(fileName);
 		this.id = id;
-		this.status = status;
+		//this.status = status;
 		
 		try {
 			this.in = new FileInput(fileName);
@@ -37,7 +37,7 @@ public class DBWriterUnit extends Thread{
 		String[] dataArr = in.loadCompleteFile();
 		
 		for (int i = 0; i < dataArr.length; i++) {
-			status.setWorkForEachDone(i, id);
+			//status.setWorkForEachDone(i, id);
 			entities = dataArr[i].split(entitySplitSymbol);
 			city = entities[0].split(coordsSplitSymbol);
 			

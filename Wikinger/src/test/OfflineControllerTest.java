@@ -10,8 +10,10 @@ public class OfflineControllerTest {
 		System.out.println("Init Crawling");
 		off.init();
 		System.out.println("Start Crawling");
-		off.startCrawling(1, "localhost", 3306, "wiki", "root", "");
-		
+		//off.startCrawling(1, "localhost", 3306, "wiki", "root", "");
+		System.out.println("Start writing");
+		off.startWritingToDatabase("localhost", 3306, "wikinger", "root", "", "./crawleroutputs/");
+		System.out.println("fertig");
 	}
 
 }

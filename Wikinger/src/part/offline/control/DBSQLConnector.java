@@ -43,19 +43,21 @@ public class DBSQLConnector {
 	}
 
 	public int writeCity(City city) {
-		StringBuffer query = new StringBuffer(150);
+		StringBuffer query = new StringBuffer();
 		
-		query.append("INSERT INTO TABLE city VALUES (");
+		query.append("INSERT INTO TABLE City (name, latitude, longitude) VALUES ('");
 		query.append(city.getName());
-		query.append(",");
+		query.append("', ");
 		query.append(city.getLati());
-		query.append(",");
+		query.append(", ");
 		query.append(city.getLongi());
 		query.append(");");
 		
-		writeCommand(query.toString());
+		System.out.println(query.toString());
 		
-		query = new StringBuffer(150);
+		writeInsertCommand(query.toString());
+		
+		query = new StringBuffer();
 		
 		query.append("SELECT id FROM city WHERE name = '");
 		query.append(city.getName());
@@ -68,13 +70,37 @@ public class DBSQLConnector {
 		int[] rcArr;
 		StringBuffer query = new StringBuffer(150);
 		
-		query.append("SELECT entityToDatabase(");
+		query.append("SELECT counter from entity where name = '");
 		query.append(entity.getName());
-		query.append(",");
-		query.append(entity.getType());
-		query.append(");");
+		query.append("' limit 1;");
 		
 		rcArr = writeCommand(query.toString());
+		query = new StringBuffer(150);
+		
+		if(rcArr == null){
+			query.append("insert into table entity (name, entityType, counter) values ('");
+			query.append(entity.getName());
+			query.append("', '");
+			query.append(entity.getType());
+			query.append("', ");
+			query.append(" 1);");
+		}else{
+			query.append("update entity set counter = ");
+			query.append(rcArr[0]+1);
+			query.append(" where name = '");
+			query.append(entity.getName());
+			query.append("';");
+		}
+		
+		writeInsertCommand(query.toString());
+		
+		query = new StringBuffer(150);
+		query.append("SELECT id from entity where name = '");
+		query.append(entity.getName());
+		query.append("' limit 1;");
+		
+		rcArr = writeCommand(query.toString());
+		
 		return rcArr[0];
 	}
 
@@ -89,7 +115,7 @@ public class DBSQLConnector {
 		query.append(count);
 		query.append(");");
 		
-		writeCommand(query.toString());
+		writeInsertCommand(query.toString());
 	}
 
 	public int[] writeCommand(String query) {
@@ -114,6 +140,23 @@ public class DBSQLConnector {
 		}
 		
 		return null;
+	}
+	
+
+	private int writeInsertCommand(String query) {
+		Statement stmt;
+
+		try {
+			stmt = con.createStatement();
+
+			int rc = stmt.executeUpdate(query);
+
+			return rc;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return -1;
 	}
 
 }
