@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.JLabel;
@@ -16,6 +15,8 @@ import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
 
 import java.awt.Insets;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
@@ -24,7 +25,10 @@ import javax.swing.JSeparator;
 
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.JXMapKit.DefaultProviders;
+import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
+import org.jdesktop.swingx.mapviewer.Waypoint;
+import org.jdesktop.swingx.mapviewer.WaypointPainter;
 
 public class OnlineView
 {
@@ -175,7 +179,18 @@ public class OnlineView
 		//visualize OpenStreetMap in InternalFrame
 		JXMapKit openMap = new JXMapKit();
 		openMap.setDefaultProvider(DefaultProviders.OpenStreetMaps);
-		openMap.setAddressLocation(new GeoPosition(50.241111, 11.328056));
+//		openMap.setAddressLocation(new GeoPosition(50.241111, 11.328056));
+		
+		Set geopositions = new HashSet<Waypoint>();
+		geopositions.add(new Waypoint(41.881944,-87.627778));
+		geopositions.add(new Waypoint(40.716667,-74));
+		geopositions.add(new Waypoint(50.241111, 11.328056));
+		geopositions.add(new Waypoint(72.0000, 40.0000));
+		
+		WaypointPainter painter = new WaypointPainter();
+		painter.setWaypoints(geopositions);
+		openMap.getMainMap().setOverlayPainter(painter);
+		
 		internalFrame.add(openMap);
 		
 		JPanel panel_1 = new JPanel();
