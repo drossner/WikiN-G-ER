@@ -8,17 +8,24 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import part.online.view.OnlineView;
 import data.Entity;
 import data.control.FileInput;
 import data.control.StanfordNER;
 
 public class ViewController{
 
+	//TODO: ViewController soll den Prozess initialisieren!
 	private String filePath;
 	private String classifierPath;
 	private FileInput fileReader;
 	private String[] fileContent;
 	private StanfordNER ner;
+	private OnlineView view;
+	
+	public ViewController(){
+		view = new OnlineView();
+	}
 	
 	public ViewController(String incPath, String classifierPath){
 		this.filePath = incPath;
