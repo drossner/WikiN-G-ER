@@ -30,6 +30,8 @@ public class ViewController{
 	public ViewController(String incPath, String classifierPath){
 		this.filePath = incPath;
 		this.classifierPath = classifierPath;
+		ner = new StanfordNER(classifierPath);
+
 	}
 	
 	public void readIncTextFile(){
@@ -44,7 +46,6 @@ public class ViewController{
 	}
 	
 	public void handleEntities(){
-		ner = new StanfordNER(classifierPath);
 		ArrayList<Entity> allEntities;
 		StringBuffer incText = new StringBuffer(Arrays.toString(fileContent));
 		try{
