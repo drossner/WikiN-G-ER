@@ -1,6 +1,9 @@
 package part.offline.control;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.*;
+
+import data.control.FileOutput;
 
 public class SQLConnector {
 	
@@ -86,6 +89,11 @@ public class SQLConnector {
 			prepStmt.setString(3, cityName+",\\_%");
 			ResultSet rs = prepStmt.executeQuery();
 			rs.last();
+			
+//			if(rs.getRow() == 0){
+//				System.out.println(cityName);
+//			}
+			
 			int[] rc = new int[rs.getRow()];
 			int i = 0;
 			rs.beforeFirst();
@@ -150,13 +158,18 @@ public class SQLConnector {
 		try {
 			stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query.toString());
-			
 			rs.last();
 			String[] rc = new String[rs.getRow()];
 			int i = 0;
 			rs.beforeFirst();
 			while(rs.next()){
-				rc[i++]=rs.getString(1);
+				//rc[i++]=rs.getString(1);
+				try {
+					rc[i++] = new String(rs.getBytes(1), "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			
 			rs.close();
