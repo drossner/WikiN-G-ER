@@ -45,15 +45,13 @@ public class DBSQLConnector {
 	public int writeCity(City city) {
 		StringBuffer query = new StringBuffer();
 		
-		query.append("INSERT INTO TABLE City (name, latitude, longitude) VALUES ('");
+		query.append("INSERT INTO city (name, latitude, longitude) VALUES ('");
 		query.append(city.getName());
 		query.append("', ");
 		query.append(city.getLati());
 		query.append(", ");
 		query.append(city.getLongi());
 		query.append(");");
-		
-		System.out.println(query.toString());
 		
 		writeInsertCommand(query.toString());
 		
@@ -68,17 +66,19 @@ public class DBSQLConnector {
 
 	public int writeEntity(Entity entity) {
 		int[] rcArr;
-		StringBuffer query = new StringBuffer(150);
+		StringBuffer query = new StringBuffer(250);
 		
 		query.append("SELECT counter from entity where name = '");
 		query.append(entity.getName());
+		query.append("' and entityType = '");
+		query.append(entity.getType());
 		query.append("' limit 1;");
 		
 		rcArr = writeCommand(query.toString());
 		query = new StringBuffer(150);
 		
-		if(rcArr == null){
-			query.append("insert into table entity (name, entityType, counter) values ('");
+		if(rcArr.length == 0){
+			query.append("insert into entity (name, entityType, counter) values ('");
 			query.append(entity.getName());
 			query.append("', '");
 			query.append(entity.getType());
@@ -89,6 +89,8 @@ public class DBSQLConnector {
 			query.append(rcArr[0]+1);
 			query.append(" where name = '");
 			query.append(entity.getName());
+			query.append("' and entityType = '");
+			query.append(entity.getType());
 			query.append("';");
 		}
 		
@@ -107,7 +109,7 @@ public class DBSQLConnector {
 	public void writeConnection(int cityID, int entityID, int count) {
 		StringBuffer query = new StringBuffer(150);
 		
-		query.append("INSERT INTO TABLE cityEntityConnection VALUES (");
+		query.append("INSERT INTO cityEntityConnection VALUES (");
 		query.append(cityID);
 		query.append(",");
 		query.append(entityID);

@@ -44,7 +44,8 @@ public class DBWriterUnit extends Thread{
 			cityID = connector.writeCity(new City(city[0], city[1], city[2]));
 			
 			for (int j = 1; j < entities.length; j++) {
-				temp = new Entity(entities[j], entities[j++], entities[j++]);
+				System.out.println(j);
+				temp = new Entity(entities[j], entities[++j], entities[++j]);
 				entityID = connector.writeEntity(temp);
 				
 				connector.writeConnection(cityID, entityID, temp.getCount());
