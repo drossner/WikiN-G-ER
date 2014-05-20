@@ -15,6 +15,8 @@ import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
 
 import java.awt.Insets;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -176,7 +178,7 @@ public class OnlineView
 		gbc_internalFrame.gridy = 6;
 		panel.add(internalFrame, gbc_internalFrame);
 		
-		//visualize OpenStreetMap in InternalFrame
+		//visualize OpenStreetMap in InternalFrame TODO: final??
 		JXMapKit openMap = new JXMapKit();
 		openMap.setDefaultProvider(DefaultProviders.OpenStreetMaps);
 //		openMap.setAddressLocation(new GeoPosition(50.241111, 11.328056));
