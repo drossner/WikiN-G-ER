@@ -1,5 +1,8 @@
 package part.offline.data;
 
+import java.io.UnsupportedEncodingException;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
 import java.util.HashMap;
 
 import data.control.FileInput;
@@ -27,7 +30,7 @@ public class Gazetteer {
 		
 		for(int i = 0; i<temp.length; i++){
 			line = temp[i].split(",");	//Gazetteer speziell
-			value = line[1];			//Gazetteer speziell
+				value = line[1];
 			
 			if(!rc.containsKey(value)){
 				rc.put(value, value);

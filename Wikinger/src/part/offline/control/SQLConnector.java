@@ -90,9 +90,9 @@ public class SQLConnector {
 			ResultSet rs = prepStmt.executeQuery();
 			rs.last();
 			
-//			if(rs.getRow() == 0){
-//				System.out.println(cityName);
-//			}
+			if(rs.getRow() == 0){
+				System.out.println(cityName);
+			}
 			
 			int[] rc = new int[rs.getRow()];
 			int i = 0;
