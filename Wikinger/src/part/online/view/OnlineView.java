@@ -181,13 +181,14 @@ public class OnlineView
 		openMap.setDefaultProvider(DefaultProviders.OpenStreetMaps);
 //		openMap.setAddressLocation(new GeoPosition(50.241111, 11.328056));
 		
-		Set geopositions = new HashSet<Waypoint>();
+		//TODO noch auslagern!!
+		Set<Waypoint> geopositions = new HashSet<Waypoint>();
 		geopositions.add(new Waypoint(41.881944,-87.627778));
 		geopositions.add(new Waypoint(40.716667,-74));
 		geopositions.add(new Waypoint(50.241111, 11.328056));
 		geopositions.add(new Waypoint(72.0000, 40.0000));
 		
-		WaypointPainter painter = new WaypointPainter();
+		WaypointPainter<JXMapViewer> painter = new WaypointPainter<JXMapViewer>();
 		painter.setWaypoints(geopositions);
 		openMap.getMainMap().setOverlayPainter(painter);
 		
