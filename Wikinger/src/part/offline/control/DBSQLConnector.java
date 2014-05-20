@@ -45,9 +45,9 @@ public class DBSQLConnector {
 	public int writeCity(City city) {
 		StringBuffer query = new StringBuffer();
 		
-		query.append("INSERT INTO city (name, latitude, longitude) VALUES ('");
+		query.append("INSERT INTO city (name, latitude, longitude) VALUES (\"");
 		query.append(city.getName());
-		query.append("', ");
+		query.append("\", ");
 		query.append(city.getLati());
 		query.append(", ");
 		query.append(city.getLongi());
@@ -57,9 +57,9 @@ public class DBSQLConnector {
 		
 		query = new StringBuffer();
 		
-		query.append("SELECT id FROM city WHERE name = '");
+		query.append("SELECT id FROM city WHERE name = \"");
 		query.append(city.getName());
-		query.append("';");
+		query.append("\";");
 		
 		return writeCommand(query.toString())[0];
 	}
@@ -68,38 +68,40 @@ public class DBSQLConnector {
 		int[] rcArr;
 		StringBuffer query = new StringBuffer(250);
 		
-		query.append("SELECT counter from entity where name = '");
+		query.append("SELECT counter from entity where name = \"");
 		query.append(entity.getName());
-		query.append("' and entityType = '");
+		query.append("\" and entityType = \"");
 		query.append(entity.getType());
-		query.append("' limit 1;");
+		query.append("\" limit 1;");
+		
+		System.out.println(query.toString());
 		
 		rcArr = writeCommand(query.toString());
 		query = new StringBuffer(150);
 		
 		if(rcArr.length == 0){
-			query.append("insert into entity (name, entityType, counter) values ('");
+			query.append("insert into entity (name, entityType, counter) values (\"");
 			query.append(entity.getName());
-			query.append("', '");
+			query.append("\", \"");
 			query.append(entity.getType());
-			query.append("', ");
+			query.append("\", ");
 			query.append(" 1);");
 		}else{
 			query.append("update entity set counter = ");
 			query.append(rcArr[0]+1);
-			query.append(" where name = '");
+			query.append(" where name = \"");
 			query.append(entity.getName());
-			query.append("' and entityType = '");
+			query.append("\" and entityType = \"");
 			query.append(entity.getType());
-			query.append("';");
+			query.append("\";");
 		}
 		
 		writeInsertCommand(query.toString());
 		
 		query = new StringBuffer(150);
-		query.append("SELECT id from entity where name = '");
+		query.append("SELECT id from entity where name = \"");
 		query.append(entity.getName());
-		query.append("' limit 1;");
+		query.append("\" limit 1;");
 		
 		rcArr = writeCommand(query.toString());
 		
