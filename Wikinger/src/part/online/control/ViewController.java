@@ -27,15 +27,22 @@ public class ViewController{
 	 * 
 	 */
 	public ViewController(){
-		view = new OnlineView();
+		initView();
 	}
 	
+	/**
+	 * private Procedure that initializes the GUI
+	 */
+	private void initView(){
+		view = new OnlineView();
+	}
+
 	/**
 	 * 
 	 * @param incPath
 	 * @param classifierPath
 	 */
-	public void callViewController(String incPath, String classifierPath){
+	public ViewController(String incPath, String classifierPath){
 		this.filePath = incPath;
 		this.classifierPath = classifierPath;
 		ner = new StanfordNER(classifierPath);

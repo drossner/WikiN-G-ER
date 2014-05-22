@@ -32,11 +32,10 @@ public class FileReaderAction implements ActionListener{
 				initViewController(outPath, outClassifier);
 		}
 	}
-
 	
-	//TODO ViewController muss noch geaendert werden!!!
+	//TODO: Bis jetzt noch ne **** Lösung... aber geht!
 	private void initViewController(String incPath, String incClassifier){
-		controller.callViewController(incPath, incClassifier);
+		controller = new ViewController(incPath, incClassifier);
 		doWork();
 	}
 

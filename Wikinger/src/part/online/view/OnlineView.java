@@ -47,7 +47,6 @@ public class OnlineView{
 	 * Create the application.
 	 */
 	public OnlineView(){
-		System.out.println("Bin im OnlineView");
 		initialize();
 	}
 
