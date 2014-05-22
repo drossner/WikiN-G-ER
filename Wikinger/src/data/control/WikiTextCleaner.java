@@ -24,7 +24,7 @@ public class WikiTextCleaner {
 			 current = builder.charAt(i);
 			 
 			 if(current == '{'){
-				 System.out.println("Klammer bei: "+i);
+				// System.out.println("Klammer bei: "+i);
 				 int start = i;
 				 openBreak = 1;
 				 
