@@ -32,6 +32,7 @@ public class OfflineGui extends JFrame {
 
 	private JPanel contentPane;
 	private JButton startButton;
+	private JButton chooseClassifier;
 	private JProgressBar progressBar;
 	private JLabel varlblExpectedTime;
 	private JLabel varlblElapsedTime;
@@ -45,12 +46,13 @@ public class OfflineGui extends JFrame {
 	 */
 
 	public static void main(String[] args) {
-
+		
 		OfflineGui frame = new OfflineGui(new Status(2, 5));
 		frame.setVisible(true);
 	}
 
 	public OfflineGui(Status aStatus) {
+		super("Wiki-NER");
 		textfields = new JTextField[7];
 		this.status = aStatus;
 		initiateFrame();
@@ -85,8 +87,9 @@ public class OfflineGui extends JFrame {
 		textfields[DBInformations.CLASSIFIER] = new JTextField(); //classifier
 		textfields[DBInformations.MAX_THREADS] = new JTextField();
 
-		JButton chooseClassifier = new JButton("Choose Classifier");
+		
 		startButton = new JButton("Start Process");
+		chooseClassifier = new JButton("Choose Classifier");
 		progressBar = new JProgressBar(0, 1000);
 		progressBar.setStringPainted(true);
 
@@ -390,6 +393,7 @@ public class OfflineGui extends JFrame {
 		for (int i = 0; i < textfields.length; i++) {
 			textfields[i].setEditable(false);
 		}
+		chooseClassifier.setEnabled(false);
 		startButton.setText("Abort");
 		startButton.setBackground(Color.red);
 		startButton.setForeground(Color.white);
@@ -401,6 +405,7 @@ public class OfflineGui extends JFrame {
 		for (int i = 0; i < textfields.length; i++) {
 			textfields[i].setEditable(true);
 		}
+		chooseClassifier.setEnabled(true);
 		startButton.setText("Start Process");
 		startButton.setBackground(null);
 		startButton.setForeground(null);

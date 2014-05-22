@@ -33,11 +33,9 @@ public class OfflineGUIListener implements ActionListener {
 	}
 	
 	private void abort() {
-		System.out.println("Abgebrochen"); 
 		JDialog dialog  = new JDialog();
 		Object[] options = {"Yes", "No"};
 		int n =JOptionPane.showOptionDialog(dialog, "Are you sure?", "Abort Crawling", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null ,options, options[1]);
-
 		if (n==0) {
 			gui.abort();
 		}
@@ -47,13 +45,25 @@ public class OfflineGUIListener implements ActionListener {
 		
 		String[] infos = gui.getInformations();
 		
-		for (int i = 0; i < infos.length; i++) {
-			System.out.println(infos[i]);
+		if (!fullyFilled(gui.getInformations())) {
+			JDialog dialog  = new JDialog();
+			JOptionPane.showMessageDialog(dialog, "Please fill in all Fields");
+			return;
 		}
-		
 		gui.disableFields();
 		Thread t = new Thread(updater);
 		t.start();
+	}
+	
+	private boolean fullyFilled(String[] information){
+		boolean temp = true;
+		
+		for (int i = 0; i < information.length; i++) {
+			if (information[i].equals("")) {
+				temp =false;
+			}
+		}
+		return temp;
 	}
 
 }
