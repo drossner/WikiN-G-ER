@@ -76,6 +76,16 @@ public class Status {
 	}
 	
 	/**
+	 * setzt die variablen zurück, damit das objekt nochmals benutzt werden kann
+	 */
+	public void reset(){
+		this.percentDone = 0.0;
+		this.startTime = 0;
+		
+		this.workForEachDone = new int[workForEachDone.length];
+	}
+	
+	/**
 	 * calcStatus() sollte vorher aufgerufen werden, um auf dem aktuellsten Stand zu sein
 	 * @return Verbleibende Zeit in ms
 	 */
