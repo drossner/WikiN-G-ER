@@ -63,7 +63,7 @@ public class OfflineGUIListener implements ActionListener {
 		updater.setStatus(status);
 		gui.disableFields();
 		Thread t = new Thread(updater);
-//		controller.startCrawling(infos);
+		controller.startCrawling(infos);
 		t.start();
 	}
 	
