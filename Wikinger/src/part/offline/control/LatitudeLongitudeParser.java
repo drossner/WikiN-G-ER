@@ -157,12 +157,12 @@ public class LatitudeLongitudeParser {
 		double[] lon = new double[3];
 		int index = 0;
 		for(int i = 1; i < posNS; i++){
-			lat[index++] = Double.parseDouble(coordFields[i]);
+			if(!coordFields[i].equals("")) lat[index++] = Double.parseDouble(coordFields[i]);
 		}
 		
 		index = 0;
 		for(int i = posNS + 1; i < posEW; i++){
-			lon[index++] = Double.parseDouble(coordFields[i]);
+			if(!coordFields[i].equals(""))  lon[index++] = Double.parseDouble(coordFields[i]);
 		}
 		
 		//Umrechnung von Grad in Dezimal
