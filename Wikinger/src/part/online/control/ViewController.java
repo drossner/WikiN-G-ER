@@ -15,7 +15,7 @@ import data.control.StanfordNER;
 
 public class ViewController{
 
-	//TODO: ViewController soll den Prozess initialisieren!
+	//TODO: ViewController soll den Prozess starten!
 	private String filePath;
 	private String classifierPath;
 	private FileInput fileReader;
@@ -23,10 +23,18 @@ public class ViewController{
 	private StanfordNER ner;
 	private OnlineView view;
 	
+	/**
+	 * 
+	 */
 	public ViewController(){
 		view = new OnlineView();
 	}
 	
+	/**
+	 * 
+	 * @param incPath
+	 * @param classifierPath
+	 */
 	public ViewController(String incPath, String classifierPath){
 		this.filePath = incPath;
 		this.classifierPath = classifierPath;
@@ -34,6 +42,9 @@ public class ViewController{
 
 	}
 	
+	/**
+	 * reads the inputted .txt File
+	 */
 	public void readIncTextFile(){
 		try{
 			fileReader = new FileInput(filePath);
@@ -44,6 +55,9 @@ public class ViewController{
 		}
 	}
 	
+	/**
+	 * calls the chosen Classifier and extracts the Entities
+	 */
 	public void handleEntities(){
 		ArrayList<Entity> allEntities;
 		StringBuffer incText = new StringBuffer(Arrays.toString(fileContent));
