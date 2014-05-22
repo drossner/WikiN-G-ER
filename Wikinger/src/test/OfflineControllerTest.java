@@ -12,7 +12,7 @@ public class OfflineControllerTest {
 		System.out.println(Charset.defaultCharset());
 		OfflineController off = new OfflineController(new StanfordNER("./classifiers/english.all.3class.distsim.crf.ser.gz"), "./gazetteer.csv");
 		System.out.println("Init Crawling");
-		Status s = off.init(8);
+		Status s = off.init(1);
 		System.out.println("Start Crawling");
 		OfflineControllerTestGui gui = new OfflineControllerTestGui(s);
 		gui.init();
