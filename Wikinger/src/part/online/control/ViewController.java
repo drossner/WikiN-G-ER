@@ -37,7 +37,6 @@ public class ViewController{
 	public void readIncTextFile(){
 		try{
 			fileReader = new FileInput(filePath);
-//			System.out.println(filePath);
 			fileContent = fileReader.loadCompleteFile();
 			
 		} catch (Exception e){
