@@ -434,7 +434,7 @@ public class OfflineGui extends JFrame {
 	public void setProgress(Status status) {
 		int percentage = (int) (1000 * status.getPercent());
 		progressBar.setValue(percentage);
-		progressBar.setString(percentage + "%");
+		progressBar.setString(String.format("%.2f", percentage/10.0) + "%");
 		long time = (System.currentTimeMillis() - status.getStartTime());
 		varlblElapsedTime.setText(getTime(time));
 		varlblExpectedTime.setText(getTime(status.getTimeRemaining()));
