@@ -27,8 +27,8 @@ public class DataDump{
 				entity = temp.get(ent.getName());
 				count = entity.getCount();
 				entity.setCount(++count);
-				temp.remove(ent.getName());
-				temp.put(ent.getName(), entity);
+				temp.remove(entity.getName());
+				temp.put(entity.getName(), entity);
 			}else{
 				temp.put(ent.getName(), ent);
 			}
