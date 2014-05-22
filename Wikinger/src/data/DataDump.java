@@ -19,19 +19,22 @@ public class DataDump{
 	 */
 	private void extractEntities(ArrayList<Entity> entities) {
 		HashMap<String, Entity> temp = new HashMap<String, Entity>();	
+		StringBuilder hashMapKey = new StringBuilder();
 		Entity entity = null;
 		int count;
 		
 		for(Entity ent : entities){
-			if(temp.containsKey(ent.getName()) && ent.getType() == temp.get(ent.getName()).getType()){
-				entity = temp.get(ent.getName());
+			hashMapKey.append(ent.getName() + "/" + ent.getType());
+			if(temp.containsKey(hashMapKey)){
+				entity = temp.get(hashMapKey);
 				count = entity.getCount();
 				ent.setCount(++count);
-				temp.remove(ent.getName());
-				temp.put(ent.getName(), ent);
+				temp.remove(hashMapKey);
+				temp.put(hashMapKey.toString(), ent);
 			}else{
-				temp.put(ent.getName(), ent);
+				temp.put(hashMapKey.toString(), ent);
 			}
+			hashMapKey = new StringBuilder();
 		}
 		entityList = temp.values().toArray(new Entity[temp.values().size()]);
 	}
