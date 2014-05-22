@@ -74,7 +74,7 @@ public class DBSQLConnector {
 		query.append(entity.getType());
 		query.append("\" limit 1;");
 		
-		System.out.println(query.toString());
+		//System.out.println(query.toString());
 		
 		rcArr = writeCommand(query.toString());
 		query = new StringBuffer(150);
