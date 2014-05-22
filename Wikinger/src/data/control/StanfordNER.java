@@ -45,10 +45,9 @@ public class StanfordNER
 	 * @throws IOException 
 	 * @throws SAXException
 	 */
-	public ArrayList<Entity> extractEntities(StringBuffer textDoc) throws IOException, ParserConfigurationException, SAXException{
+	public ArrayList<Entity> extractEntities(String text) throws IOException, ParserConfigurationException, SAXException{
 
 		ArrayList<Entity> entities = new ArrayList<Entity>();
-		String text  = textDoc.toString();
 		String resultInXml = classifier.classifyToString(text, "xml", false);
 		StringBuffer buffer = new StringBuffer("<root>");
 		buffer.append(resultInXml);

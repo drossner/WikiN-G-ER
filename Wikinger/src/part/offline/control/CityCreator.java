@@ -11,16 +11,20 @@ import data.City;
 import data.DataDump;
 import data.Entity;
 import data.control.StanfordNER;
+import data.control.WikiTextCleaner;
 
 public class CityCreator {
-	StanfordNER ner;
-	String name;
-	LatitudeLongitudeParser llp;
+	private StanfordNER ner;
+	private String name;
+	private LatitudeLongitudeParser llp;
+	private WikiTextCleaner cleaner;
+	
 	
 	public CityCreator(StanfordNER ner, String name, LatitudeLongitudeParser llp){
 		this.ner = ner;
 		this.name = name;
 		this.llp = llp;
+		this.cleaner = new WikiTextCleaner();
 	}
 	
 	/**
@@ -37,7 +41,7 @@ public class CityCreator {
 		if(!checkIfCity(text)) return null;
 	
 		try {
-			temp = ner.extractEntities(new StringBuffer(text));
+			temp = ner.extractEntities(cleaner.cleanText(text));
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParserConfigurationException e) {
