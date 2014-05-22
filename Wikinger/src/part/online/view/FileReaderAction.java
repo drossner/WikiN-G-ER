@@ -33,8 +33,10 @@ public class FileReaderAction implements ActionListener{
 		}
 	}
 
+	
+	//TODO ViewController muss noch geaendert werden!!!
 	private void initViewController(String incPath, String incClassifier){
-		controller = new ViewController(incPath, incClassifier);
+		controller.callViewController(incPath, incClassifier);
 		doWork();
 	}
 

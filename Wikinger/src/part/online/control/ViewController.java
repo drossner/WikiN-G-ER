@@ -35,7 +35,7 @@ public class ViewController{
 	 * @param incPath
 	 * @param classifierPath
 	 */
-	public ViewController(String incPath, String classifierPath){
+	public void callViewController(String incPath, String classifierPath){
 		this.filePath = incPath;
 		this.classifierPath = classifierPath;
 		ner = new StanfordNER(classifierPath);
@@ -60,7 +60,7 @@ public class ViewController{
 	 */
 	public void handleEntities(){
 		ArrayList<Entity> allEntities;
-		StringBuffer incText = new StringBuffer(Arrays.toString(fileContent));
+		String incText = Arrays.toString(fileContent);
 		try{
 			allEntities = ner.extractEntities(incText);
 			
