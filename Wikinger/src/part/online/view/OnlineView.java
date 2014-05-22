@@ -55,6 +55,7 @@ public class OnlineView{
 	 */
 	private void initialize(){
 		frmWikinerOnlinepart = new JFrame();
+		frmWikinerOnlinepart.setLocationRelativeTo(null);
 		frmWikinerOnlinepart.setTitle("Wiki-NER --- OnlinePart");
 		frmWikinerOnlinepart.setBounds(100, 100, 618, 516);
 		frmWikinerOnlinepart.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
