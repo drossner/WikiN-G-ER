@@ -45,22 +45,7 @@ public class WikiTextCleaner {
 		 
 		 //remove []
 		 for(int i = 0; i < builder.length(); i++){
-			 current = builder.charAt(i);
-			 
-			 if(current == '['){
-				 int start = i;
-				 openBreak = 1;
-				 
-				 while(openBreak != 0 && ++i < builder.length()){
-					 current = builder.charAt(i);
-					 
-					 if(current == '[') openBreak++;
-					 if(current == ']') openBreak--;
-				 }
-				 
-				 builder.delete(start, i+1);
-				 i = start;
-			 }
+
 		 }
 		 
 		 return builder.toString();
