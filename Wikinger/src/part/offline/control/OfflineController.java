@@ -77,6 +77,15 @@ public class OfflineController {
 		
 	}
 	
+	/**
+	 * Method to start the file to database write
+	 * @param host
+	 * @param port
+	 * @param database
+	 * @param user
+	 * @param passwd
+	 * @param directory of the crawled crawleroutputs, in a different folder
+	 */
 	public void startWritingToDatabase(String host, int port, String database, String user, String passwd, String directory){
 		int crawlerOutPutFileCount;
 		Thread[] threadList;
@@ -95,7 +104,7 @@ public class OfflineController {
 		}
 		
 		for (int i = 0; i < threadList.length; i++) {
-			DBWriterUnit temp = new DBWriterUnit(i, fileDest+i+".txt", connectors[i], ";#/", ";");
+			DBWriterUnit temp = new DBWriterUnit(i, fileDest+i+".txt", connectors[i], ";#/", ";", status);
 			threadList[i] = new Thread(temp);
 			threadList[i].start();
 		}
