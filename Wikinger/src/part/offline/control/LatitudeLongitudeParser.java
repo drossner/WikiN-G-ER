@@ -162,7 +162,7 @@ public class LatitudeLongitudeParser {
 		
 		index = 0;
 		for(int i = posNS + 1; i < posEW; i++){
-			if(!coordFields[i].equals(""))  lon[index++] = Double.parseDouble(coordFields[i]);
+			if(!coordFields[i].equals("")) lon[index++] = Integer.parseInt(coordFields[i]);
 		}
 		
 		//Umrechnung von Grad in Dezimal

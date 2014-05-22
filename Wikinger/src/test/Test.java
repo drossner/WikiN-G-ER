@@ -68,7 +68,7 @@ public class Test {
 		for (int i = 0; i < erg8.length; i++) {
 			System.out.println(erg8[i]);
 		}
-		
+
 		System.out.println("");
 		
 		double[] erg9 = p.parseLatLon(ParseTestStrings.Coord5);
@@ -84,7 +84,11 @@ public class Test {
 		for (int i = 0; i < erg10.length; i++) {
 			System.out.println(erg10[i]);
 		}
+		double[] erg11 = p.parseLatLon(ParseTestStrings.Astudillo);
 		
+		for (int i = 0; i < erg11.length; i++) {
+			System.out.println(erg11[i]);
+		}
 		
 	}
 
