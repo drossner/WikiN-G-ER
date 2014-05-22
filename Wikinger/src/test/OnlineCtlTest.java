@@ -8,6 +8,7 @@ public class OnlineCtlTest{
 	public static void main(String[] args){
 //		OnlineView view = new OnlineView();
 		ViewController ctl = new ViewController();
+		System.out.println("Starting " + ctl.getClass());
 	}
 
 }
