@@ -38,6 +38,7 @@ public class DBWriterUnit extends Thread{
 		
 		for (int i = 0; i < dataArr.length; i++) {
 			//status.setWorkForEachDone(i, id);
+			System.out.println("Thread: " + id + " bei " + i);
 			entities = dataArr[i].split(entitySplitSymbol);
 			city = entities[0].split(coordsSplitSymbol);
 			

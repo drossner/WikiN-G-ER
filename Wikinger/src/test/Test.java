@@ -68,7 +68,14 @@ public class Test {
 		for (int i = 0; i < erg8.length; i++) {
 			System.out.println(erg8[i]);
 		}
+
+		System.out.println("Astudillo :)");
 		
+		double[] erg9 = p.parseLatLon(ParseTestStrings.Astudillo);
+		
+		for (int i = 0; i < erg9.length; i++) {
+			System.out.println(erg9[i]);
+		}
 		
 	}
 
