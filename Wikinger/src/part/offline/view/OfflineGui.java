@@ -36,9 +36,9 @@ public class OfflineGui extends JFrame {
 	private JProgressBar progressBar;
 	private JLabel varlblExpectedTime;
 	private JLabel varlblElapsedTime;
-	private Status status;
 	private boolean isAborted = false;
 	private JTextField[] textfields;
+	private OfflineGUIListener listener;
 
 
 	/**
@@ -47,15 +47,22 @@ public class OfflineGui extends JFrame {
 
 	public static void main(String[] args) {
 		
-		OfflineGui frame = new OfflineGui(new Status(2, 5));
+		OfflineGui frame = new OfflineGui();
+		
 		frame.setVisible(true);
 	}
 
-	public OfflineGui(Status aStatus) {
+	public OfflineGui() {
 		super("Wiki-NER");
 		textfields = new JTextField[7];
-		this.status = aStatus;
 		initiateFrame();
+		setActionlistener();
+	}
+
+	private void setActionlistener(){
+		listener = new OfflineGUIListener(this);
+		listener.setUpdater(new Updater(this));
+		startButton.addActionListener(listener);
 	}
 
 	private void initiateFrame() {
@@ -87,6 +94,9 @@ public class OfflineGui extends JFrame {
 		textfields[DBInformations.CLASSIFIER] = new JTextField(); //classifier
 		textfields[DBInformations.MAX_THREADS] = new JTextField();
 
+		textfields[DBInformations.PORT].addKeyListener(new NumberListener());
+		textfields[DBInformations.MAX_THREADS].addKeyListener(new NumberListener());
+		
 		
 		startButton = new JButton("Start Process");
 		chooseClassifier = new JButton("Choose Classifier");
@@ -98,7 +108,6 @@ public class OfflineGui extends JFrame {
 		JTextPane textPane = new JTextPane();
 
 		startButton.setActionCommand("start");
-		startButton.addActionListener(new OfflineGUIListener(this, new Updater(this,this.status)));
 		chooseClassifier.setActionCommand("browse");
 		chooseClassifier.addActionListener(new FileOpener(textfields[DBInformations.CLASSIFIER])); // TODO:
 																					// Package
@@ -437,11 +446,13 @@ public class OfflineGui extends JFrame {
 
 	class Updater implements Runnable {
 
-		OfflineGui gui;
+		private OfflineGui gui;
 		private Status status;
 
-		public Updater(OfflineGui gui, Status status) {
+		public Updater(OfflineGui gui) {
 			this.gui = gui;
+		}
+		public void setStatus(Status status){
 			this.status = status;
 		}
 
