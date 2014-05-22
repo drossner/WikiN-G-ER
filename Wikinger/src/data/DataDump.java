@@ -23,14 +23,14 @@ public class DataDump{
 		int count;
 		
 		for(Entity ent : entities){
-			if(temp.containsKey(ent.getName()) && ent.getType() == temp.get(ent.getName()).getType()){
-				entity = temp.get(ent.getName());
+			if(temp.containsKey(ent.getName() + "/" + ent.getType())){
+				entity = temp.get(ent.getName() + "/" + ent.getType());
 				count = entity.getCount();
-				entity.setCount(++count);
-				temp.remove(ent.getName());
-				temp.put(ent.getName(), entity);
+				ent.setCount(++count);
+				temp.remove(ent.getName() + "/" + ent.getType());
+				temp.put(ent.getName() + "/" + ent.getType(), ent);
 			}else{
-				temp.put(ent.getName(), ent);
+				temp.put(ent.getName() + "/" + ent.getType(), ent);
 			}
 		}
 		entityList = temp.values().toArray(new Entity[temp.values().size()]);

@@ -2,6 +2,7 @@ package part.offline.control;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,6 +13,14 @@ import data.Entity;
 public class DBSQLConnector {
 
 	private Connection con;
+	private PreparedStatement selectEntityCounter;
+	private PreparedStatement selectCityID;
+	private PreparedStatement selectEntityID;
+	private PreparedStatement insertEntity;
+	private PreparedStatement insertCity;
+	private PreparedStatement insertCitEntConnection;
+	private PreparedStatement updateEntity;
+	
 
 	/**
 	 * Init the connection to the given database
@@ -39,53 +48,49 @@ public class DBSQLConnector {
 			System.out.println("Verbindung ist fehlgeschlagen: "
 					+ sqle.getMessage());
 		}
+		
+		try {
+			selectEntityCounter = con.prepareStatement("SELECT counter from entity where name = \"?\" and entityType = \"?\" limit 1;");
+			selectCityID = con.prepareStatement("SELECT id FROM city WHERE name = \"?\";");
+			selectEntityID = con.prepareStatement("");
+			insertCity = con.prepareStatement("INSERT INTO city (name, latitude, longitude) VALUES (\"?\", \"?\", \"?\");");
+			insertEntity = con.prepareStatement("INSERT INTO entity (name, entityType, counter) values (\"?\", \"?\", 1;");
+			insertCitEntConnection = con.prepareStatement("");
+			updateEntity = con.prepareStatement("UPDATE entity SET counter = ");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 	}
 
-	public int writeCity(City city) {
-		StringBuffer query = new StringBuffer();
+	public int writeCity(City city) throws SQLException {
+		ResultSet rs;
 		
-		query.append("INSERT INTO city (name, latitude, longitude) VALUES (\"");
-		query.append(city.getName());
-		query.append("\", ");
-		query.append(city.getLati());
-		query.append(", ");
-		query.append(city.getLongi());
-		query.append(");");
+		insertCity.setString(1, city.getName());
+		insertCity.setDouble(2, city.getLati());
+		insertCity.setDouble(3, city.getLongi());
 		
-		writeInsertCommand(query.toString());
+		insertCity.executeUpdate();
 		
-		query = new StringBuffer();
+		selectCityID.setString(1, city.getName());
+		rs = selectCityID.executeQuery();
+		rs.next();
 		
-		query.append("SELECT id FROM city WHERE name = \"");
-		query.append(city.getName());
-		query.append("\";");
-		
-		return writeCommand(query.toString())[0];
+		return rs.getInt(1);
 	}
 
 	public int writeEntity(Entity entity) {
-		int[] rcArr;
-		StringBuffer query = new StringBuffer(250);
+		ResultSet rs;
 		
-		query.append("SELECT counter from entity where name = \"");
-		query.append(entity.getName());
-		query.append("\" and entityType = \"");
-		query.append(entity.getType());
-		query.append("\" limit 1;");
+		selectEntityCounter.setString(1, entity.getName());
+		selectEntityCounter.setString(2, entity.getType());				//Fehler !!! Type sollte eignetlich int sein
 		
-		rcArr = writeCommand(query.toString());
-		query = new StringBuffer(150);
+		rs = selectEntityCounter.executeQuery();
 		
 		if(rcArr.length == 0){
-			query.append("insert into entity (name, entityType, counter) values (\"");
-			query.append(entity.getName());
-			query.append("\", \"");
-			query.append(entity.getType());
-			query.append("\", ");
-			query.append(" 1);");
+			insertEntity.setString(1, entity.getName());
+			insertEntity.setString(2, entity.getType());
 		}else{
-			query.append("update entity set counter = ");
 			query.append(rcArr[0]+1);
 			query.append(" where name = \"");
 			query.append(entity.getName());
