@@ -1,10 +1,13 @@
 package part.online.view;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Image;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,8 +18,6 @@ import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
 
 import java.awt.Insets;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,9 +29,10 @@ import javax.swing.JSeparator;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.JXMapKit.DefaultProviders;
 import org.jdesktop.swingx.JXMapViewer;
-import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.jdesktop.swingx.mapviewer.Waypoint;
 import org.jdesktop.swingx.mapviewer.WaypointPainter;
+import org.jdesktop.swingx.mapviewer.WaypointRenderer;
+import org.jdesktop.swingx.painter.CompoundPainter;
 
 public class OnlineView
 {
@@ -178,7 +180,7 @@ public class OnlineView
 		gbc_internalFrame.gridy = 6;
 		panel.add(internalFrame, gbc_internalFrame);
 		
-		//visualize OpenStreetMap in InternalFrame TODO: final??
+		//visualize OpenStreetMap in InternalFrame
 		JXMapKit openMap = new JXMapKit();
 		openMap.setDefaultProvider(DefaultProviders.OpenStreetMaps);
 //		openMap.setAddressLocation(new GeoPosition(50.241111, 11.328056));
@@ -344,6 +346,12 @@ public class OnlineView
 		
 		internalFrame.setVisible(true);
 		
+	}
+
+	protected Object getGeopositions()
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public JTextField getClassifierTextField(){
