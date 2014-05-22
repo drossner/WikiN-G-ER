@@ -73,7 +73,7 @@ public class CityCreator {
 	 * @return true if text represents a city
 	 */
 	public boolean checkIfCity(String text) {
-		return text.contains("|population");
+		return text.replaceAll("\\s", "").contains("|population");
 		
 	}
 	
