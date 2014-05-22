@@ -156,11 +156,13 @@ public class LatitudeLongitudeParser {
 		double[] lat = new double[3];
 		double[] lon = new double[3];
 		int index = 0;
+
 		for(int i = 1; i < posNS; i++){
 			if(!coordFields[i].equals("")) lat[index++] = Double.parseDouble(coordFields[i]);
 		}
 		
 		index = 0;
+
 		for(int i = posNS + 1; i < posEW; i++){
 			if(!coordFields[i].equals("")) lon[index++] = Integer.parseInt(coordFields[i]);
 		}

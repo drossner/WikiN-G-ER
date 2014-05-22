@@ -70,7 +70,7 @@ public class Test {
 		}
 
 		System.out.println("");
-		
+
 		double[] erg9 = p.parseLatLon(ParseTestStrings.Coord5);
 		
 		for (int i = 0; i < erg9.length; i++) {
