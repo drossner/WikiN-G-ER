@@ -1,4 +1,6 @@
 package part.offline.control;
+import java.io.File;
+
 import part.offline.data.Gazetteer;
 import data.control.FileOutput;
 import data.control.StanfordNER;
@@ -72,8 +74,39 @@ public class OfflineController {
 				e.printStackTrace();
 			}
 		}
-		//System.out.println("Alle gejoint und fertig !");
 		
+	}
+	
+	public void startWritingToDatabase(String host, int port, String database, String user, String passwd, String directory){
+		int crawlerOutPutFileCount;
+		Thread[] threadList;
+		DBSQLConnector[] connectors;
+		String fileDest;
+		
+		fileDest = directory + "CrawlerOutPut";
+		crawlerOutPutFileCount = new File(directory).listFiles().length; 
+		
+		threadList = new Thread[crawlerOutPutFileCount];
+		connectors = new DBSQLConnector[crawlerOutPutFileCount];
+		
+		for (int i = 0; i < connectors.length; i++) {
+			connectors[i] = new DBSQLConnector();
+			connectors[i].init(host, port, database, user, passwd);
+		}
+		
+		for (int i = 0; i < threadList.length; i++) {
+			DBWriterUnit temp = new DBWriterUnit(i, fileDest+i+".txt", connectors[i], ";#/", ";");
+			threadList[i] = new Thread(temp);
+			threadList[i].start();
+		}
+		
+		for (int i = 0; i < threadList.length; i++) {
+			try {
+				threadList[i].join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public Gazetteer getGaz() {
