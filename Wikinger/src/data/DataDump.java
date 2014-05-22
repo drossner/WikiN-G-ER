@@ -25,10 +25,10 @@ public class DataDump{
 		for(Entity ent : entities){
 			if(temp.containsKey(ent.getName()) && ent.getType() == temp.get(ent.getName()).getType()){
 				entity = temp.get(ent.getName());
-				count = ent.getCount();
+				count = entity.getCount();
 				entity.setCount(++count);
 				temp.remove(ent.getName());
-				temp.put(entity.getName(), entity);
+				temp.put(ent.getName(), entity);
 			}else{
 				temp.put(ent.getName(), ent);
 			}
