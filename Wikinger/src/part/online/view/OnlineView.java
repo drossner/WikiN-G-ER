@@ -28,8 +28,11 @@ import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.jdesktop.swingx.mapviewer.Waypoint;
 import org.jdesktop.swingx.mapviewer.WaypointPainter;
+import java.awt.FlowLayout;
+import javax.swing.JSplitPane;
 
-public class OnlineView{
+public class OnlineView
+{
 
 	private JFrame frmWikinerOnlinepart;
 	private JTextField fileTextField;
@@ -46,14 +49,16 @@ public class OnlineView{
 	/**
 	 * Create the application.
 	 */
-	public OnlineView(){
+	public OnlineView()
+	{
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(){
+	private void initialize()
+	{
 		frmWikinerOnlinepart = new JFrame();
 		frmWikinerOnlinepart.setLocationRelativeTo(null);
 		frmWikinerOnlinepart.setTitle("Wiki-NER --- OnlinePart");
@@ -70,23 +75,23 @@ public class OnlineView{
 		frmWikinerOnlinepart.getContentPane().add(tabbedPane,
 				BorderLayout.CENTER);
 
-		JPanel panel = new JPanel();
-		tabbedPane.addTab("General", null, panel, null);
-		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] { 0, 0, 0, 0 };
-		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_panel.columnWeights = new double[] { 0.0, 1.0, 1.0,
+		JPanel mainPanel = new JPanel();
+		tabbedPane.addTab("General", null, mainPanel, null);
+		GridBagLayout gbl_mainPanel = new GridBagLayout();
+		gbl_mainPanel.columnWidths = new int[] { 0, 0, 0, 0 };
+		gbl_mainPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_mainPanel.columnWeights = new double[] { 0.0, 1.0, 1.0,
 				Double.MIN_VALUE };
-		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+		gbl_mainPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				1.0, 0.0, 1.0, Double.MIN_VALUE };
-		panel.setLayout(gbl_panel);
+		mainPanel.setLayout(gbl_mainPanel);
 
 		JSeparator separator = new JSeparator();
 		GridBagConstraints gbc_separator = new GridBagConstraints();
 		gbc_separator.insets = new Insets(0, 0, 5, 5);
 		gbc_separator.gridx = 1;
 		gbc_separator.gridy = 0;
-		panel.add(separator, gbc_separator);
+		mainPanel.add(separator, gbc_separator);
 
 		JLabel lblInputTextFor = new JLabel(
 				"Input Text for Named Entity Recognition");
@@ -96,7 +101,7 @@ public class OnlineView{
 		gbc_lblInputTextFor.anchor = GridBagConstraints.WEST;
 		gbc_lblInputTextFor.gridx = 1;
 		gbc_lblInputTextFor.gridy = 1;
-		panel.add(lblInputTextFor, gbc_lblInputTextFor);
+		mainPanel.add(lblInputTextFor, gbc_lblInputTextFor);
 
 		setTextField(new JTextField());
 		fileTextField.setEditable(false);
@@ -105,7 +110,7 @@ public class OnlineView{
 		gbc_fileTextField.insets = new Insets(0, 0, 5, 5);
 		gbc_fileTextField.gridx = 1;
 		gbc_fileTextField.gridy = 2;
-		panel.add(getTextField(), gbc_fileTextField);
+		mainPanel.add(getTextField(), gbc_fileTextField);
 		getTextField().setColumns(10);
 
 		JButton btnBrowse = new JButton("Browse");
@@ -114,7 +119,7 @@ public class OnlineView{
 		gbc_btnBrowse.insets = new Insets(0, 0, 5, 0);
 		gbc_btnBrowse.gridx = 2;
 		gbc_btnBrowse.gridy = 2;
-		panel.add(btnBrowse, gbc_btnBrowse);
+		mainPanel.add(btnBrowse, gbc_btnBrowse);
 
 		// Add action to btnBrowse
 		btnBrowse.setActionCommand("browse");
@@ -129,7 +134,7 @@ public class OnlineView{
 		gbc_classifierTextField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_classifierTextField.gridx = 1;
 		gbc_classifierTextField.gridy = 3;
-		panel.add(classifierTextField, gbc_classifierTextField);
+		mainPanel.add(classifierTextField, gbc_classifierTextField);
 		classifierTextField.setColumns(10);
 		FileOpener openClf = new FileOpener(classifierTextField);
 
@@ -139,7 +144,7 @@ public class OnlineView{
 		gbc_btnReadClassifier.insets = new Insets(0, 0, 5, 0);
 		gbc_btnReadClassifier.gridx = 2;
 		gbc_btnReadClassifier.gridy = 3;
-		panel.add(btnReadClassifier, gbc_btnReadClassifier);
+		mainPanel.add(btnReadClassifier, gbc_btnReadClassifier);
 
 		btnReadClassifier.setActionCommand("readclassifier");
 		btnReadClassifier.addActionListener(openClf);
@@ -149,7 +154,7 @@ public class OnlineView{
 		gbc_separator_1.insets = new Insets(0, 0, 5, 5);
 		gbc_separator_1.gridx = 0;
 		gbc_separator_1.gridy = 4;
-		panel.add(separator_1, gbc_separator_1);
+		mainPanel.add(separator_1, gbc_separator_1);
 
 		JLabel lblFileReadAnd = new JLabel("File read and processing...");
 		lblFileReadAnd.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -157,7 +162,7 @@ public class OnlineView{
 		gbc_lblFileReadAnd.insets = new Insets(0, 0, 5, 5);
 		gbc_lblFileReadAnd.gridx = 1;
 		gbc_lblFileReadAnd.gridy = 5;
-		panel.add(lblFileReadAnd, gbc_lblFileReadAnd);
+		mainPanel.add(lblFileReadAnd, gbc_lblFileReadAnd);
 
 		JButton btnStartProcess = new JButton("Start Process");
 		btnStartProcess.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -165,14 +170,13 @@ public class OnlineView{
 		gbc_btnStartProcess.insets = new Insets(0, 0, 5, 0);
 		gbc_btnStartProcess.gridx = 2;
 		gbc_btnStartProcess.gridy = 5;
-		panel.add(btnStartProcess, gbc_btnStartProcess);
+		mainPanel.add(btnStartProcess, gbc_btnStartProcess);
 
 		// adding action to btnReadFile
 		btnStartProcess.setActionCommand("startProcess");
 		btnStartProcess.addActionListener(read);
 
-		internalFrame = new JInternalFrame(
-				"Result in OpenStreetMap");
+		internalFrame = new JInternalFrame("Result in OpenStreetMap");
 		internalFrame.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,
 				null));
 		GridBagConstraints gbc_internalFrame = new GridBagConstraints();
@@ -181,18 +185,20 @@ public class OnlineView{
 		gbc_internalFrame.fill = GridBagConstraints.BOTH;
 		gbc_internalFrame.gridx = 1;
 		gbc_internalFrame.gridy = 6;
-		panel.add(internalFrame, gbc_internalFrame);
+		mainPanel.add(internalFrame, gbc_internalFrame);
 		this.setMap();
-		
-		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Settings", null, panel_1, null);
-		GridBagLayout gbl_panel_1 = new GridBagLayout();
-		gbl_panel_1.columnWidths = new int[] { 68, 288, 0 };
-		gbl_panel_1.rowHeights = new int[] { 24, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_panel_1.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
-		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, 0.0, Double.MIN_VALUE };
-		panel_1.setLayout(gbl_panel_1);
+
+		JPanel settingsPanel = new JPanel();
+		tabbedPane.addTab("Settings", null, settingsPanel, null);
+		GridBagLayout gbl_settingsPanel = new GridBagLayout();
+		gbl_settingsPanel.columnWidths = new int[] { 68, 288, 0 };
+		gbl_settingsPanel.rowHeights = new int[] { 24, 0, 0, 0, 0, 0, 0, 0, 0,
+				0 };
+		gbl_settingsPanel.columnWeights = new double[] { 0.0, 1.0,
+				Double.MIN_VALUE };
+		gbl_settingsPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		settingsPanel.setLayout(gbl_settingsPanel);
 
 		JPanel panel_2 = new JPanel();
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
@@ -200,7 +206,7 @@ public class OnlineView{
 		gbc_panel_2.anchor = GridBagConstraints.NORTHWEST;
 		gbc_panel_2.gridx = 1;
 		gbc_panel_2.gridy = 0;
-		panel_1.add(panel_2, gbc_panel_2);
+		settingsPanel.add(panel_2, gbc_panel_2);
 
 		JLabel lblEnterYourSpecific = new JLabel(
 				"Enter your specific Configuration for the loaded Classifier:");
@@ -212,7 +218,7 @@ public class OnlineView{
 		gbc_lblLocation.insets = new Insets(0, 0, 5, 5);
 		gbc_lblLocation.gridx = 0;
 		gbc_lblLocation.gridy = 1;
-		panel_1.add(lblLocation, gbc_lblLocation);
+		settingsPanel.add(lblLocation, gbc_lblLocation);
 
 		setLocationText = new JTextField();
 		GridBagConstraints gbc_setLocationText = new GridBagConstraints();
@@ -220,7 +226,7 @@ public class OnlineView{
 		gbc_setLocationText.fill = GridBagConstraints.HORIZONTAL;
 		gbc_setLocationText.gridx = 1;
 		gbc_setLocationText.gridy = 1;
-		panel_1.add(setLocationText, gbc_setLocationText);
+		settingsPanel.add(setLocationText, gbc_setLocationText);
 		setLocationText.setColumns(10);
 
 		JLabel lblPerson = new JLabel("Person");
@@ -229,7 +235,7 @@ public class OnlineView{
 		gbc_lblPerson.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPerson.gridx = 0;
 		gbc_lblPerson.gridy = 2;
-		panel_1.add(lblPerson, gbc_lblPerson);
+		settingsPanel.add(lblPerson, gbc_lblPerson);
 
 		setPersonText = new JTextField();
 		GridBagConstraints gbc_setPersonText = new GridBagConstraints();
@@ -237,7 +243,7 @@ public class OnlineView{
 		gbc_setPersonText.fill = GridBagConstraints.HORIZONTAL;
 		gbc_setPersonText.gridx = 1;
 		gbc_setPersonText.gridy = 2;
-		panel_1.add(setPersonText, gbc_setPersonText);
+		settingsPanel.add(setPersonText, gbc_setPersonText);
 		setPersonText.setColumns(10);
 
 		JLabel lblOrganization = new JLabel("Organization");
@@ -246,7 +252,7 @@ public class OnlineView{
 		gbc_lblOrganization.insets = new Insets(0, 0, 5, 5);
 		gbc_lblOrganization.gridx = 0;
 		gbc_lblOrganization.gridy = 3;
-		panel_1.add(lblOrganization, gbc_lblOrganization);
+		settingsPanel.add(lblOrganization, gbc_lblOrganization);
 
 		setOrganizationText = new JTextField();
 		GridBagConstraints gbc_setOrganizationText = new GridBagConstraints();
@@ -254,7 +260,7 @@ public class OnlineView{
 		gbc_setOrganizationText.fill = GridBagConstraints.HORIZONTAL;
 		gbc_setOrganizationText.gridx = 1;
 		gbc_setOrganizationText.gridy = 3;
-		panel_1.add(setOrganizationText, gbc_setOrganizationText);
+		settingsPanel.add(setOrganizationText, gbc_setOrganizationText);
 		setOrganizationText.setColumns(10);
 
 		JLabel lblNewLabel = new JLabel("Date");
@@ -263,7 +269,7 @@ public class OnlineView{
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridx = 0;
 		gbc_lblNewLabel.gridy = 4;
-		panel_1.add(lblNewLabel, gbc_lblNewLabel);
+		settingsPanel.add(lblNewLabel, gbc_lblNewLabel);
 
 		setDateText = new JTextField();
 		GridBagConstraints gbc_setDateText = new GridBagConstraints();
@@ -271,7 +277,7 @@ public class OnlineView{
 		gbc_setDateText.fill = GridBagConstraints.HORIZONTAL;
 		gbc_setDateText.gridx = 1;
 		gbc_setDateText.gridy = 4;
-		panel_1.add(setDateText, gbc_setDateText);
+		settingsPanel.add(setDateText, gbc_setDateText);
 		setDateText.setColumns(10);
 
 		JLabel lblMoney = new JLabel("Money");
@@ -280,7 +286,7 @@ public class OnlineView{
 		gbc_lblMoney.insets = new Insets(0, 0, 5, 5);
 		gbc_lblMoney.gridx = 0;
 		gbc_lblMoney.gridy = 5;
-		panel_1.add(lblMoney, gbc_lblMoney);
+		settingsPanel.add(lblMoney, gbc_lblMoney);
 
 		setMoneyText = new JTextField();
 		GridBagConstraints gbc_setMoneyText = new GridBagConstraints();
@@ -288,7 +294,7 @@ public class OnlineView{
 		gbc_setMoneyText.fill = GridBagConstraints.HORIZONTAL;
 		gbc_setMoneyText.gridx = 1;
 		gbc_setMoneyText.gridy = 5;
-		panel_1.add(setMoneyText, gbc_setMoneyText);
+		settingsPanel.add(setMoneyText, gbc_setMoneyText);
 		setMoneyText.setColumns(10);
 
 		JLabel lblMeal = new JLabel("Meal");
@@ -297,7 +303,7 @@ public class OnlineView{
 		gbc_lblMeal.insets = new Insets(0, 0, 5, 5);
 		gbc_lblMeal.gridx = 0;
 		gbc_lblMeal.gridy = 6;
-		panel_1.add(lblMeal, gbc_lblMeal);
+		settingsPanel.add(lblMeal, gbc_lblMeal);
 
 		setMealText = new JTextField();
 		GridBagConstraints gbc_setMealText = new GridBagConstraints();
@@ -305,7 +311,7 @@ public class OnlineView{
 		gbc_setMealText.fill = GridBagConstraints.HORIZONTAL;
 		gbc_setMealText.gridx = 1;
 		gbc_setMealText.gridy = 6;
-		panel_1.add(setMealText, gbc_setMealText);
+		settingsPanel.add(setMealText, gbc_setMealText);
 		setMealText.setColumns(10);
 
 		JLabel lblTime = new JLabel("Time");
@@ -314,7 +320,7 @@ public class OnlineView{
 		gbc_lblTime.insets = new Insets(0, 0, 5, 5);
 		gbc_lblTime.gridx = 0;
 		gbc_lblTime.gridy = 7;
-		panel_1.add(lblTime, gbc_lblTime);
+		settingsPanel.add(lblTime, gbc_lblTime);
 
 		setTimeText = new JTextField();
 		GridBagConstraints gbc_setTimeText = new GridBagConstraints();
@@ -322,7 +328,7 @@ public class OnlineView{
 		gbc_setTimeText.fill = GridBagConstraints.HORIZONTAL;
 		gbc_setTimeText.gridx = 1;
 		gbc_setTimeText.gridy = 7;
-		panel_1.add(setTimeText, gbc_setTimeText);
+		settingsPanel.add(setTimeText, gbc_setTimeText);
 		setTimeText.setColumns(10);
 
 		JButton btnSubmit = new JButton("Submit Values");
@@ -330,13 +336,14 @@ public class OnlineView{
 		GridBagConstraints gbc_btnSubmit = new GridBagConstraints();
 		gbc_btnSubmit.gridx = 1;
 		gbc_btnSubmit.gridy = 8;
-		panel_1.add(btnSubmit, gbc_btnSubmit);
+		settingsPanel.add(btnSubmit, gbc_btnSubmit);
 
 		internalFrame.setVisible(true);
 
 	}
 
-	private void setMap(){
+	private void setMap()
+	{
 		// visualize OpenStreetMap in InternalFrame
 		JXMapKit openMap = new JXMapKit();
 		openMap.setDefaultProvider(DefaultProviders.OpenStreetMaps);
@@ -353,27 +360,32 @@ public class OnlineView{
 		WaypointPainter<JXMapViewer> painter = new WaypointPainter<JXMapViewer>();
 		painter.setWaypoints(geopositions);
 		openMap.getMainMap().setOverlayPainter(painter);
-		
-		internalFrame.add(openMap);
+
+		internalFrame.getContentPane().add(openMap);
 	}
 
-	protected Object getGeopositions(){
+	protected Object getGeopositions()
+	{
 		return null;
 	}
 
-	public JTextField getClassifierTextField(){
+	public JTextField getClassifierTextField()
+	{
 		return classifierTextField;
 	}
 
-	public void setClassifierTextField(JTextField classifierTextField){
+	public void setClassifierTextField(JTextField classifierTextField)
+	{
 		this.classifierTextField = classifierTextField;
 	}
 
-	public JTextField getTextField(){
+	public JTextField getTextField()
+	{
 		return fileTextField;
 	}
 
-	public void setTextField(JTextField textField){
+	public void setTextField(JTextField textField)
+	{
 		this.fileTextField = textField;
 	}
 }
