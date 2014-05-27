@@ -20,7 +20,7 @@ public class FileReaderAction implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent event){
 		String actionTodo = event.getActionCommand();
-		String outPath = onlineView.getTextField().getText();
+		String outPath = onlineView.getFileTextField().getText();
 		
 		String outClassifier = onlineView.getClassifierTextField().getText();
 		if (actionTodo.equals("startProcess")){
