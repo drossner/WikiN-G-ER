@@ -5,8 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-
 import data.City;
 import data.Entity;
 
@@ -50,13 +48,13 @@ public class DBSQLConnector {
 		}
 		
 		try {
-			selectEntityCounter = con.prepareStatement("SELECT counter from entity where name = \"?\" and entityType = \"?\" limit 1;");
-			selectCityID = con.prepareStatement("SELECT id FROM city WHERE name = \"?\";");
-			selectEntityID = con.prepareStatement("");
-			insertCity = con.prepareStatement("INSERT INTO city (name, latitude, longitude) VALUES (\"?\", \"?\", \"?\");");
-			insertEntity = con.prepareStatement("INSERT INTO entity (name, entityType, counter) values (\"?\", \"?\", 1;");
-			insertCitEntConnection = con.prepareStatement("");
-			updateEntity = con.prepareStatement("UPDATE entity SET counter = ");
+			selectEntityCounter = con.prepareStatement("SELECT counter from entity where name = ? and entityType = ? limit 1");
+			selectCityID = con.prepareStatement("SELECT id FROM city WHERE name = ?");
+			selectEntityID = con.prepareStatement("SELECT id from entity where name = ? and entityType = ? limit 1");
+			insertCity = con.prepareStatement("INSERT INTO city (name, latitude, longitude) VALUES (?, ?, ?)");
+			insertEntity = con.prepareStatement("INSERT INTO entity (name, entityType, counter) values (?, ?, 1)");
+			insertCitEntConnection = con.prepareStatement("INSERT INTO cityEntityConnection VALUES (?, ?, ?)");
+			updateEntity = con.prepareStatement("UPDATE entity SET counter = ? where name = ? and entityType = ?");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -79,91 +77,45 @@ public class DBSQLConnector {
 		return rs.getInt(1);
 	}
 
-	public int writeEntity(Entity entity) {
+	public int writeEntity(Entity entity) throws SQLException {
 		ResultSet rs;
 		
 		selectEntityCounter.setString(1, entity.getName());
 		selectEntityCounter.setString(2, entity.getType());				//Fehler !!! Type sollte eignetlich int sein
 		
 		rs = selectEntityCounter.executeQuery();
-		
-		if(rcArr.length == 0){
+		rs.last();
+		if(rs.getRow() == 0){
 			insertEntity.setString(1, entity.getName());
 			insertEntity.setString(2, entity.getType());
+			
+			insertEntity.executeUpdate();
 		}else{
-			query.append(rcArr[0]+1);
-			query.append(" where name = \"");
-			query.append(entity.getName());
-			query.append("\" and entityType = \"");
-			query.append(entity.getType());
-			query.append("\";");
-		}
-		
-		writeInsertCommand(query.toString());
-		
-		query = new StringBuffer(150);
-		query.append("SELECT id from entity where name = \"");
-		query.append(entity.getName());
-		query.append("\" limit 1;");
-		
-		rcArr = writeCommand(query.toString());
-		
-		return rcArr[0];
-	}
-
-	public void writeConnection(int cityID, int entityID, int count) {
-		StringBuffer query = new StringBuffer(150);
-		
-		query.append("INSERT INTO cityEntityConnection VALUES (");
-		query.append(cityID);
-		query.append(",");
-		query.append(entityID);
-		query.append(",");
-		query.append(count);
-		query.append(");");
-		
-		writeInsertCommand(query.toString());
-	}
-
-	public int[] writeCommand(String query) {
-		Statement stmt;
-
-		try {
-			stmt = con.createStatement();
-
-			ResultSet rs = stmt.executeQuery(query);
-
-			rs.last();
-			int[] rc = new int[rs.getRow()];
-			int i = 0;
 			rs.beforeFirst();
-			while (rs.next()) {
-				rc[i++] = rs.getInt(1);
-			}
-
-			return rc;
-		} catch (SQLException e) {
-			e.printStackTrace();
+			rs.next();
+			updateEntity.setInt(1, rs.getInt(1));
+			updateEntity.setString(2, entity.getName());
+			updateEntity.setString(3, entity.getType());
+			
+			updateEntity.executeUpdate();
 		}
 		
-		return null;
+		selectEntityID.setString(1, entity.getName());
+		selectEntityID.setString(2, entity.getType());
+		
+		rs = selectEntityID.executeQuery();
+		rs.next();
+		
+		return rs.getInt(1);
 	}
-	
 
-	private int writeInsertCommand(String query) {
-		Statement stmt;
-
-		try {
-			stmt = con.createStatement();
-
-			int rc = stmt.executeUpdate(query);
-
-			return rc;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public void writeConnection(int cityID, int entityID, int count) throws SQLException {
 		
-		return -1;
+		insertCitEntConnection.setInt(1, cityID);
+		insertCitEntConnection.setInt(2, entityID);
+		insertCitEntConnection.setInt(3, count);
+		
+		insertCitEntConnection.executeUpdate();
 	}
 
 }
