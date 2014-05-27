@@ -25,11 +25,11 @@ public class DataDump{
 		
 		for(Entity ent : entities){
 			hashMapKey.append(ent.getName() + "/" + ent.getType());
-			if(temp.containsKey(hashMapKey)){
-				entity = temp.get(hashMapKey);
+			if(temp.containsKey(hashMapKey.toString())){
+				entity = temp.get(hashMapKey.toString());
 				count = entity.getCount();
 				ent.setCount(++count);
-				temp.remove(hashMapKey);
+				temp.remove(hashMapKey.toString());
 				temp.put(hashMapKey.toString(), ent);
 			}else{
 				temp.put(hashMapKey.toString(), ent);

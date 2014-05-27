@@ -47,7 +47,7 @@ public class ViewController{
 	
 	public void handleEntities(){
 		ArrayList<Entity> allEntities;
-		StringBuffer incText = new StringBuffer(Arrays.toString(fileContent));
+		String incText = new String(Arrays.toString(fileContent));
 		try{
 			allEntities = ner.extractEntities(incText);
 			
