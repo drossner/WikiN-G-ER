@@ -190,37 +190,37 @@ public class OnlineView{
 		tabbedPane.addTab("Settings", null, settingsPanel, null);
 		GridBagLayout gbl_settingsPanel = new GridBagLayout();
 		gbl_settingsPanel.columnWidths = new int[] { 68, 0, 0, 0, 288, 0 };
-		gbl_settingsPanel.rowHeights = new int[] { 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		gbl_settingsPanel.rowHeights = new int[] { 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0 };
 		gbl_settingsPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0,
 				1.0, Double.MIN_VALUE };
-		gbl_settingsPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
+		gbl_settingsPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
 				0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		settingsPanel.setLayout(gbl_settingsPanel);
-
-		JLabel lblEnterYourSpecific = new JLabel(
-				"Enter your specific Configuration for the loaded Classifier:");
-		lblEnterYourSpecific.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		GridBagConstraints gbc_lblEnterYourSpecific = new GridBagConstraints();
-		gbc_lblEnterYourSpecific.insets = new Insets(0, 0, 5, 5);
-		gbc_lblEnterYourSpecific.gridx = 2;
-		gbc_lblEnterYourSpecific.gridy = 0;
-		settingsPanel.add(lblEnterYourSpecific, gbc_lblEnterYourSpecific);
-
-		JLabel lblLocation = new JLabel("Classifier Configuration");
-		GridBagConstraints gbc_lblLocation = new GridBagConstraints();
-		gbc_lblLocation.anchor = GridBagConstraints.EAST;
-		gbc_lblLocation.insets = new Insets(0, 0, 5, 5);
-		gbc_lblLocation.gridx = 1;
-		gbc_lblLocation.gridy = 1;
-		settingsPanel.add(lblLocation, gbc_lblLocation);
+				
+						JLabel lblEnterYourSpecific = new JLabel(
+								"Enter your specific Configuration for the loaded Classifier:");
+						lblEnterYourSpecific.setFont(new Font("Tahoma", Font.PLAIN, 14));
+						GridBagConstraints gbc_lblEnterYourSpecific = new GridBagConstraints();
+						gbc_lblEnterYourSpecific.insets = new Insets(0, 0, 5, 5);
+						gbc_lblEnterYourSpecific.gridx = 2;
+						gbc_lblEnterYourSpecific.gridy = 1;
+						settingsPanel.add(lblEnterYourSpecific, gbc_lblEnterYourSpecific);
+		
+				JLabel lblLocation = new JLabel("Classifier Configuration");
+				GridBagConstraints gbc_lblLocation = new GridBagConstraints();
+				gbc_lblLocation.anchor = GridBagConstraints.EAST;
+				gbc_lblLocation.insets = new Insets(0, 0, 5, 5);
+				gbc_lblLocation.gridx = 1;
+				gbc_lblLocation.gridy = 2;
+				settingsPanel.add(lblLocation, gbc_lblLocation);
 		
 		JSpinner classifierConfigSpinner = new JSpinner();
 		GridBagConstraints gbc_classifierConfigSpinner = new GridBagConstraints();
 		gbc_classifierConfigSpinner.fill = GridBagConstraints.HORIZONTAL;
 		gbc_classifierConfigSpinner.insets = new Insets(0, 0, 5, 5);
 		gbc_classifierConfigSpinner.gridx = 2;
-		gbc_classifierConfigSpinner.gridy = 1;
+		gbc_classifierConfigSpinner.gridy = 2;
 		settingsPanel.add(classifierConfigSpinner, gbc_classifierConfigSpinner);
 		
 		JLabel lblEntityWeighting = new JLabel("Entity Weighting");
@@ -228,7 +228,7 @@ public class OnlineView{
 		gbc_lblEntityWeighting.insets = new Insets(0, 0, 5, 5);
 		gbc_lblEntityWeighting.anchor = GridBagConstraints.EAST;
 		gbc_lblEntityWeighting.gridx = 1;
-		gbc_lblEntityWeighting.gridy = 2;
+		gbc_lblEntityWeighting.gridy = 4;
 		settingsPanel.add(lblEntityWeighting, gbc_lblEntityWeighting);
 		
 		entityWeightTextField = new JTextField();
@@ -236,7 +236,7 @@ public class OnlineView{
 		gbc_entityWeightTextField.insets = new Insets(0, 0, 5, 5);
 		gbc_entityWeightTextField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_entityWeightTextField.gridx = 2;
-		gbc_entityWeightTextField.gridy = 2;
+		gbc_entityWeightTextField.gridy = 4;
 		settingsPanel.add(entityWeightTextField, gbc_entityWeightTextField);
 		entityWeightTextField.setColumns(10);
 		
@@ -246,7 +246,7 @@ public class OnlineView{
 		gbc_btnSubmit.gridheight = 2;
 		gbc_btnSubmit.insets = new Insets(0, 0, 5, 5);
 		gbc_btnSubmit.gridx = 2;
-		gbc_btnSubmit.gridy = 4;
+		gbc_btnSubmit.gridy = 5;
 		settingsPanel.add(btnSubmit, gbc_btnSubmit);
 		
 		JLabel lblNewLabel_1 = new JLabel("");
