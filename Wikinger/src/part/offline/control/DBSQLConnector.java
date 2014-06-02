@@ -115,7 +115,7 @@ public class DBSQLConnector {
 	private int findEntityType(String type) throws SQLException {
 		ResultSet rs;
 		
-		selectEntityType.setString(1, type);
+		selectEntityType.setString(1, type.toUpperCase());
 		rs = selectEntityType.executeQuery();
 		
 		rs.next();
