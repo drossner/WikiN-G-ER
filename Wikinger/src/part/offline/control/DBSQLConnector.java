@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import data.City;
 import data.Entity;
 
@@ -18,6 +19,7 @@ public class DBSQLConnector {
 	private PreparedStatement insertCity;
 	private PreparedStatement insertCitEntConnection;
 	private PreparedStatement updateEntity;
+	private PreparedStatement selectEntityType;
 	
 
 	/**
@@ -51,6 +53,7 @@ public class DBSQLConnector {
 			selectEntityCounter = con.prepareStatement("SELECT counter from entity where name = ? and entityType = ? limit 1");
 			selectCityID = con.prepareStatement("SELECT id FROM city WHERE name = ?");
 			selectEntityID = con.prepareStatement("SELECT id from entity where name = ? and entityType = ? limit 1");
+			selectEntityType = con.prepareStatement("SELECT id from entitytype where name = ? LIMIT 1");
 			insertCity = con.prepareStatement("INSERT INTO city (name, latitude, longitude) VALUES (?, ?, ?)");
 			insertEntity = con.prepareStatement("INSERT INTO entity (name, entityType, counter) values (?, ?, 1)");
 			insertCitEntConnection = con.prepareStatement("INSERT INTO cityEntityConnection VALUES (?, ?, ?)");
@@ -87,7 +90,7 @@ public class DBSQLConnector {
 		rs.last();
 		if(rs.getRow() == 0){
 			insertEntity.setString(1, entity.getName());
-			insertEntity.setString(2, entity.getType());
+			insertEntity.setInt(2, findEntityType(entity.getType()));
 			
 			insertEntity.executeUpdate();
 		}else{
@@ -95,7 +98,7 @@ public class DBSQLConnector {
 			rs.next();
 			updateEntity.setInt(1, rs.getInt(1));
 			updateEntity.setString(2, entity.getName());
-			updateEntity.setString(3, entity.getType());
+			updateEntity.setInt(3, findEntityType(entity.getType()));
 			
 			updateEntity.executeUpdate();
 		}
@@ -106,6 +109,16 @@ public class DBSQLConnector {
 		rs = selectEntityID.executeQuery();
 		rs.next();
 		
+		return rs.getInt(1);
+	}
+
+	private int findEntityType(String type) throws SQLException {
+		ResultSet rs;
+		
+		selectEntityType.setString(1, type);
+		rs = selectEntityType.executeQuery();
+		
+		rs.next();
 		return rs.getInt(1);
 	}
 
