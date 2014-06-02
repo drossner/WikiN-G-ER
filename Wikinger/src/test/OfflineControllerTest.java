@@ -14,10 +14,10 @@ public class OfflineControllerTest {
 		System.out.println("Init Crawling");
 		Status s = off.init(8);
 		System.out.println("Start Crawling");
-		OfflineControllerTestGui gui = new OfflineControllerTestGui(s);
-		gui.init();
-		off.startCrawling("localhost", 3306, "wiki", "root", "");
-		System.out.println("Start Crawling");
+		//OfflineControllerTestGui gui = new OfflineControllerTestGui(s);
+		//gui.init();
+		//off.startCrawling("localhost", 3306, "wiki", "root", "");
+		//System.out.println("Start Crawling");
 		//off.startCrawling(1, "localhost", 3306, "wiki", "root", "");
 		System.out.println("Start writing");
 		off.startWritingToDatabase("localhost", 3306, "wikinger", "root", "", "./crawleroutput/");

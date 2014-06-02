@@ -84,7 +84,7 @@ public class DBSQLConnector {
 		ResultSet rs;
 		
 		selectEntityCounter.setString(1, entity.getName());
-		selectEntityCounter.setString(2, entity.getType());				//Fehler !!! Type sollte eignetlich int sein
+		selectEntityCounter.setInt(2, findEntityType(entity.getType()));				//Fehler !!! Type sollte eignetlich int sein
 		
 		rs = selectEntityCounter.executeQuery();
 		rs.last();
@@ -104,7 +104,7 @@ public class DBSQLConnector {
 		}
 		
 		selectEntityID.setString(1, entity.getName());
-		selectEntityID.setString(2, entity.getType());
+		selectEntityID.setInt(2, findEntityType(entity.getType()));
 		
 		rs = selectEntityID.executeQuery();
 		rs.next();
