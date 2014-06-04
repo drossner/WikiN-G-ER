@@ -40,6 +40,7 @@ public class FileOutput {
 			writer = new BufferedWriter(new FileWriter(new File(fileName), sameFile));
 			
 			writer.write(builder.toString());
+			writer.newLine();
 			
 			writer.close();
 		} catch (IOException e) {

@@ -60,6 +60,8 @@ public class CrawlerUnit implements Runnable {
 					entitesToString(dump, builder);
 					
 					out.writeToFile(builder);
+					
+					builder = new StringBuilder();
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
