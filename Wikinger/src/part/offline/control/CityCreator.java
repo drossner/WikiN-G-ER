@@ -27,6 +27,12 @@ public class CityCreator {
 		this.cleaner = new WikiTextCleaner();
 	}
 	
+	public CityCreator(StanfordNER ner, LatitudeLongitudeParser llp) {
+		this.ner = ner;
+		this.llp = llp;
+		this.cleaner = new WikiTextCleaner();
+	}
+
 	/**
 	 * Method creates a City object of a given wikidump text, with lon, lat and entities
 	 * @param text text extracted of the wikidump
@@ -59,7 +65,7 @@ public class CityCreator {
 		}
 		
 		if(coords != null){
-			city = new City(name, coords[0], coords[1]);
+			city = new City("", coords[0], coords[1]);
 			rc = new DataDump(city, temp);
 		}
 		

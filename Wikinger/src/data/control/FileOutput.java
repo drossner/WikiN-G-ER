@@ -35,12 +35,22 @@ public class FileOutput {
 		}
 	}
 	
+	public void writeToFile(StringBuilder builder) {
+		try {
+			writer = new BufferedWriter(new FileWriter(new File(fileName), sameFile));
+			
+			writer.write(builder.toString());
+			
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public String getFileName() {
 		return fileName;
 	}
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-	
-	
 }

@@ -1,5 +1,6 @@
 package part.offline.control;
 import java.io.File;
+import java.sql.SQLException;
 
 import part.offline.data.Gazetteer;
 import data.control.FileOutput;
@@ -41,29 +42,33 @@ public class OfflineController {
 	 * @param database databasename
 	 * @param user user
 	 * @param passwd password
+	 * @throws SQLException 
 	 */
-	public void startCrawling(String host, int port, String database, String user, String passwd){
+	public void startCrawling(String host, int port, String database, String user, String passwd) throws SQLException{
 		Thread[] threadList = new Thread[threads];
 		SQLConnector[] connectors = new SQLConnector[threads];
+		int[] textIDs;
 		
 		for (int i = 0; i < connectors.length; i++) {
 			connectors[i] = new SQLConnector();
 			connectors[i].init(host, port, database, user, passwd);
 		}
 		
-		int step = cityCount/threads;
+		textIDs = connectors[0].getAllText();
+		
+		int step = textIDs.length/threads;
 		int counter = 0;
-		int rest = cityCount%threads;
+		int rest = textIDs.length%threads;
 		
 		for (int i = 0; i < threads-1; i++) {
 			//System.out.println("Starte Thread " + i);
-			CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1, connectors[i], ner, i, new FileOutput(true, "CrawlerOutPut" + i +".txt"), status);
+			CrawlerUnit temp = new CrawlerUnit(textIDs, counter, counter+step-1, connectors[i], ner, i, new FileOutput(true, "CrawlerOutPut" + i +".txt"), status);
 			threadList[i] = new Thread(temp);
 			threadList[i].start();
 			counter += step;	
 		}
 		
-		CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1+rest, connectors[threads-1], ner, threads-1, new FileOutput(true, "CrawlerOutPut" + (threads-1) +".txt"), status);
+		CrawlerUnit temp = new CrawlerUnit(textIDs, counter, counter+step-1+rest, connectors[threads-1], ner, threads-1, new FileOutput(true, "CrawlerOutPut" + (threads-1) +".txt"), status);
 		threadList[threads-1] = new Thread(temp);
 		threadList[threads-1].start();
 			

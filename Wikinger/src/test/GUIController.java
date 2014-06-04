@@ -1,5 +1,7 @@
 package test;
 
+import java.sql.SQLException;
+
 import data.control.StanfordNER;
 import part.offline.constants.DBInformations;
 import part.offline.control.OfflineController;
@@ -22,8 +24,12 @@ public class GUIController implements Runnable {
 	}
 	
 	public void startCrawling(){
-		off.startCrawling(infos[DBInformations.HOSTNAME], Integer.parseInt(infos[DBInformations.PORT]), 
-				infos[DBInformations.DB_NAME], infos[DBInformations.USERNAME], infos[DBInformations.PASSWD]);
+		try {
+			off.startCrawling(infos[DBInformations.HOSTNAME], Integer.parseInt(infos[DBInformations.PORT]), 
+					infos[DBInformations.DB_NAME], infos[DBInformations.USERNAME], infos[DBInformations.PASSWD]);
+		} catch (NumberFormatException | SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void run(){

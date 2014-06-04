@@ -1,5 +1,6 @@
 package part.offline.control;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
@@ -10,7 +11,7 @@ import data.control.FileOutput;
 import data.control.StanfordNER;
 
 public class CrawlerUnit implements Runnable {
-	private String[] cities;
+	private int[] textIDs;
 	private int start, end, acPos;
 	private int id;
 	private SQLConnector connector;
@@ -21,8 +22,8 @@ public class CrawlerUnit implements Runnable {
 	private Status status;
 	
 	
-	public CrawlerUnit(String[] cities, int start, int end, SQLConnector connector, StanfordNER ner, int id, FileOutput out, Status status){
-		this.cities = cities;
+	public CrawlerUnit(int[] textIDs, int start, int end, SQLConnector connector, StanfordNER ner, int id, FileOutput out, Status status){
+		this.textIDs = textIDs;
 		this.start = start;
 		this.end = end;
 		this.connector = connector;
@@ -35,51 +36,40 @@ public class CrawlerUnit implements Runnable {
 	public void run() {
 		LatitudeLongitudeParser llp = new LatitudeLongitudeParser();
 		StringBuffer temp = new StringBuffer();
+		CityCreator cc = new CityCreator(ner, llp);
+		String text;
+		DataDump dump;
+		int revID;
+		String pageTitle;
+		StringBuilder builder = new StringBuilder();
+		
 		for (int i = this.start; i <= this.end ; i++) {
 			status.setWorkForEachDone(i - start, id);
-			//System.out.println(cities[i]+" i:"+i);
-			CityCreator cc = new CityCreator(ner, this.cities[i], llp);
-			int[] pageIDs = connector.getPageIDs(cities[i]);
-
-			int[] revIDs = null;
-			if (pageIDs.length > 0) {
-				revIDs = filter(connector.getRevIDs(pageIDs));
-			}
-
-			if (revIDs != null) {
-				String[] text = connector.getTexts(revIDs);
-				ArrayList<DataDump> dumpList = new ArrayList<DataDump>();
-				for (int j = 0; j < text.length; j++) {
-					DataDump dump = cc.getCity(text[j]);
-					if (dump != null) {
-						dumpList.add(dump);
-					}
+			
+			try {
+				text = connector.getText(this.textIDs[i]);
+				dump = cc.getCity(text);
+				
+				if(dump != null){
+					revID = connector.getRevID(this.textIDs[i]);
+					pageTitle = connector.getPageTitle(revID);
+					
+					dump.getCity().setName(pageTitle);
+					
+					builder.append(dump.getCity().cityToString());
+					entitesToString(dump, builder);
+					
+					out.writeToFile(builder);
 				}
-				if (dumpList.size() > 0) {
-					String[] writeList = new String[dumpList.size()];
-					int c = 0;
-					for (DataDump dump : dumpList) {
-						temp.append(dump.getCity().cityToString());
-						entitesToString(dump, temp);
-						writeList[c] = temp.toString();
-						c++;
-
-						if (maxLength < temp.length()) {
-							maxLength = temp.length();
-						}
-						temp = new StringBuffer(maxLength);
-					}
-					out.writeToFile(writeList);
-				}
-
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
+	
 			setAcPos(end - start + i);
 		}
-		// System.out.println("Mein längster StringBuffer war " + maxLength +
-		// " lang!");
 	}
 
-	private void entitesToString(DataDump dump, StringBuffer temp) {
+	private void entitesToString(DataDump dump, StringBuilder temp) {
 		for (Entity ent : dump.getEntityList()) {
 			temp.append(splitSymbol);
 			temp.append(ent.getName());
