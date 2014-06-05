@@ -22,8 +22,7 @@ public class FileOutput {
 		try {
 			File file = new File(fileName);
 			FileOutputStream fos = new FileOutputStream(file, sameFile);
-			writer = new OutputStreamWriter(fos, "utf-8"); 
-			
+			writer = new OutputStreamWriter(fos, "utf-8"); 			
 			for(int i = 0; i<writeArr.length; i++){
 				writer.write(writeArr[i]);
 				writer.write("\n");
@@ -39,8 +38,7 @@ public class FileOutput {
 		try {
 			File file = new File(fileName);
 			FileOutputStream fos = new FileOutputStream(file, sameFile);
-			writer = new OutputStreamWriter(fos, "utf-8"); 
-			
+			writer = new OutputStreamWriter(fos, "utf-8"); 			
 			writer.write(builder.toString());
 			writer.write("\n");
 			writer.flush();
