@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import part.offline.control.Status;
-
 public class FileOutput {
 
 	private Writer writer = null;
