@@ -22,7 +22,7 @@ public class Logger implements Runnable{
 
 	public void run() {
 		status.calcStatus();
-		double percent = status.getPercent();
+		double percent = status.getPercent();			//Prozent noch schöner ausschauen lassen !
 		StringBuilder builder = new StringBuilder();
 		
 		while(percent <= 1){
