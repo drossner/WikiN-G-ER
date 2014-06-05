@@ -3,6 +3,7 @@ package part.log;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import data.control.FileOutput;
 import part.offline.control.Status;
@@ -27,12 +28,12 @@ public class Logger implements Runnable{
 		while(percent <= 1){
 			status.calcStatus();
 			builder.append(format.format((System.currentTimeMillis())));
-			builder.append("	");
+			builder.append("\t");
 			builder.append(percent);
-			builder.append("	");
+			builder.append("\t");
 			long time = (System.currentTimeMillis() - status.getStartTime());
-			builder.append(" starttime: " + time);
-			builder.append(" time remaining: " + status.getTimeRemaining());
+			builder.append("\tellapsed time: " + getTime(time));
+			builder.append("\ttime remaining: " + getTime(status.getTimeRemaining()));
 			out.writeToFile(builder);
 			builder = new StringBuilder();
 			percent = status.getPercent();
@@ -45,6 +46,14 @@ public class Logger implements Runnable{
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private String getTime(long time) {		//TODO: Auslagern in Status
+		String s = String.format("%02d:%02d:%02d",
+				TimeUnit.MILLISECONDS.toHours(time),
+				TimeUnit.MILLISECONDS.toMinutes(time)%60,
+				TimeUnit.MILLISECONDS.toSeconds(time)%60);
+		return s;
 	}
 
 }
