@@ -61,7 +61,6 @@ public class OfflineController {
 		int rest = textIDs.length%threads;
 		
 		for (int i = 0; i < threads-1; i++) {
-			//System.out.println("Starte Thread " + i);
 			CrawlerUnit temp = new CrawlerUnit(textIDs, counter, counter+step-1, connectors[i], ner, i, new FileOutput(true, "CrawlerOutPut" + i +".txt"), status);
 			threadList[i] = new Thread(temp);
 			threadList[i].start();

@@ -59,9 +59,9 @@ public class CityCreator {
 		coords = llp.parseLatLon(text);
 		
 		if(coords == null){
-			System.out.println(name);
+			return null;
 		}else if((coords[0] == 0.0 && coords[1] == 0.0)){
-			System.out.println(name + ": " + coords[0] + "; " + coords[1]);
+			return null;
 		}
 		
 		if(coords != null){

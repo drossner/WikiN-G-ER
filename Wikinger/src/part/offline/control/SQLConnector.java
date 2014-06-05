@@ -85,7 +85,11 @@ public class SQLConnector {
 		
 		if(rs.getRow() == 0) return rc;
 		
-		rc = rs.getString(1);
+		try {
+			rc = new String(rs.getBytes(1), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			rc = rs.getString(1);
+		}
 		return rc;
 	}
 	
@@ -113,7 +117,11 @@ public class SQLConnector {
 		
 		if(rs.getRow() == 0) return null;
 		
-		rc = rs.getString(1);
+		try {
+			rc = new String(rs.getBytes(1), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			rc = rs.getString(1);
+		}
 		return rc;
 	}
 

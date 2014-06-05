@@ -35,7 +35,6 @@ public class CrawlerUnit implements Runnable {
 
 	public void run() {
 		LatitudeLongitudeParser llp = new LatitudeLongitudeParser();
-		StringBuffer temp = new StringBuffer();
 		CityCreator cc = new CityCreator(ner, llp);
 		String text;
 		DataDump dump;
