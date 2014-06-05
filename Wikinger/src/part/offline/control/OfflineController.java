@@ -8,13 +8,18 @@ import data.control.StanfordNER;
 
 public class OfflineController {
 	
-	private String[] uniqueCityNames;
-	private int cityCount;
+	private int[] textIDs;
+	private int textCount;
 	private StanfordNER ner;
 	private Gazetteer gaz;
 	private Status status;
 	private int threads;
 	private String clf_path;
+	private String host;
+	private int port;
+	private String database;
+	private String user;
+	private String passwd;
 	
 	public OfflineController(StanfordNER ner, String fileNameOldGazetteer){
 		this.setGaz(new Gazetteer(fileNameOldGazetteer));
@@ -24,12 +29,25 @@ public class OfflineController {
 	/**
 	 * initialize the load of the old gazetteer
 	 */
-	public Status init(int threads){
-		String [] uniqueCityNames = gaz.loadGazetter();
-		this.uniqueCityNames = uniqueCityNames;
-		setCityCount(uniqueCityNames.length);
+	public Status init(int threads, String host, int port, String database, String user, String passwd){
+		SQLConnector connector = new SQLConnector();
 		this.threads = threads;
-		Status rc = new Status(threads, getCityCount()/threads);
+		this.host = host;
+		this.port = port;
+		this.database = database;
+		this.user = user;
+		this.passwd = passwd;
+		
+		connector.init(host, port, database, user, passwd);
+		try {
+			textIDs = connector.getAllText();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		textCount = textIDs.length;
+		
+		Status rc = new Status(threads, textCount/threads);
 		status = rc;
 		return rc;
 	}
@@ -44,21 +62,18 @@ public class OfflineController {
 	 * @param passwd password
 	 * @throws SQLException 
 	 */
-	public void startCrawling(String host, int port, String database, String user, String passwd) throws SQLException{
+	public void startCrawling() throws SQLException{
 		Thread[] threadList = new Thread[threads];
 		SQLConnector[] connectors = new SQLConnector[threads];
-		int[] textIDs;
 		
 		for (int i = 0; i < connectors.length; i++) {
 			connectors[i] = new SQLConnector();
 			connectors[i].init(host, port, database, user, passwd);
 		}
 		
-		textIDs = connectors[0].getAllText();
-		
-		int step = textIDs.length/threads;
+		int step = textCount/threads;
 		int counter = 0;
-		int rest = textIDs.length%threads;
+		int rest = textCount%threads;
 		
 		for (int i = 0; i < threads-1; i++) {
 			CrawlerUnit temp = new CrawlerUnit(textIDs, counter, counter+step-1, connectors[i], ner, i, new FileOutput(true, "CrawlerOutPut" + i +".txt"), status);
@@ -121,11 +136,11 @@ public class OfflineController {
 		this.gaz = gaz;
 	}
 
-	public int getCityCount() {
-		return cityCount;
+	public int getTextCount() {
+		return textCount;
 	}
 
-	public void setCityCount(int cityCount) {
-		this.cityCount = cityCount;
+	public void setTextCount(int textCount) {
+		this.textCount = textCount;
 	}
 }
