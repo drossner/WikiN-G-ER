@@ -2,9 +2,11 @@ package data;
 
 public class Entity {
 
+	private int id;
 	private String name;
 	private int count;
 	private String type;
+	private double idf;
 	
 	public Entity(String name, String type){
 		this.name = name;
@@ -12,7 +14,6 @@ public class Entity {
 		this.count = 1;
 	}
 	
-
 	@Override
 	public String toString()
 	{
@@ -25,6 +26,13 @@ public class Entity {
 		this.count = Integer.parseInt(count);
 	}
 	
+	public Entity(int id, int counter, double idf) {
+		this.setId(id);
+		this.count = counter;
+		this.setIdf(idf);
+	}
+
+
 	public String getName() {
 		return name;
 	}
@@ -44,5 +52,21 @@ public class Entity {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public double getIdf() {
+		return idf;
+	}
+
+	public void setIdf(double idf) {
+		this.idf = idf;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }
