@@ -20,9 +20,7 @@ public class SQLConnector {
 	 * @param user
 	 * @param passwd
 	 */
-	public void init(String host, int port, String database, String user, String passwd){
-//		prepStmt = new PreparedStatement[threads];
-		
+	public void init(String host, int port, String database, String user, String passwd){		
 		try 
 		{ 
 		    Class.forName("org.gjt.mm.mysql.Driver"); 
@@ -49,11 +47,7 @@ public class SQLConnector {
 			selectPageTitle = con.prepareStatement("SELECT page_title FROM page WHERE page_id = ? LIMIT 1");
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		
-	
-		
-	
+		}	
 	}
 	
 	public int[] getAllText() throws SQLException{

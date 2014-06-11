@@ -113,6 +113,27 @@ public class OfflineController {
 			}
 		}
 	}
+	
+	public void createInverseDocFrequency(String host, int port, String database, String user, String passwd){
+		WikiDBSQLConnector connector = new WikiDBSQLConnector();
+		int[] entities;
+		int counter;
+		double idf;
+		
+		connector.init(host, port, database, user, passwd);
+		
+		try {
+			entities = connector.getAllEntityIDs();
+			
+			for (int i = 0; i < entities.length; i++) {
+				counter = connector.getEntityCounter(entities[i]);
+				idf = Math.log(1.0 + (entities.length/counter));
+				connector.setEntityIDF(idf);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public Gazetteer getGaz() {
 		return gaz;
