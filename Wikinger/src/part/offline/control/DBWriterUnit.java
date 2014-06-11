@@ -3,6 +3,7 @@ package part.offline.control;
 import data.City;
 import data.Entity;
 import data.control.FileInput;
+import data.database.connection.DBSQLConnector;
 
 public class DBWriterUnit extends Thread{
 	

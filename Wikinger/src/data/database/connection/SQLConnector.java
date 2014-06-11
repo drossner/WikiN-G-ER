@@ -1,4 +1,4 @@
-package part.offline.control;
+package data.database.connection;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.*;

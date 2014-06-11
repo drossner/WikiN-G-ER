@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import part.offline.data.Gazetteer;
 import data.control.FileOutput;
 import data.control.StanfordNER;
+import data.database.connection.DBSQLConnector;
+import data.database.connection.SQLConnector;
 
 public class OfflineController {
 	

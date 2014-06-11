@@ -9,6 +9,7 @@ import data.DataDump;
 import data.Entity;
 import data.control.FileOutput;
 import data.control.StanfordNER;
+import data.database.connection.SQLConnector;
 
 public class CrawlerUnit implements Runnable {
 	private int[] textIDs;
