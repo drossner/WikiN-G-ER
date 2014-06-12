@@ -44,7 +44,7 @@ public class CrawlerUnit implements Runnable {
 		
 		for (int i = this.start; i <= this.end ; i++) {
 			status.setWorkForEachDone(i - start, id);
-			
+			System.out.println(i + " / " + end);
 			try {
 				text = connector.getText(this.textIDs[i]);
 				dump = cc.getCity(text);
