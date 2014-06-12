@@ -15,28 +15,12 @@ import data.control.StanfordNER;
 
 public class ViewController{
 
-	//TODO: ViewController soll den Prozess starten!
 	private String filePath;
 	private String classifierPath;
 	private FileInput fileReader;
 	private String[] fileContent;
-	private StanfordNER ner;
-	private OnlineView view;
+	private StanfordNER ner;	
 	
-	/**
-	 * 
-	 */
-	public ViewController(){
-		initView();
-	}
-	
-	/**
-	 * private Procedure that initializes the GUI
-	 */
-	private void initView(){
-		view = new OnlineView();
-	}
-
 	/**
 	 * 
 	 * @param incPath
