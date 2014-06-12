@@ -33,7 +33,6 @@ public class FileReaderAction implements ActionListener{
 		}
 	}
 	
-	//TODO: Bis jetzt noch ne **** Lösung... aber geht!
 	private void initViewController(String incPath, String incClassifier){
 		controller = new ViewController(incPath, incClassifier);
 		doWork();
