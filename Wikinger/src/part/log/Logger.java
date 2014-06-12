@@ -17,7 +17,7 @@ public class Logger implements Runnable{
 	public Logger(String pathName, Status status) {
 		this.status = status;
 		this.out = new FileOutput(true, pathName);
-		format = new SimpleDateFormat("dd.mm.yyyy HH:mm:ss");
+		format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 	}
 
 	public void run() {
