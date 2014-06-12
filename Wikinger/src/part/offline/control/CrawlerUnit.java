@@ -62,11 +62,9 @@ public class CrawlerUnit implements Runnable {
 					
 					builder = new StringBuilder();
 				}
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-	
-			setAcPos(end - start + i);
 		}
 	}
 
