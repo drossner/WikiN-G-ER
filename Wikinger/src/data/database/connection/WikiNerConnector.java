@@ -25,6 +25,7 @@ public class WikiNerConnector {
 	private PreparedStatement insertEntity;
 	private PreparedStatement updateEntity;
 	private PreparedStatement insertCityEntityCon;
+	private PreparedStatement selectCityEntCounter;
 
 	/**
 	 * Init the connection to the given database
@@ -57,6 +58,7 @@ public class WikiNerConnector {
 			selectEntityCounter = con.prepareStatement("SELECT counter FROM entity WHERE id = ? LIMIT 1");
 			selectCityIDs = con.prepareStatement("SELECT cityid FROM cityentityconnection WHERE entityid = ?");
 			selectCity = con.prepareStatement("SELECT name, latitude, longitude FROM city WHERE id = ? LIMIT 1");
+			selectCityEntCounter = con.prepareStatement("SELECT counter FROM cityentityconnection WHERE cityid = ? AND entityid = ? LIMIT 1");
 			selectEntity = con.prepareStatement("SELECT id, counter, idf FROM entity WHERE name = ? AND entityType = ? LIMIT 1");
 			selectCityID = con.prepareStatement("SELECT id FROM city WHERE name = ? LIMIT 1");
 			updateEntityIDF = con.prepareStatement("UPDATE entity SET idf = ?");
@@ -216,6 +218,20 @@ public class WikiNerConnector {
 		insertCityEntityCon.setInt(3, count);
 
 		insertCityEntityCon.executeUpdate();
+	}
+
+	public int getCityEntityCounter(String name, int entityid) throws SQLException {
+		ResultSet rs;
+		
+		selectCity.setString(1, name);
+		rs = selectCityID.executeQuery();
+		rs.next();
+		
+		selectCityEntCounter.setInt(1, rs.getInt(1));
+		selectCityEntCounter.setInt(2, entityid);
+		rs = selectCityEntCounter.executeQuery();
+		rs.next();
+		return rs.getInt(1);
 	}
 
 }
