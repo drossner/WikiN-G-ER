@@ -39,16 +39,21 @@ public class DBWriterUnit extends Thread{
 		
 		for (int i = 0; i < dataArr.length; i++) {
 			//status.setWorkForEachDone(i, id);
-			entities = dataArr[i].split(entitySplitSymbol);
-			city = entities[0].split(coordsSplitSymbol);
+			try{
+				entities = dataArr[i].split(entitySplitSymbol);
+				city = entities[0].split(coordsSplitSymbol);
 			
-			cityID = connector.writeCity(new City(city[0], city[1], city[2]));
-			
-			for (int j = 1; j < entities.length; j++) {
-				temp = new Entity(entities[j], entities[++j], entities[++j]);
-				entityID = connector.writeEntity(temp);
+				cityID = connector.writeCity(new City(city[0], city[1], city[2]));
 				
-				connector.writeConnection(cityID, entityID, temp.getCount());
+				for (int j = 1; j < entities.length; j++) {
+					temp = new Entity(entities[j], entities[++j], entities[++j]);
+					entityID = connector.writeEntity(temp);
+				
+					connector.writeConnection(cityID, entityID, temp.getCount());
+				}
+		
+			}catch(Exception e){
+				e.printStackTrace();
 			}
 		}
 	}
