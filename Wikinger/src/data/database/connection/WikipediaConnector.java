@@ -3,7 +3,7 @@ package data.database.connection;
 import java.io.UnsupportedEncodingException;
 import java.sql.*;
 
-public class SQLConnector {
+public class WikipediaConnector {
 	
 	private Connection con;
 	private PreparedStatement prepStmt;

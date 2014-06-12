@@ -9,13 +9,13 @@ import data.DataDump;
 import data.Entity;
 import data.control.FileOutput;
 import data.control.StanfordNER;
-import data.database.connection.SQLConnector;
+import data.database.connection.WikipediaConnector;
 
 public class CrawlerUnit implements Runnable {
 	private int[] textIDs;
 	private int start, end, acPos;
 	private int id;
-	private SQLConnector connector;
+	private WikipediaConnector connector;
 	private StanfordNER ner;
 	private FileOutput out;
 	private int maxLength = 0;
@@ -23,7 +23,7 @@ public class CrawlerUnit implements Runnable {
 	private Status status;
 	
 	
-	public CrawlerUnit(int[] textIDs, int start, int end, SQLConnector connector, StanfordNER ner, int id, FileOutput out, Status status){
+	public CrawlerUnit(int[] textIDs, int start, int end, WikipediaConnector connector, StanfordNER ner, int id, FileOutput out, Status status){
 		this.textIDs = textIDs;
 		this.start = start;
 		this.end = end;

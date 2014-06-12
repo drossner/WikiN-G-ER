@@ -5,8 +5,8 @@ import java.sql.SQLException;
 import part.offline.data.Gazetteer;
 import data.control.FileOutput;
 import data.control.StanfordNER;
-import data.database.connection.DBSQLConnector;
-import data.database.connection.SQLConnector;
+import data.database.connection.WikiNerConnector;
+import data.database.connection.WikipediaConnector;
 
 public class OfflineController {
 	
@@ -48,11 +48,11 @@ public class OfflineController {
 	 */
 	public void startCrawling(String host, int port, String database, String user, String passwd) throws SQLException{
 		Thread[] threadList = new Thread[threads];
-		SQLConnector[] connectors = new SQLConnector[threads];
+		WikipediaConnector[] connectors = new WikipediaConnector[threads];
 		int[] textIDs;
 		
 		for (int i = 0; i < connectors.length; i++) {
-			connectors[i] = new SQLConnector();
+			connectors[i] = new WikipediaConnector();
 			connectors[i].init(host, port, database, user, passwd);
 		}
 		
@@ -87,17 +87,17 @@ public class OfflineController {
 	public void startWritingToDatabase(String host, int port, String database, String user, String passwd, String directory){
 		int crawlerOutPutFileCount;
 		Thread[] threadList;
-		DBSQLConnector[] connectors;
+		WikiNerConnector[] connectors;
 		String fileDest;
 		
 		fileDest = directory + "CrawlerOutPut";
 		crawlerOutPutFileCount = new File(directory).listFiles().length; 
 		
 		threadList = new Thread[crawlerOutPutFileCount];
-		connectors = new DBSQLConnector[crawlerOutPutFileCount];
+		connectors = new WikiNerConnector[crawlerOutPutFileCount];
 		
 		for (int i = 0; i < connectors.length; i++) {
-			connectors[i] = new DBSQLConnector();
+			connectors[i] = new WikiNerConnector();
 			connectors[i].init(host, port, database, user, passwd);
 		}
 		

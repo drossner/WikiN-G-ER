@@ -3,19 +3,19 @@ package part.offline.control;
 import data.City;
 import data.Entity;
 import data.control.FileInput;
-import data.database.connection.DBSQLConnector;
+import data.database.connection.WikiNerConnector;
 
 public class DBWriterUnit extends Thread{
 	
 	private String fileName;
 	private String entitySplitSymbol;
 	private String coordsSplitSymbol;
-	private DBSQLConnector connector;
+	private WikiNerConnector connector;
 	private FileInput in;
 	private int id;
 	private Status status;
 	
-	public DBWriterUnit(int id, String fileName, DBSQLConnector connector, String entitySplitSymbol, String coordsSplitSymbol) {
+	public DBWriterUnit(int id, String fileName, WikiNerConnector connector, String entitySplitSymbol, String coordsSplitSymbol) {
 		this.connector = connector;
 		this.coordsSplitSymbol = coordsSplitSymbol;
 		this.entitySplitSymbol = entitySplitSymbol;
