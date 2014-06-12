@@ -36,7 +36,6 @@ public class CrawlerUnit implements Runnable {
 
 	public void run() {
 		LatitudeLongitudeParser llp = new LatitudeLongitudeParser();
-		StringBuffer temp = new StringBuffer();
 		CityCreator cc = new CityCreator(ner, llp);
 		String text;
 		DataDump dump;
@@ -46,7 +45,7 @@ public class CrawlerUnit implements Runnable {
 		
 		for (int i = this.start; i <= this.end ; i++) {
 			status.setWorkForEachDone(i - start, id);
-			
+			System.out.println(i + " / " + end);
 			try {
 				text = connector.getText(this.textIDs[i]);
 				dump = cc.getCity(text);
@@ -64,11 +63,9 @@ public class CrawlerUnit implements Runnable {
 					
 					builder = new StringBuilder();
 				}
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-	
-			setAcPos(end - start + i);
 		}
 	}
 
