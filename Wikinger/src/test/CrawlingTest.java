@@ -13,12 +13,12 @@ public class CrawlingTest {
 		Status s;
 		OfflineController c = new OfflineController(new StanfordNER("./classifiers/english.muc.7class.distsim.crf.ser.gz"), "./gazetteer.csv");
 		try {
-			//s = c.init(1, "172.16.50.83", 3306, "wiki", "student", "aisTM14Wiki");
+			s = c.init(1, "172.16.50.83", 3306, "wiki", "student", "aisTM14Wiki");
 			//Logger lg = new Logger("./log.txt", s);
 			//Thread t = new Thread(lg);
 			//t.start();
 			//c.startCrawling();
-			c.startWritingToDatabase("172.16.50.83", 3306, "wikinger", "student", "aisTM14Wiki", "./temp/");
+			c.startWritingToDatabase("wikinger", "./temp/");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

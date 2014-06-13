@@ -61,7 +61,7 @@ public class WikiNerConnector {
 			selectCityEntCounter = con.prepareStatement("SELECT counter FROM cityentityconnection WHERE cityid = ? AND entityid = ? LIMIT 1");
 			selectEntity = con.prepareStatement("SELECT id, counter, idf FROM entity WHERE name = ? AND entityType = (SELECT id FROM entitytype WHERE name = ?) LIMIT 1");
 			selectCityID = con.prepareStatement("SELECT id FROM city WHERE name = ? LIMIT 1");
-			updateEntityIDF = con.prepareStatement("UPDATE entity SET idf = ?");
+			updateEntityIDF = con.prepareStatement("UPDATE entity SET idf = ? WHERE id = ?");
 			insertCity = con.prepareStatement("INSERT INTO city (name, latitude, longitude) VALUES (?, ?, ?)");
 			insertEntity = con.prepareStatement("INSERT INTO entity (name, entityType, counter) VALUES (?, (SELECT id FROM entitytype WHERE name = ?), ?)");
 			updateEntity = con.prepareStatement("UPDATE entity SET counter = ? WHERE id = ?");
@@ -91,8 +91,9 @@ public class WikiNerConnector {
 		return rc;
 	}
 
-	public void setEntityIDF(double idf) throws SQLException {
+	public void setEntityIDF(double idf, int id) throws SQLException {
 		updateEntityIDF.setDouble(1, idf);
+		updateEntityIDF.setInt(2, id);
 		updateEntityIDF.executeUpdate();
 	}
 

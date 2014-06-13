@@ -98,7 +98,7 @@ public class OfflineController {
 		
 	}
 	
-	public void startWritingToDatabase(String host, int port, String database, String user, String passwd, String directory){
+	public void startWritingToDatabase(String database, String directory){
 		int crawlerOutPutFileCount;
 		Thread[] threadList;
 		WikiNerConnector[] connectors;
@@ -130,7 +130,7 @@ public class OfflineController {
 		}
 	}
 	
-	public void createInverseDocFrequency(String host, int port, String database, String user, String passwd){
+	public void createInverseDocFrequency(String database){
 		WikiNerConnector connector = new WikiNerConnector();
 		int[] entities;
 		int counter;
@@ -144,7 +144,7 @@ public class OfflineController {
 			for (int i = 0; i < entities.length; i++) {
 				counter = connector.getEntityCounter(entities[i]);
 				idf = Math.log(1.0 + (entities.length/counter));
-				connector.setEntityIDF(idf);
+				connector.setEntityIDF(idf, entities[i]);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
