@@ -59,13 +59,13 @@ public class WikiNerConnector {
 			selectCityIDs = con.prepareStatement("SELECT cityid FROM cityentityconnection WHERE entityid = ?");
 			selectCity = con.prepareStatement("SELECT name, latitude, longitude FROM city WHERE id = ? LIMIT 1");
 			selectCityEntCounter = con.prepareStatement("SELECT counter FROM cityentityconnection WHERE cityid = ? AND entityid = ? LIMIT 1");
-			selectEntity = con.prepareStatement("SELECT id, counter, idf FROM entity WHERE name = ? AND entityType = ? LIMIT 1");
+			selectEntity = con.prepareStatement("SELECT id, counter, idf FROM entity WHERE name = ? AND entityType = (SELECT id FROM entitytype WHERE name = ?) LIMIT 1");
 			selectCityID = con.prepareStatement("SELECT id FROM city WHERE name = ? LIMIT 1");
 			updateEntityIDF = con.prepareStatement("UPDATE entity SET idf = ?");
 			insertCity = con.prepareStatement("INSERT INTO city (name, latitude, longitude) VALUES (?, ?, ?)");
-			insertEntity = con.prepareStatement("INSERT INTO entity (name, entityType, counter) VALUES (?, (SELECT id FROM entitytype WHERE name = ?), ?,)");
+			insertEntity = con.prepareStatement("INSERT INTO entity (name, entityType, counter) VALUES (?, (SELECT id FROM entitytype WHERE name = ?), ?)");
 			updateEntity = con.prepareStatement("UPDATE entity SET counter = ? WHERE id = ?");
-			insertCityEntityCon = con.prepareStatement("INSERT INTO cityEntityConnection (cityid, entityid, counter) VALUES (?, ?, ?)");
+			insertCityEntityCon = con.prepareStatement("INSERT INTO cityentityconnection (cityid, entityid, counter) VALUES (?, ?, ?)");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -183,10 +183,10 @@ public class WikiNerConnector {
 		int counter;
 
 		selectEntity.setString(1, entity.getName());
-		selectEntity.setString(1, entity.getType());
+		selectEntity.setString(2, entity.getType());
 		
 		rs = selectEntity.executeQuery();
-		rs.afterLast();
+		rs.last();
 
 		if (rs.getRow() == 0) {
 			insertEntity.setString(1, entity.getName());
@@ -195,9 +195,10 @@ public class WikiNerConnector {
 			insertEntity.executeUpdate();
 			
 			selectEntity.setString(1, entity.getName());
-			selectEntity.setString(1, entity.getType());
+			selectEntity.setString(2, entity.getType());
 			
 			rs = selectEntity.executeQuery();
+			rs.beforeFirst();
 			rs.next();
 			return rs.getInt(1);
 		} else {
