@@ -6,6 +6,7 @@ public class City {
 	private double longi;
 	private double lati;
 	private double score;
+	private int counter;
 	
 	public City(String name, double latitude, double longitude){
 		setName(name);
@@ -53,6 +54,14 @@ public class City {
 
 	public void setScore(double score) {
 		this.score = score;
+	}
+
+	public int getCounter() {
+		return counter;
+	}
+
+	public void setCounter(int counter) {
+		this.counter = counter;
 	}
 
 }

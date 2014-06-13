@@ -35,7 +35,7 @@ public class WeightingUnit extends Thread {
 				cityArr = connector.getCities(entity.getId());
 				for (int j = 0; j < cityArr.length; j++) {
 					counter = connector.getCityEntityCounter(cityArr[j].getName(), entity.getId());
-					score = Math.log(1.0 + counter/entity.getIdf());
+					score = Math.log(counter) * entity.getIdf();
 					cityArr[j].setScore(score);
 					addToHashMap(cities, cityArr[j]);
 				}
@@ -44,12 +44,17 @@ public class WeightingUnit extends Thread {
 			e.printStackTrace();
 		}
 		resultCities = cities.values().toArray(new City[cities.values().size()]);
+		
+		for (int i = 0; i < resultCities.length; i++) {
+			resultCities[i].setScore(resultCities[i].getScore()/resultCities[i].getCounter());
+		}
 	}
 
 	private void addToHashMap(HashMap<String, City> cities, City city) {
 		StringBuilder hashMapKey = new StringBuilder();
 		City cityTemp;
 		double score;
+		int counter;
 		hashMapKey.append(city.getName() + "/");
 		hashMapKey.append(city.getLati() + "/");
 		hashMapKey.append(city.getLongi());
@@ -57,6 +62,8 @@ public class WeightingUnit extends Thread {
 			cityTemp = cities.get(hashMapKey.toString());
 			score = cityTemp.getScore();
 			score = score + city.getScore();				//Hier müssen wir vll noch etwas verändern!
+			counter = cityTemp.getCounter();
+			cityTemp.setCounter(++counter);
 			cityTemp.setScore(score);
 			cities.remove(hashMapKey.toString());
 			cities.put(hashMapKey.toString(), cityTemp);
