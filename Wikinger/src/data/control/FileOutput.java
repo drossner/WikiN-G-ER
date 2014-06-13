@@ -1,18 +1,16 @@
 package data.control;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
-
-import part.offline.control.Status;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 public class FileOutput {
 
-	private BufferedWriter writer = null;
+	private Writer writer = null;
 	private String fileName;
 	private boolean sameFile;
-	private Status status;
 	
 	//sameFile = true => append to File, false => new File
 	public FileOutput(boolean sameFile, String fileName) {
@@ -22,12 +20,28 @@ public class FileOutput {
 	
 	public void writeToFile(String[] writeArr){
 		try {
-			writer = new BufferedWriter(new FileWriter(new File(fileName), sameFile));
-			
+			File file = new File(fileName);
+			FileOutputStream fos = new FileOutputStream(file, sameFile);
+			writer = new OutputStreamWriter(fos, "utf-8"); 			
 			for(int i = 0; i<writeArr.length; i++){
 				writer.write(writeArr[i]);
-				writer.newLine();
+				writer.write("\n");
 			}
+			
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void writeToFile(StringBuilder builder) {
+		try {
+			File file = new File(fileName);
+			FileOutputStream fos = new FileOutputStream(file, sameFile);
+			writer = new OutputStreamWriter(fos, "utf-8"); 			
+			writer.write(builder.toString());
+			writer.write("\n");
+			writer.flush();
 			
 			writer.close();
 		} catch (IOException e) {
@@ -41,6 +55,4 @@ public class FileOutput {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-	
-	
 }

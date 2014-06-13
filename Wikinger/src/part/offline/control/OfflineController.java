@@ -1,19 +1,27 @@
 package part.offline.control;
 import java.io.File;
+import java.sql.SQLException;
 
 import part.offline.data.Gazetteer;
 import data.control.FileOutput;
 import data.control.StanfordNER;
+import data.database.connection.WikiNerConnector;
+import data.database.connection.WikipediaConnector;
 
 public class OfflineController {
 	
-	private String[] uniqueCityNames;
-	private int cityCount;
+	private int[] textIDs;
+	private int textCount;
 	private StanfordNER ner;
 	private Gazetteer gaz;
 	private Status status;
 	private int threads;
 	private String clf_path;
+	private String host;
+	private int port;
+	private String database;
+	private String user;
+	private String passwd;
 	
 	public OfflineController(StanfordNER ner, String fileNameOldGazetteer){
 		this.setGaz(new Gazetteer(fileNameOldGazetteer));
@@ -23,12 +31,25 @@ public class OfflineController {
 	/**
 	 * initialize the load of the old gazetteer
 	 */
-	public Status init(int threads){
-		String [] uniqueCityNames = gaz.loadGazetter();
-		this.uniqueCityNames = uniqueCityNames;
-		setCityCount(uniqueCityNames.length);
+	public Status init(int threads, String host, int port, String database, String user, String passwd){
+		WikipediaConnector connector = new WikipediaConnector();
 		this.threads = threads;
-		Status rc = new Status(threads, getCityCount()/threads);
+		this.host = host;
+		this.port = port;
+		this.database = database;
+		this.user = user;
+		this.passwd = passwd;
+		
+		connector.init(host, port, database, user, passwd);
+		try {
+			textIDs = connector.getAllText();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		textCount = textIDs.length;
+		
+		Status rc = new Status(threads, textCount/threads);
 		status = rc;
 		return rc;
 	}
@@ -41,29 +62,29 @@ public class OfflineController {
 	 * @param database databasename
 	 * @param user user
 	 * @param passwd password
+	 * @throws SQLException 
 	 */
-	public void startCrawling(String host, int port, String database, String user, String passwd){
+	public void startCrawling() throws SQLException{
 		Thread[] threadList = new Thread[threads];
-		SQLConnector[] connectors = new SQLConnector[threads];
+		WikipediaConnector[] connectors = new WikipediaConnector[threads];
 		
 		for (int i = 0; i < connectors.length; i++) {
-			connectors[i] = new SQLConnector();
+			connectors[i] = new WikipediaConnector();
 			connectors[i].init(host, port, database, user, passwd);
 		}
 		
-		int step = cityCount/threads;
+		int step = textCount/threads;
 		int counter = 0;
-		int rest = cityCount%threads;
+		int rest = textCount%threads;
 		
 		for (int i = 0; i < threads-1; i++) {
-			//System.out.println("Starte Thread " + i);
-			CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1, connectors[i], ner, i, new FileOutput(true, "CrawlerOutPut" + i +".txt"), status);
+			CrawlerUnit temp = new CrawlerUnit(textIDs, counter, counter+step-1, connectors[i], ner, i, new FileOutput(true, "CrawlerOutPut" + i +".txt"), status);
 			threadList[i] = new Thread(temp);
 			threadList[i].start();
 			counter += step;	
 		}
 		
-		CrawlerUnit temp = new CrawlerUnit(uniqueCityNames, counter, counter+step-1+rest, connectors[threads-1], ner, threads-1, new FileOutput(true, "CrawlerOutPut" + (threads-1) +".txt"), status);
+		CrawlerUnit temp = new CrawlerUnit(textIDs, counter, counter+step-1+rest, connectors[threads-1], ner, threads-1, new FileOutput(true, "CrawlerOutPut" + (threads-1) +".txt"), status);
 		threadList[threads-1] = new Thread(temp);
 		threadList[threads-1].start();
 			
@@ -77,20 +98,20 @@ public class OfflineController {
 		
 	}
 	
-	public void startWritingToDatabase(String host, int port, String database, String user, String passwd, String directory){
+	public void startWritingToDatabase(String database, String directory){
 		int crawlerOutPutFileCount;
 		Thread[] threadList;
-		DBSQLConnector[] connectors;
+		WikiNerConnector[] connectors;
 		String fileDest;
 		
 		fileDest = directory + "CrawlerOutPut";
 		crawlerOutPutFileCount = new File(directory).listFiles().length; 
 		
 		threadList = new Thread[crawlerOutPutFileCount];
-		connectors = new DBSQLConnector[crawlerOutPutFileCount];
+		connectors = new WikiNerConnector[crawlerOutPutFileCount];
 		
 		for (int i = 0; i < connectors.length; i++) {
-			connectors[i] = new DBSQLConnector();
+			connectors[i] = new WikiNerConnector();
 			connectors[i].init(host, port, database, user, passwd);
 		}
 		
@@ -108,6 +129,27 @@ public class OfflineController {
 			}
 		}
 	}
+	
+	public void createInverseDocFrequency(String database){
+		WikiNerConnector connector = new WikiNerConnector();
+		int[] entities;
+		int counter;
+		double idf;
+		
+		connector.init(host, port, database, user, passwd);
+		
+		try {
+			entities = connector.getAllEntityIDs();
+			
+			for (int i = 0; i < entities.length; i++) {
+				counter = connector.getEntityCounter(entities[i]);
+				idf = Math.log(1.0 + (entities.length/counter));
+				connector.setEntityIDF(idf, entities[i]);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public Gazetteer getGaz() {
 		return gaz;
@@ -117,11 +159,11 @@ public class OfflineController {
 		this.gaz = gaz;
 	}
 
-	public int getCityCount() {
-		return cityCount;
+	public int getTextCount() {
+		return textCount;
 	}
 
-	public void setCityCount(int cityCount) {
-		this.cityCount = cityCount;
+	public void setTextCount(int textCount) {
+		this.textCount = textCount;
 	}
 }

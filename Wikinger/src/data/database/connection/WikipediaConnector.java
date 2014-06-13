@@ -1,14 +1,16 @@
-package part.offline.control;
+package data.database.connection;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.*;
 
-import data.control.FileOutput;
-
-public class SQLConnector {
+public class WikipediaConnector {
 	
 	private Connection con;
 	private PreparedStatement prepStmt;
+	private PreparedStatement selectAllText;
+	private PreparedStatement selectRevID;
+	private PreparedStatement selectPageTitle;
+	private PreparedStatement selectText;
 	
 	/**
 	 * Init the connection to the given database
@@ -41,6 +43,10 @@ public class SQLConnector {
 		}
 		try {
 			prepStmt = con.prepareStatement("SELECT page_id FROM page WHERE page_title = ? OR page_title like ? OR page_title like ?;");
+			selectAllText = con.prepareStatement("SELECT old_id from text");
+			selectText = con.prepareStatement("SELECT old_text from text where old_id = ? LIMIT 1");
+			selectRevID = con.prepareStatement("SELECT rev_page FROM revision WHERE rev_id = ? LIMIT 1");
+			selectPageTitle = con.prepareStatement("SELECT page_title FROM page WHERE page_id = ? LIMIT 1");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -50,30 +56,67 @@ public class SQLConnector {
 	
 	}
 	
-	public static void main(String[] args) {
-		SQLConnector s = new SQLConnector();
-		s.init("localhost", 3306, "wiki", "root", "");
-		int[] rc = s.getPageIDs("Paris");
+	public int[] getAllText() throws SQLException{
+		ResultSet rs;
+		int counter = 0;
+		int[] rc = null;
 		
-		System.out.println("Page ID");
-		for (int i = 0; i < rc.length; i++) {
-			System.out.println(rc[i]);
+		rs = selectAllText.executeQuery();
+		rs.last();
+		rc = new int[rs.getRow()];
+		
+		if(rs.getRow() == 0) return null;
+		
+		rs.beforeFirst();
+		while(rs.next()){
+			rc[counter++] = rs.getInt(1);
 		}
-		
-		int[] rc2 = s.getRevIDs(rc);
-		System.out.println("\nRev ID");
-		for (int i = 0; i < rc2.length; i++) {
-			System.out.println(rc2[i]);
-		}
-		
-		String[] texte = s.getTexts(rc2);
-		System.out.println("\nTexte: "+texte.length);
-		
-		for (int i = 0; i < texte.length; i++) {
-			System.out.println(texte[i]+"\n---------------------------------------------------------\n");
-		}
+		 
+		return rc;
 	}
 	
+	public String getText(int oldTextID) throws SQLException{
+		ResultSet rs;
+		String rc = null;
+		
+		selectText.setInt(1, oldTextID);
+		rs = selectText.executeQuery();
+		rs.next();
+		
+		if(rs.getRow() == 0) return rc;
+		
+		rc = rs.getString(1);
+		return rc;
+	}
+	
+	public int getRevID(int oldTextID) throws SQLException{
+		ResultSet rs;
+		int rc = 0;
+		
+		selectRevID.setInt(1, oldTextID);
+		rs = selectRevID.executeQuery();
+		rs.next();
+		
+		if(rs.getRow() == 0) return 0;
+		
+		rc = rs.getInt(1);
+		return rc;
+	}
+	
+	public String getPageTitle(int revID) throws SQLException{
+		ResultSet rs;
+		String rc = null;
+		
+		selectPageTitle.setInt(1, revID);
+		rs = selectPageTitle.executeQuery();
+		rs.next();
+		
+		if(rs.getRow() == 0) return null;
+		
+		rc = rs.getString(1);
+		return rc;
+	}
+
 	/**
 	 * Search the page_ids for a given cityname
 	 * @param cityName
