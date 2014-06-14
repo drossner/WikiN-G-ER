@@ -40,18 +40,18 @@ public class OfflineController {
 		this.user = user;
 		this.passwd = passwd;
 		
-		connector.init(host, port, database, user, passwd);
-		try {
-			textIDs = connector.getAllText();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		textCount = textIDs.length;
-		
-		Status rc = new Status(threads, textCount/threads);
-		status = rc;
-		return rc;
+//		connector.init(host, port, database, user, passwd);
+//		try {
+//			textIDs = connector.getAllText();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		textCount = textIDs.length;
+//		
+//		Status rc = new Status(threads, textCount/threads);
+//		status = rc;
+		return null;
 	}
 
 	/**

@@ -21,6 +21,7 @@ public class IDFCalculator {
 			entities = connector.getAllEntityIDs();
 			
 			for (int i = 0; i < entities.length; i++) {
+				System.out.println(i + " / " + entities.length);
 				counter = connector.getEntityCounter(entities[i]);
 				idf = Math.log(1.0 + (entities.length/counter));
 				connector.setEntityIDF(idf, entities[i]);
