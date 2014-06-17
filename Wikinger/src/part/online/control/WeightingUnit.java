@@ -1,10 +1,13 @@
 package part.online.control;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import data.City;
 import data.Entity;
+import data.EntityType;
 import data.database.connection.WikiNerConnector;
 
 public class WeightingUnit extends Thread {
@@ -13,13 +16,16 @@ public class WeightingUnit extends Thread {
 	private int end;
 	private Entity[] entities;
 	private WikiNerConnector connector;
-	private City[] resultCities;
+	private ArrayList<City> resultCities;
+	private EntityType[] entityWeighting;
 
-	public WeightingUnit(int start, int end, Entity[] entities,	WikiNerConnector connector) {
+	public WeightingUnit(int start, int end, Entity[] entities,	WikiNerConnector connector, ArrayList<City> resultCities, EntityType[] entitiesWeighting) {
 		this.start = start;
 		this.end = end;
 		this.entities = entities;
 		this.connector = connector;
+		this.resultCities = resultCities;
+		this.entityWeighting = entitiesWeighting;
 	}
 
 	public void run() {
@@ -28,14 +34,23 @@ public class WeightingUnit extends Thread {
 		City[] cityArr;
 		int counter;
 		double score;
+		City temp;
+		Iterator<City> it;
+		EntityType et = null;
 
 		try {
 			for (int i = start; i <= end; i++) {
 				entity = connector.getEntity(entities[i].getName(), entities[i].getType());
 				cityArr = connector.getCities(entity.getId());
+				for (int j = 0; j < entityWeighting.length; j++) {
+					if(entityWeighting[j].getName() == entity.getName()){
+						et = entityWeighting[j];
+						break;
+					}
+				}
 				for (int j = 0; j < cityArr.length; j++) {
 					counter = connector.getCityEntityCounter(cityArr[j].getName(), entity.getId());
-					score = Math.log(counter) * entity.getIdf();
+					score = et.getWeighting() * Math.log(counter) * entity.getIdf();
 					cityArr[j].setScore(score);
 					addToHashMap(cities, cityArr[j]);
 				}
@@ -43,10 +58,12 @@ public class WeightingUnit extends Thread {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		resultCities = cities.values().toArray(new City[cities.values().size()]);
 		
-		for (int i = 0; i < resultCities.length; i++) {
-			resultCities[i].setScore(resultCities[i].getScore()/resultCities[i].getCounter());
+		it = cities.values().iterator();
+		while(it.hasNext()){
+			temp = it.next();
+			temp.setScore(temp.getScore() / temp.getCounter());
+			resultCities.add(temp);
 		}
 	}
 
@@ -73,11 +90,11 @@ public class WeightingUnit extends Thread {
 		hashMapKey = new StringBuilder();
 	}
 
-	public City[] getResultCities() {
+	public ArrayList<City> getResultCities() {
 		return resultCities;
 	}
 
-	public void setResultCities(City[] resultCities) {
+	public void setResultCities(ArrayList<City> resultCities) {
 		this.resultCities = resultCities;
 	}
 	
