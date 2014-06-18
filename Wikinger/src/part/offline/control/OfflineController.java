@@ -131,10 +131,45 @@ public class OfflineController {
 	}
 	
 	public void createInverseDocFrequency(String database){
-		WikiNerConnector connector = new WikiNerConnector();
-		IDFCalculator calc = new IDFCalculator(connector);
-		connector.init(host, port, database, user, passwd);
-		calc.calculate();
+		WikiNerConnector[] connectors = new WikiNerConnector[threads];
+		Thread[] threadArr = new Thread[threads];
+		int[] entities = null;
+		int countCities = 0;
+		int step;
+		
+		for (int i = 0; i < connectors.length; i++) {
+			connectors[i] = new WikiNerConnector();
+			connectors[i].init(host, port, database, user, passwd);
+		}
+		
+		try {
+			entities = connectors[0].getAllEntityIDs();
+			countCities = connectors[0].getCityCount();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		step = entities.length/threads;
+		int counter = 0;
+		int rest = entities.length%threads;
+		
+		for (int i = 0; i < threads-1; i++) {
+			IDFCalculator calc = new IDFCalculator(connectors[i], entities, countCities, counter, counter + step);
+			threadArr[i] = new Thread(calc);
+			threadArr[i].start();
+			counter += step;	
+		}
+		IDFCalculator calc = new IDFCalculator(connectors[threads - 1], entities, countCities, counter, counter + step + rest);
+		threadArr[threads - 1] = new Thread(calc);
+		threadArr[threads - 1].start();
+		
+		for (int i = 0; i < threadArr.length; i++) {
+			try {
+				threadArr[i].join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public Gazetteer getGaz() {

@@ -33,6 +33,7 @@ public class WeightingUnit extends Thread {
 		HashMap<String, City> cities = new HashMap<String, City>();
 		City[] cityArr;
 		int counter;
+		int maximumEntity;
 		double score;
 		City temp;
 		Iterator<City> it;
@@ -43,14 +44,15 @@ public class WeightingUnit extends Thread {
 				entity = connector.getEntity(entities[i].getName(), entities[i].getType());
 				cityArr = connector.getCities(entity.getId());
 				for (int j = 0; j < entityWeighting.length; j++) {
-					if(entityWeighting[j].getName() == entity.getName()){
+					if(entityWeighting[j].getName() == entity.getType()){
 						et = entityWeighting[j];
 						break;
 					}
 				}
 				for (int j = 0; j < cityArr.length; j++) {
 					counter = connector.getCityEntityCounter(cityArr[j].getName(), entity.getId());
-					score = et.getWeighting() * Math.log(counter) * entity.getIdf();
+					maximumEntity = connector.getMaxEntity(cityArr[j].getName());
+					score = et.getWeighting() * Math.log(maximumEntity / counter) * entity.getIdf();
 					cityArr[j].setScore(score);
 					addToHashMap(cities, cityArr[j]);
 				}

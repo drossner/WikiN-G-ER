@@ -4,26 +4,30 @@ import java.sql.SQLException;
 
 import data.database.connection.WikiNerConnector;
 
-public class IDFCalculator {
+public class IDFCalculator extends Thread{
 
 	private WikiNerConnector connector;
+	private int[] entities;
+	private int countCities;
+	private int start;
+	private int ende;
 
-	public IDFCalculator(WikiNerConnector connector) {
+	public IDFCalculator(WikiNerConnector connector, int[] entities, int countCities, int start, int ende) {
 		this.connector = connector;
+		this.entities = entities;
+		this.countCities = countCities;
+		this.start = start;
+		this.ende = ende;
 	}
 	
-	public void calculate(){
-		int[] entities;
-		int counter;
+	public void run(){
+		int countEntity;
 		double idf;
 		
-		try {
-			entities = connector.getAllEntityIDs();
-			
-			for (int i = 0; i < entities.length; i++) {
-				System.out.println(i + " / " + entities.length);
-				counter = connector.getEntityCounter(entities[i]);
-				idf = Math.log(1.0 + (entities.length/counter));
+		try {			
+			for (int i = start; i < ende; i++) {
+				countEntity = connector.getEntityConnCount(entities[i]);
+				idf = Math.log((countCities / countEntity));
 				connector.setEntityIDF(idf, entities[i]);
 			}
 		} catch (SQLException e) {

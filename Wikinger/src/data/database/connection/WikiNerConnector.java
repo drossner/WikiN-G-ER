@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 import data.City;
@@ -26,6 +25,9 @@ public class WikiNerConnector {
 	private PreparedStatement updateEntity;
 	private PreparedStatement insertCityEntityCon;
 	private PreparedStatement selectCityEntCounter;
+	private PreparedStatement countCities;
+	private PreparedStatement countEntityConn;
+	private PreparedStatement maximumEntityCountCity;
 
 	/**
 	 * Init the connection to the given database
@@ -66,6 +68,9 @@ public class WikiNerConnector {
 			insertEntity = con.prepareStatement("INSERT INTO entity (name, entityType, counter) VALUES (?, (SELECT id FROM entitytype WHERE name = ?), ?)");
 			updateEntity = con.prepareStatement("UPDATE entity SET counter = ? WHERE id = ?");
 			insertCityEntityCon = con.prepareStatement("INSERT INTO cityentityconnection (cityid, entityid, counter) VALUES (?, ?, ?)");
+			countCities = con.prepareStatement("SELECT COUNT(id) FROM city");
+			countEntityConn = con.prepareStatement("SELECT COUNT(entityid) FROM cityentityconnection WHERE entityid = ?");
+			maximumEntityCountCity = con.prepareStatement("SELECT MAX(counter) FROM cityentityconnection WHERE cityid = (SELECT id FROM city WHERE name = ?)");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -233,6 +238,35 @@ public class WikiNerConnector {
 		selectCityEntCounter.setInt(2, entityid);
 		rs = selectCityEntCounter.executeQuery();
 		rs.next();
+		return rs.getInt(1);
+	}
+
+	public int getCityCount() throws SQLException {
+		ResultSet rs;
+		
+		rs = countCities.executeQuery();
+		rs.next();
+		
+		return rs.getInt(1);
+	}
+
+	public int getEntityConnCount(int entityID) throws SQLException {
+		ResultSet rs;
+		
+		countEntityConn.setInt(1, entityID);
+		rs = countEntityConn.executeQuery();
+		rs.next();
+		
+		return rs.getInt(1);
+	}
+
+	public int getMaxEntity(String name) throws SQLException {
+		ResultSet rs;
+		
+		maximumEntityCountCity.setString(1, name);
+		rs = maximumEntityCountCity.executeQuery();
+		rs.next();
+		
 		return rs.getInt(1);
 	}
 

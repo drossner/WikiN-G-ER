@@ -12,6 +12,10 @@ public class DataDump{
 		this.setCity(city);
 		extractEntities(entities);
 	}
+	
+	public DataDump(ArrayList<Entity> entities){
+		extractEntities(entities);
+	}
 
 	/**
 	 * muss getestet werden!
