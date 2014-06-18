@@ -43,8 +43,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JSpinner;
 import javax.swing.ImageIcon;
 
-public class OnlineView
-{
+public class OnlineView{
 
 	private JFrame frmWikinerOnlinepart;
 	private JTextField fileTextField;
