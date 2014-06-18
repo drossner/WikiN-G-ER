@@ -40,7 +40,7 @@ public class WeightingUnit extends Thread {
 		EntityType et = null;
 
 		try {
-			for (int i = start; i <= end; i++) {
+			for (int i = start; i <= end && i < entities.length; i++) {
 				entity = connector.getEntity(entities[i].getName(), entities[i].getType());
 				cityArr = connector.getCities(entity.getId());
 				for (int j = 0; j < entityWeighting.length; j++) {
@@ -52,7 +52,7 @@ public class WeightingUnit extends Thread {
 				for (int j = 0; j < cityArr.length; j++) {
 					counter = connector.getCityEntityCounter(cityArr[j].getName(), entity.getId());
 					maximumEntity = connector.getMaxEntity(cityArr[j].getName());
-					score = et.getWeighting() * Math.log(maximumEntity / counter) * entity.getIdf();
+					score = et.getWeighting() * ((counter * 1.0) / maximumEntity) * entity.getIdf();
 					cityArr[j].setScore(score);
 					addToHashMap(cities, cityArr[j]);
 				}

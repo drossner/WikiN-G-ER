@@ -1,6 +1,7 @@
 package part.online.control;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -45,7 +46,11 @@ public class WeightingSystem {
 			start += 100;
 		}
 		
-		return null;
+		executor.shutdown();
+		
+		Collections.sort(resultCities);
+		
+		return resultCities.toArray(new City[resultCities.size()]);
 	}
 
 }

@@ -1,6 +1,6 @@
 package data;
 
-public class Entity {
+public class Entity{
 
 	private int id;
 	private String name;

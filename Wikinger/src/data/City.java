@@ -1,6 +1,6 @@
 package data;
 
-public class City {
+public class City implements Comparable<City>{
 	
 	private String name;
 	private double longi;
@@ -62,6 +62,12 @@ public class City {
 
 	public void setCounter(int counter) {
 		this.counter = counter;
+	}
+
+	public int compareTo(City o) {
+		if(this.score > o.score) return 1;
+		else if(this.score == o.score) return 0;
+		else return -1;
 	}
 
 }
