@@ -8,21 +8,31 @@ import javax.swing.JOptionPane;
 
 import part.online.control.ViewController;
 
-public class FileReaderAction implements ActionListener{
+public class ReaderAction implements ActionListener{
 
 	private OnlineView onlineView;
 	private ViewController controller;
+	private String[] dbParameters;
 	
-	public FileReaderAction(OnlineView onlineView){
+	public ReaderAction(OnlineView onlineView){
 		this.onlineView = onlineView;
+		dbParameters = new String[5];
+	}
+	
+	public void readDatabaseParameters(){
+		dbParameters[0] = onlineView.getHostnameTextfield().getText();
+		dbParameters[1] = onlineView.getPasswordTextfield().getText();
+		dbParameters[2] = onlineView.getPortTextfield().getText();
+		dbParameters[3] = onlineView.getDatabaseTextfield().getText();
+		dbParameters[4] = onlineView.getUsernameTextfield().getText();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event){
 		String actionTodo = event.getActionCommand();
 		String outPath = onlineView.getFileTextField().getText();
-		
 		String outClassifier = onlineView.getClassifierTextField().getText();
+		
 		if (actionTodo.equals("startProcess")){
 			if(outPath.equals("") && outClassifier.equals("")){
 				JOptionPane.showMessageDialog(null, "No Text and Classifier input", 

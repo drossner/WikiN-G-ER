@@ -19,7 +19,7 @@ public class ViewController{
 	private String classifierPath;
 	private FileInput fileReader;
 	private String[] fileContent;
-	private StanfordNER ner;	
+	private StanfordNER ner;
 	
 	/**
 	 * 

@@ -34,12 +34,10 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.jdesktop.swingx.mapviewer.Waypoint;
 import org.jdesktop.swingx.mapviewer.WaypointPainter;
 
-import java.awt.FlowLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 
-import javax.swing.JSplitPane;
 import javax.swing.JSpinner;
 import javax.swing.ImageIcon;
 
@@ -49,13 +47,15 @@ public class OnlineView{
 	private JTextField fileTextField;
 	private JTextField classifierTextField;
 	private JInternalFrame internalFrame;
-	private JTextField usernameTextfield;
-	private JTextField passwordTextfield;
-	private JTextField hostnameTextfield;
-	private JTextField portTextfield;
-	private JTextField databaseTextfield;
 	private JTextField entityWeightTextField;
 	private JXMapKit openMap;
+	private ReaderAction read;
+	private FileOpener open;
+	private JTextField databaseTextfield;
+	private JTextField passwordTextfield;
+	private JTextField portTextfield;
+	private JTextField usernameTextfield;
+	private JTextField hostnameTextfield;
 
 	/**
 	 * Create the application.
@@ -132,9 +132,8 @@ public class OnlineView{
 
 		// Add action to btnBrowse
 		btnBrowse.setActionCommand("browse");
-		FileOpener open = new FileOpener(fileTextField);
+		open = new FileOpener(fileTextField);
 		btnBrowse.addActionListener(open);
-		FileReaderAction read = new FileReaderAction(this);
 
 		classifierTextField = new JTextField();
 		classifierTextField.setEditable(false);
@@ -155,6 +154,7 @@ public class OnlineView{
 		gbc_btnReadClassifier.gridy = 3;
 		mainPanel.add(btnReadClassifier, gbc_btnReadClassifier);
 
+		read = new ReaderAction(this);
 		btnReadClassifier.setActionCommand("readclassifier");
 		btnReadClassifier.addActionListener(openClf);
 
@@ -201,20 +201,22 @@ public class OnlineView{
 		tabbedPane.addTab("Settings", null, settingsPanel, null);
 		GridBagLayout gbl_settingsPanel = new GridBagLayout();
 		gbl_settingsPanel.columnWidths = new int[] { 68, 0, 0, 0, 288, 0 };
-		gbl_settingsPanel.rowHeights = new int[] { 24, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0 };
-		gbl_settingsPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0,
+		gbl_settingsPanel.rowHeights = new int[] { 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_settingsPanel.columnWeights = new double[] { 0.0, 1.0, 1.0, 0.0,
 				1.0, Double.MIN_VALUE };
-		gbl_settingsPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_settingsPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		settingsPanel.setLayout(gbl_settingsPanel);
 
 		JLabel lblEnterYourSpecific = new JLabel(
 				"Enter your specific Configuration for the loaded Classifier:");
 		lblEnterYourSpecific.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		GridBagConstraints gbc_lblEnterYourSpecific = new GridBagConstraints();
-		gbc_lblEnterYourSpecific.insets = new Insets(0, 0, 5, 5);
-		gbc_lblEnterYourSpecific.gridx = 2;
+		gbc_lblEnterYourSpecific.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblEnterYourSpecific.gridwidth = 4;
+		gbc_lblEnterYourSpecific.insets = new Insets(0, 0, 5, 0);
+		gbc_lblEnterYourSpecific.gridx = 1;
 		gbc_lblEnterYourSpecific.gridy = 1;
 		settingsPanel.add(lblEnterYourSpecific, gbc_lblEnterYourSpecific);
 
@@ -228,156 +230,153 @@ public class OnlineView{
 
 		JSpinner classifierConfigSpinner = new JSpinner();
 		GridBagConstraints gbc_classifierConfigSpinner = new GridBagConstraints();
+		gbc_classifierConfigSpinner.gridwidth = 2;
 		gbc_classifierConfigSpinner.fill = GridBagConstraints.HORIZONTAL;
 		gbc_classifierConfigSpinner.insets = new Insets(0, 0, 5, 5);
 		gbc_classifierConfigSpinner.gridx = 2;
 		gbc_classifierConfigSpinner.gridy = 2;
 		settingsPanel.add(classifierConfigSpinner, gbc_classifierConfigSpinner);
-
-		JLabel lblEntityWeighting = new JLabel("Entity Weighting");
-		GridBagConstraints gbc_lblEntityWeighting = new GridBagConstraints();
-		gbc_lblEntityWeighting.insets = new Insets(0, 0, 5, 5);
-		gbc_lblEntityWeighting.anchor = GridBagConstraints.EAST;
-		gbc_lblEntityWeighting.gridx = 1;
-		gbc_lblEntityWeighting.gridy = 4;
-		settingsPanel.add(lblEntityWeighting, gbc_lblEntityWeighting);
-
-		entityWeightTextField = new JTextField();
-		GridBagConstraints gbc_entityWeightTextField = new GridBagConstraints();
-		gbc_entityWeightTextField.insets = new Insets(0, 0, 5, 5);
-		gbc_entityWeightTextField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_entityWeightTextField.gridx = 2;
-		gbc_entityWeightTextField.gridy = 4;
-		settingsPanel.add(entityWeightTextField, gbc_entityWeightTextField);
-		entityWeightTextField.setColumns(10);
-
-		JButton btnSubmit = new JButton("Submit Values");
-		btnSubmit.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		GridBagConstraints gbc_btnSubmit = new GridBagConstraints();
-		gbc_btnSubmit.gridheight = 2;
-		gbc_btnSubmit.insets = new Insets(0, 0, 5, 5);
-		gbc_btnSubmit.gridx = 2;
-		gbc_btnSubmit.gridy = 5;
-		settingsPanel.add(btnSubmit, gbc_btnSubmit);
-
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1
-				.setIcon(new ImageIcon(
-						"C:\\Users\\Mario\\Dropbox\\Projektordner\\Semester 6\\Wikiner\\StanfordNLP.jpg"));
-		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
-		gbc_lblNewLabel_1.gridheight = 3;
-		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_1.gridx = 2;
-		gbc_lblNewLabel_1.gridy = 7;
-		settingsPanel.add(lblNewLabel_1, gbc_lblNewLabel_1);
-
-		JPanel panel = new JPanel();
-		tabbedPane.addTab("Database", null, panel, null);
-		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] { 0, 0, 0, 0, 0, 0 };
-		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0,
-				Double.MIN_VALUE };
-		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, Double.MIN_VALUE };
-		panel.setLayout(gbl_panel);
-
-		JLabel lblEnterYourConfiguration = new JLabel(
-				"Enter your Configuration for the connected Database");
-		lblEnterYourConfiguration.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		GridBagConstraints gbc_lblEnterYourConfiguration = new GridBagConstraints();
-		gbc_lblEnterYourConfiguration.insets = new Insets(0, 0, 5, 5);
-		gbc_lblEnterYourConfiguration.gridx = 3;
-		gbc_lblEnterYourConfiguration.gridy = 0;
-		panel.add(lblEnterYourConfiguration, gbc_lblEnterYourConfiguration);
-
-		JLabel lblHostname = new JLabel("Hostname");
-		GridBagConstraints gbc_lblHostname = new GridBagConstraints();
-		gbc_lblHostname.anchor = GridBagConstraints.EAST;
-		gbc_lblHostname.insets = new Insets(0, 0, 5, 5);
-		gbc_lblHostname.gridx = 2;
-		gbc_lblHostname.gridy = 1;
-		panel.add(lblHostname, gbc_lblHostname);
-
-		passwordTextfield = new JTextField();
-		GridBagConstraints gbc_passwordTextfield = new GridBagConstraints();
-		gbc_passwordTextfield.fill = GridBagConstraints.HORIZONTAL;
-		gbc_passwordTextfield.insets = new Insets(0, 0, 5, 5);
-		gbc_passwordTextfield.gridx = 3;
-		gbc_passwordTextfield.gridy = 1;
-		panel.add(passwordTextfield, gbc_passwordTextfield);
-		passwordTextfield.setColumns(10);
-
-		JLabel label = new JLabel("Password");
-		GridBagConstraints gbc_label = new GridBagConstraints();
-		gbc_label.insets = new Insets(0, 0, 5, 5);
-		gbc_label.anchor = GridBagConstraints.EAST;
-		gbc_label.gridx = 2;
-		gbc_label.gridy = 2;
-		panel.add(label, gbc_label);
-
-		hostnameTextfield = new JTextField();
-		hostnameTextfield.setColumns(10);
-		GridBagConstraints gbc_hostnameTextfield = new GridBagConstraints();
-		gbc_hostnameTextfield.fill = GridBagConstraints.HORIZONTAL;
-		gbc_hostnameTextfield.insets = new Insets(0, 0, 5, 5);
-		gbc_hostnameTextfield.gridx = 3;
-		gbc_hostnameTextfield.gridy = 2;
-		panel.add(hostnameTextfield, gbc_hostnameTextfield);
-
-		JLabel lblPort = new JLabel("Port");
-		GridBagConstraints gbc_lblPort = new GridBagConstraints();
-		gbc_lblPort.anchor = GridBagConstraints.EAST;
-		gbc_lblPort.insets = new Insets(0, 0, 5, 5);
-		gbc_lblPort.gridx = 2;
-		gbc_lblPort.gridy = 3;
-		panel.add(lblPort, gbc_lblPort);
-
-		portTextfield = new JTextField();
-		portTextfield.setColumns(10);
-		GridBagConstraints gbc_portTextfield = new GridBagConstraints();
-		gbc_portTextfield.fill = GridBagConstraints.HORIZONTAL;
-		gbc_portTextfield.insets = new Insets(0, 0, 5, 5);
-		gbc_portTextfield.gridx = 3;
-		gbc_portTextfield.gridy = 3;
-		panel.add(portTextfield, gbc_portTextfield);
-
-		JLabel lblDatabase = new JLabel("Database");
-		GridBagConstraints gbc_lblDatabase = new GridBagConstraints();
-		gbc_lblDatabase.anchor = GridBagConstraints.EAST;
-		gbc_lblDatabase.insets = new Insets(0, 0, 5, 5);
-		gbc_lblDatabase.gridx = 2;
-		gbc_lblDatabase.gridy = 4;
-		panel.add(lblDatabase, gbc_lblDatabase);
-
-		databaseTextfield = new JTextField();
-		databaseTextfield.setColumns(10);
-		GridBagConstraints gbc_databaseTextfield = new GridBagConstraints();
-		gbc_databaseTextfield.fill = GridBagConstraints.HORIZONTAL;
-		gbc_databaseTextfield.insets = new Insets(0, 0, 5, 5);
-		gbc_databaseTextfield.gridx = 3;
-		gbc_databaseTextfield.gridy = 4;
-		panel.add(databaseTextfield, gbc_databaseTextfield);
-
-		JLabel lblUsername = new JLabel("Username");
-		GridBagConstraints gbc_lblUsername = new GridBagConstraints();
-		gbc_lblUsername.insets = new Insets(0, 0, 5, 5);
-		gbc_lblUsername.gridx = 2;
-		gbc_lblUsername.gridy = 5;
-		panel.add(lblUsername, gbc_lblUsername);
-
-		usernameTextfield = new JTextField();
-		GridBagConstraints gbc_usernameTextfield = new GridBagConstraints();
-		gbc_usernameTextfield.fill = GridBagConstraints.HORIZONTAL;
-		gbc_usernameTextfield.insets = new Insets(0, 0, 5, 5);
-		gbc_usernameTextfield.gridx = 3;
-		gbc_usernameTextfield.gridy = 5;
-		panel.add(usernameTextfield, gbc_usernameTextfield);
-		usernameTextfield.setColumns(10);
+				
+						JLabel lblEntityWeighting = new JLabel("Entity Weighting");
+						GridBagConstraints gbc_lblEntityWeighting = new GridBagConstraints();
+						gbc_lblEntityWeighting.insets = new Insets(0, 0, 5, 5);
+						gbc_lblEntityWeighting.anchor = GridBagConstraints.EAST;
+						gbc_lblEntityWeighting.gridx = 1;
+						gbc_lblEntityWeighting.gridy = 3;
+						settingsPanel.add(lblEntityWeighting, gbc_lblEntityWeighting);
+		
+				entityWeightTextField = new JTextField();
+				GridBagConstraints gbc_entityWeightTextField = new GridBagConstraints();
+				gbc_entityWeightTextField.gridwidth = 2;
+				gbc_entityWeightTextField.insets = new Insets(0, 0, 5, 5);
+				gbc_entityWeightTextField.fill = GridBagConstraints.HORIZONTAL;
+				gbc_entityWeightTextField.gridx = 2;
+				gbc_entityWeightTextField.gridy = 3;
+				settingsPanel.add(entityWeightTextField, gbc_entityWeightTextField);
+				entityWeightTextField.setColumns(10);
+				
+						JLabel lblNewLabel_1 = new JLabel("");
+						lblNewLabel_1
+								.setIcon(new ImageIcon(
+										"C:\\Users\\Mario\\Dropbox\\Projektordner\\Semester 6\\Wikiner\\StanfordNLP.jpg"));
+						GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
+						gbc_lblNewLabel_1.gridwidth = 2;
+						gbc_lblNewLabel_1.gridheight = 4;
+						gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
+						gbc_lblNewLabel_1.gridx = 2;
+						gbc_lblNewLabel_1.gridy = 4;
+						settingsPanel.add(lblNewLabel_1, gbc_lblNewLabel_1);
+				
+				JLabel label_1 = new JLabel("Enter your Configuration for the connected Database");
+				label_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				GridBagConstraints gbc_label_1 = new GridBagConstraints();
+				gbc_label_1.gridwidth = 4;
+				gbc_label_1.fill = GridBagConstraints.HORIZONTAL;
+				gbc_label_1.insets = new Insets(0, 0, 5, 0);
+				gbc_label_1.gridx = 1;
+				gbc_label_1.gridy = 8;
+				settingsPanel.add(label_1, gbc_label_1);
+				
+				JLabel label_4 = new JLabel("Database");
+				GridBagConstraints gbc_label_4 = new GridBagConstraints();
+				gbc_label_4.anchor = GridBagConstraints.EAST;
+				gbc_label_4.insets = new Insets(0, 0, 5, 5);
+				gbc_label_4.gridx = 1;
+				gbc_label_4.gridy = 9;
+				settingsPanel.add(label_4, gbc_label_4);
+				
+				databaseTextfield = new JTextField();
+				databaseTextfield.setColumns(10);
+				GridBagConstraints gbc_databaseTextfield = new GridBagConstraints();
+				gbc_databaseTextfield.insets = new Insets(0, 0, 5, 5);
+				gbc_databaseTextfield.fill = GridBagConstraints.HORIZONTAL;
+				gbc_databaseTextfield.gridx = 2;
+				gbc_databaseTextfield.gridy = 9;
+				settingsPanel.add(databaseTextfield, gbc_databaseTextfield);
+				
+				JLabel label = new JLabel("Password");
+				GridBagConstraints gbc_label = new GridBagConstraints();
+				gbc_label.anchor = GridBagConstraints.EAST;
+				gbc_label.insets = new Insets(0, 0, 5, 5);
+				gbc_label.gridx = 1;
+				gbc_label.gridy = 10;
+				settingsPanel.add(label, gbc_label);
+				
+				passwordTextfield = new JTextField();
+				passwordTextfield.setColumns(10);
+				GridBagConstraints gbc_passwordTextfield = new GridBagConstraints();
+				gbc_passwordTextfield.insets = new Insets(0, 0, 5, 5);
+				gbc_passwordTextfield.fill = GridBagConstraints.HORIZONTAL;
+				gbc_passwordTextfield.gridx = 2;
+				gbc_passwordTextfield.gridy = 10;
+				settingsPanel.add(passwordTextfield, gbc_passwordTextfield);
+				
+				JLabel label_2 = new JLabel("Hostname");
+				GridBagConstraints gbc_label_2 = new GridBagConstraints();
+				gbc_label_2.anchor = GridBagConstraints.EAST;
+				gbc_label_2.insets = new Insets(0, 0, 5, 5);
+				gbc_label_2.gridx = 1;
+				gbc_label_2.gridy = 12;
+				settingsPanel.add(label_2, gbc_label_2);
+				
+				hostnameTextfield = new JTextField();
+				hostnameTextfield.setColumns(10);
+				GridBagConstraints gbc_hostnameTextfield = new GridBagConstraints();
+				gbc_hostnameTextfield.insets = new Insets(0, 0, 5, 5);
+				gbc_hostnameTextfield.fill = GridBagConstraints.HORIZONTAL;
+				gbc_hostnameTextfield.gridx = 2;
+				gbc_hostnameTextfield.gridy = 12;
+				settingsPanel.add(hostnameTextfield, gbc_hostnameTextfield);
+				
+				JLabel label_3 = new JLabel("Port");
+				GridBagConstraints gbc_label_3 = new GridBagConstraints();
+				gbc_label_3.anchor = GridBagConstraints.EAST;
+				gbc_label_3.insets = new Insets(0, 0, 5, 5);
+				gbc_label_3.gridx = 1;
+				gbc_label_3.gridy = 13;
+				settingsPanel.add(label_3, gbc_label_3);
+				
+				portTextfield = new JTextField();
+				portTextfield.setColumns(10);
+				GridBagConstraints gbc_portTextfield = new GridBagConstraints();
+				gbc_portTextfield.insets = new Insets(0, 0, 5, 5);
+				gbc_portTextfield.fill = GridBagConstraints.HORIZONTAL;
+				gbc_portTextfield.gridx = 2;
+				gbc_portTextfield.gridy = 13;
+				settingsPanel.add(portTextfield, gbc_portTextfield);
+				
+				JLabel label_5 = new JLabel("Username");
+				GridBagConstraints gbc_label_5 = new GridBagConstraints();
+				gbc_label_5.anchor = GridBagConstraints.EAST;
+				gbc_label_5.insets = new Insets(0, 0, 5, 5);
+				gbc_label_5.gridx = 1;
+				gbc_label_5.gridy = 14;
+				settingsPanel.add(label_5, gbc_label_5);
+				
+				usernameTextfield = new JTextField();
+				usernameTextfield.setColumns(10);
+				GridBagConstraints gbc_usernameTextfield = new GridBagConstraints();
+				gbc_usernameTextfield.insets = new Insets(0, 0, 5, 5);
+				gbc_usernameTextfield.fill = GridBagConstraints.HORIZONTAL;
+				gbc_usernameTextfield.gridx = 2;
+				gbc_usernameTextfield.gridy = 14;
+				settingsPanel.add(usernameTextfield, gbc_usernameTextfield);
+								
+										JButton btnSubmit = new JButton("Submit Values");
+										btnSubmit.setFont(new Font("Tahoma", Font.PLAIN, 13));
+										GridBagConstraints gbc_btnSubmit = new GridBagConstraints();
+										gbc_btnSubmit.gridwidth = 2;
+										gbc_btnSubmit.gridheight = 2;
+										gbc_btnSubmit.insets = new Insets(0, 0, 5, 5);
+										gbc_btnSubmit.gridx = 2;
+										gbc_btnSubmit.gridy = 15;
+										settingsPanel.add(btnSubmit, gbc_btnSubmit);
 
 		internalFrame.setVisible(true);
 
 	}
+
+	
 
 	private void setMap(){
 		openMap = new JXMapKit();
@@ -436,6 +435,46 @@ public class OnlineView{
 		});
 	}
 
+	public JTextField getUsernameTextfield(){
+		return usernameTextfield;
+	}
+
+	public void setUsernameTextfield(JTextField usernameTextfield){
+		this.usernameTextfield = usernameTextfield;
+	}
+
+	public JTextField getPasswordTextfield(){
+		return passwordTextfield;
+	}
+
+	public void setPasswordTextfield(JTextField passwordTextfield){
+		this.passwordTextfield = passwordTextfield;
+	}
+
+	public JTextField getHostnameTextfield(){
+		return hostnameTextfield;
+	}
+
+	public void setHostnameTextfield(JTextField hostnameTextfield){
+		this.hostnameTextfield = hostnameTextfield;
+	}
+
+	public JTextField getPortTextfield(){
+		return portTextfield;
+	}
+
+	public void setPortTextfield(JTextField portTextfield){
+		this.portTextfield = portTextfield;
+	}
+
+	public JTextField getDatabaseTextfield(){
+		return databaseTextfield;
+	}
+
+	public void setDatabaseTextfield(JTextField databaseTextfield){
+		this.databaseTextfield = databaseTextfield;
+	}
+	
 	public JTextField getClassifierTextField(){
 		return classifierTextField;
 	}
