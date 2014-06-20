@@ -66,7 +66,6 @@ public class City implements Comparable<City>{
 
 	public int compareTo(City o) {
 		if(this.score > o.score) return 1;
-		else if(this.score == o.score) return 0;
 		else return -1;
 	}
 

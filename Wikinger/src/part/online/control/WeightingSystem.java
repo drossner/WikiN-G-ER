@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import data.City;
 import data.Entity;
@@ -37,16 +38,17 @@ public class WeightingSystem {
 		}
 		
 		connector.init(host, port, database, user, passwd);
-		unit = new WeightingUnit(0, 5, entities, connector, resultCities, entitiesWeighting);
+		unit = new WeightingUnit(0, entities.length, entities, connector, resultCities, entitiesWeighting);
 		
-		while(start < entities.length){
-			unit.setStart(start);
-			unit.setEnd(start + 100);
-			executor.execute(unit);
-			start += 100;
-		}
+		executor.execute(unit);
 		
 		executor.shutdown();
+		
+		try {
+			executor.awaitTermination(5, TimeUnit.MINUTES);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 		Collections.sort(resultCities);
 		

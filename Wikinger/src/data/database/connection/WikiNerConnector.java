@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import data.City;
@@ -62,7 +63,7 @@ public class WikiNerConnector {
 			selectCity = con.prepareStatement("SELECT name, latitude, longitude FROM city WHERE id = ? LIMIT 1");
 			selectCityEntCounter = con.prepareStatement("SELECT counter FROM cityentityconnection WHERE cityid = ? AND entityid = ? LIMIT 1");
 			selectEntity = con.prepareStatement("SELECT id, counter, idf FROM entity WHERE name = ? AND entityType = (SELECT id FROM entitytype WHERE name = ?) LIMIT 1");
-			selectCityID = con.prepareStatement("SELECT id FROM city WHERE name = ? LIMIT 1");
+			selectCityID = con.prepareStatement("SELECT id FROM city WHERE name = ? ");
 			updateEntityIDF = con.prepareStatement("UPDATE entity SET idf = ? WHERE id = ?");
 			insertCity = con.prepareStatement("INSERT INTO city (name, latitude, longitude) VALUES (?, ?, ?)");
 			insertEntity = con.prepareStatement("INSERT INTO entity (name, entityType, counter) VALUES (?, (SELECT id FROM entitytype WHERE name = ?), ?)");
@@ -123,7 +124,7 @@ public class WikiNerConnector {
 		double idf;
 
 		selectEntity.setString(1, name);
-		selectEntity.setString(2, type);
+		selectEntity.setString(2, type.toUpperCase());
 		rs = selectEntity.executeQuery();
 
 		rs.next();
@@ -139,23 +140,24 @@ public class WikiNerConnector {
 
 	public City[] getCities(int entityID) throws SQLException {
 		ArrayList<City> temp = new ArrayList<City>();
-		int[] cityIDs;
-		ResultSet rs;
+		ArrayList<Integer> cityIDs = new ArrayList<Integer>();
+		Statement st;
+		ResultSet rs = null;
 		String name;
 		double latitude, longitude;
 
+		
 		selectCityIDs.setInt(1, entityID);
 		rs = selectCityIDs.executeQuery();
-		rs.afterLast();
-		cityIDs = new int[rs.getRow()];
 		rs.beforeFirst();
-		for (int i = 0; i < cityIDs.length; i++) {
-			rs.next();
-			cityIDs[i] = rs.getInt(1);
+		while(rs.next()) {
+			cityIDs.add(rs.getInt(1));
+			System.out.println("cityid from entityid");
 		}
 
-		for (int i = 0; i < cityIDs.length; i++) {
-			selectCity.setInt(1, cityIDs[i]);
+		for (int i = 0; i < cityIDs.size(); i++) {
+			System.out.println("ids: " + cityIDs.get(i));
+			selectCity.setInt(1, cityIDs.get(i));
 			rs = selectCity.executeQuery();
 			rs.next();
 			name = rs.getString(1);
@@ -164,8 +166,10 @@ public class WikiNerConnector {
 
 			temp.add(new City(name, latitude, longitude));
 		}
-
-		return temp.toArray(new City[temp.size()]);
+		
+		City[] rc = temp.toArray(new City[temp.size()]) ;
+		System.out.println(rc.length);
+		return rc;
 	}
 
 	public int writeCity(City city) throws SQLException {
@@ -230,7 +234,7 @@ public class WikiNerConnector {
 	public int getCityEntityCounter(String name, int entityid) throws SQLException {
 		ResultSet rs;
 		
-		selectCity.setString(1, name);
+		selectCityID.setString(1, name);
 		rs = selectCityID.executeQuery();
 		rs.next();
 		

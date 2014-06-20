@@ -19,7 +19,9 @@ public class WeightingUnit extends Thread {
 	private ArrayList<City> resultCities;
 	private EntityType[] entityWeighting;
 
-	public WeightingUnit(int start, int end, Entity[] entities,	WikiNerConnector connector, ArrayList<City> resultCities, EntityType[] entitiesWeighting) {
+	public WeightingUnit(int start, int end, Entity[] entities,
+			WikiNerConnector connector, ArrayList<City> resultCities,
+			EntityType[] entitiesWeighting) {
 		this.start = start;
 		this.end = end;
 		this.entities = entities;
@@ -31,7 +33,7 @@ public class WeightingUnit extends Thread {
 	public void run() {
 		Entity entity;
 		HashMap<String, City> cities = new HashMap<String, City>();
-		City[] cityArr;
+		City[] cityArr = null;
 		int counter;
 		int maximumEntity;
 		double score;
@@ -41,31 +43,41 @@ public class WeightingUnit extends Thread {
 
 		try {
 			for (int i = start; i <= end && i < entities.length; i++) {
-				entity = connector.getEntity(entities[i].getName(), entities[i].getType());
-				cityArr = connector.getCities(entity.getId());
-				for (int j = 0; j < entityWeighting.length; j++) {
-					if(entityWeighting[j].getName() == entity.getType()){
-						et = entityWeighting[j];
-						break;
+				entity = connector.getEntity(entities[i].getName(),
+						entities[i].getType());
+				if (entity == null) {
+					System.out.println("null bei : " + entities[i].getName()+ " " + entities[i].getType());
+				} else {
+					cityArr = connector.getCities(entity.getId());
+					for (int j = 0; j < entityWeighting.length; j++) {
+						if (entityWeighting[j].getName().equals(entities[i].getType().toUpperCase())) {
+							et = entityWeighting[j];
+							break;
+						}
 					}
-				}
-				for (int j = 0; j < cityArr.length; j++) {
-					counter = connector.getCityEntityCounter(cityArr[j].getName(), entity.getId());
-					maximumEntity = connector.getMaxEntity(cityArr[j].getName());
-					score = et.getWeighting() * ((counter * 1.0) / maximumEntity) * entity.getIdf();
-					cityArr[j].setScore(score);
-					addToHashMap(cities, cityArr[j]);
+					for (int j = 0; j < cityArr.length; j++) {
+						counter = connector.getCityEntityCounter(cityArr[j].getName(), entity.getId());
+						maximumEntity = connector.getMaxEntity(cityArr[j].getName());
+						score = et.getWeighting() 
+								* Math.log(entity.getCount())
+								* ((counter * 1.0) / maximumEntity)
+								* entity.getIdf();
+						cityArr[j].setScore(score);
+						addToHashMap(cities, cityArr[j]);
+					}
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		it = cities.values().iterator();
-		while(it.hasNext()){
+		while (it.hasNext()) {
+			
 			temp = it.next();
 			temp.setScore(temp.getScore() / temp.getCounter());
 			resultCities.add(temp);
+			System.out.println("füge hinzu: " + temp.getName());
 		}
 	}
 
@@ -77,19 +89,17 @@ public class WeightingUnit extends Thread {
 		hashMapKey.append(city.getName() + "/");
 		hashMapKey.append(city.getLati() + "/");
 		hashMapKey.append(city.getLongi());
-		if(cities.containsKey(hashMapKey.toString())){
+		if (cities.containsKey(hashMapKey.toString())) {
 			cityTemp = cities.get(hashMapKey.toString());
 			score = cityTemp.getScore();
-			score = score + city.getScore();				//Hier müssen wir vll noch etwas verändern!
+			score = score + city.getScore(); // Hier müssen wir vll noch etwas
+												// verändern!
 			counter = cityTemp.getCounter();
 			cityTemp.setCounter(++counter);
 			cityTemp.setScore(score);
-			cities.remove(hashMapKey.toString());
-			cities.put(hashMapKey.toString(), cityTemp);
-		}else{
+		} else {
 			cities.put(hashMapKey.toString(), city);
 		}
-		hashMapKey = new StringBuilder();
 	}
 
 	public ArrayList<City> getResultCities() {
@@ -99,12 +109,12 @@ public class WeightingUnit extends Thread {
 	public void setResultCities(ArrayList<City> resultCities) {
 		this.resultCities = resultCities;
 	}
-	
-	public void setStart(int start){
+
+	public void setStart(int start) {
 		this.start = start;
 	}
-	
-	public int getStart(){
+
+	public int getStart() {
 		return this.start;
 	}
 
