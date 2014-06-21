@@ -58,7 +58,7 @@ public class OnlineControllerTest {
 		result = ws.calculateCity(entities, "localhost", 3306, "wikinger2", "root", "");
 		
 		System.out.println("\n" + result.length + "\n");
-		for (int i = 0; i < result.length; i++) {
+		for (int i = 0; i < 20; i++) {
 			System.out.println(i + ": " + result[i].getName());
 		}
 	}

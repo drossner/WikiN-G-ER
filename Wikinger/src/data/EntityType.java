@@ -4,7 +4,19 @@ public class EntityType {
 
 	private String name;
 	private double weighting;
+	private int id;
 	
+	public EntityType(int id, String name, double weighting) {
+		this.setId(id);
+		this.setName(name);
+		this.setWeighting(weighting);
+	}
+
+	public EntityType(int id, String name) {
+		this.setId(id);
+		this.setName(name);
+	}
+
 	public EntityType(String name, double weighting) {
 		this.setName(name);
 		this.setWeighting(weighting);
@@ -24,5 +36,13 @@ public class EntityType {
 
 	public void setWeighting(double weighting) {
 		this.weighting = weighting;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }

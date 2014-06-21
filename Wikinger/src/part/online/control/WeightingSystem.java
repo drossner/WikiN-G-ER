@@ -1,7 +1,10 @@
 package part.online.control;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -22,30 +25,40 @@ public class WeightingSystem {
 	public City[] calculateCity(Entity[] entities, String host, int port, String database, String user, String passwd){
 		WikiNerConnector connector = new WikiNerConnector();
 		WeightingUnit unit;
+		EntityType[] temp = null;
 		ExecutorService executor = Executors.newCachedThreadPool();
 		ArrayList<City> resultCities = new ArrayList<City>();
+		Map<String, EntityType> entityTypes = new HashMap<String, EntityType>();
 		int start = 0;
-		double max = 0.0;
-		
-		for (int i = 0; i < entitiesWeighting.length; i++) {
-			if(entitiesWeighting[i].getWeighting() > max){
-				max = entitiesWeighting[i].getWeighting();
-			}
-		}
-		
-		for (int i = 0; i < entitiesWeighting.length; i++) {
-			entitiesWeighting[i].setWeighting(entitiesWeighting[i].getWeighting() / max);
-		}
-		
+		int step = 10;
+
 		connector.init(host, port, database, user, passwd);
-		unit = new WeightingUnit(0, entities.length, entities, connector, resultCities, entitiesWeighting);
+		try {
+			temp = connector.getEntityTypes();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		for (int i = 0; i < temp.length; i++) {
+			for (int j = 0; j < entitiesWeighting.length; j++) {
+				if(temp[i].getName().equals(entitiesWeighting[j].getName())){
+					temp[i].setWeighting(entitiesWeighting[i].getWeighting());
+					break;
+				}
+			}
+			entityTypes.put(temp[i].getName(), temp[i]);
+		}
 		
-		executor.execute(unit);
-		
+		while (start < entities.length){
+			unit = new WeightingUnit(start, start + step, entities, connector, resultCities, entityTypes);
+			start += step;
+			executor.execute(unit);
+			connector = new WikiNerConnector();
+			connector.init(host, port, database, user, passwd);
+		}
 		executor.shutdown();
 		
 		try {
-			executor.awaitTermination(5, TimeUnit.MINUTES);
+			executor.awaitTermination(100, TimeUnit.MINUTES);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

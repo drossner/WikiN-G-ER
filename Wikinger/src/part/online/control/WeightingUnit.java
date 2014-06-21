@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import data.City;
 import data.Entity;
@@ -17,11 +18,11 @@ public class WeightingUnit extends Thread {
 	private Entity[] entities;
 	private WikiNerConnector connector;
 	private ArrayList<City> resultCities;
-	private EntityType[] entityWeighting;
+	private Map<String, EntityType> entityWeighting;
 
 	public WeightingUnit(int start, int end, Entity[] entities,
 			WikiNerConnector connector, ArrayList<City> resultCities,
-			EntityType[] entitiesWeighting) {
+			Map<String, EntityType> entitiesWeighting) {
 		this.start = start;
 		this.end = end;
 		this.entities = entities;
@@ -43,21 +44,16 @@ public class WeightingUnit extends Thread {
 
 		try {
 			for (int i = start; i <= end && i < entities.length; i++) {
-				entity = connector.getEntity(entities[i].getName(),
-						entities[i].getType());
+				System.out.println(i + " / " + entities.length);
+				et = entityWeighting.get( entities[i].getType());
+				entity = connector.getEntity(entities[i].getName(), et.getId());
 				if (entity == null) {
 					System.out.println("null bei : " + entities[i].getName()+ " " + entities[i].getType());
 				} else {
 					cityArr = connector.getCities(entity.getId());
-					for (int j = 0; j < entityWeighting.length; j++) {
-						if (entityWeighting[j].getName().equals(entities[i].getType().toUpperCase())) {
-							et = entityWeighting[j];
-							break;
-						}
-					}
 					for (int j = 0; j < cityArr.length; j++) {
-						counter = connector.getCityEntityCounter(cityArr[j].getName(), entity.getId());
-						maximumEntity = connector.getMaxEntity(cityArr[j].getName());
+						counter = connector.getCityEntityCounter(cityArr[j].getId(), entity.getId());
+						maximumEntity = connector.getMaxEntity(cityArr[j].getId());
 						score = et.getWeighting() 
 								* Math.log(entity.getCount())
 								* ((counter * 1.0) / maximumEntity)
@@ -77,7 +73,6 @@ public class WeightingUnit extends Thread {
 			temp = it.next();
 			temp.setScore(temp.getScore() / temp.getCounter());
 			resultCities.add(temp);
-			System.out.println("füge hinzu: " + temp.getName());
 		}
 	}
 

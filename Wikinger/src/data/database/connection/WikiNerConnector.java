@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import data.City;
 import data.Entity;
+import data.EntityType;
 
 public class WikiNerConnector {
 
@@ -29,6 +30,7 @@ public class WikiNerConnector {
 	private PreparedStatement countCities;
 	private PreparedStatement countEntityConn;
 	private PreparedStatement maximumEntityCountCity;
+	private PreparedStatement selectEntityTypes;
 
 	/**
 	 * Init the connection to the given database
@@ -62,8 +64,9 @@ public class WikiNerConnector {
 			selectCityIDs = con.prepareStatement("SELECT cityid FROM cityentityconnection WHERE entityid = ?");
 			selectCity = con.prepareStatement("SELECT name, latitude, longitude FROM city WHERE id = ? LIMIT 1");
 			selectCityEntCounter = con.prepareStatement("SELECT counter FROM cityentityconnection WHERE cityid = ? AND entityid = ? LIMIT 1");
-			selectEntity = con.prepareStatement("SELECT id, counter, idf FROM entity WHERE name = ? AND entityType = (SELECT id FROM entitytype WHERE name = ?) LIMIT 1");
+			selectEntity = con.prepareStatement("SELECT id, counter, idf FROM entity WHERE name = ? AND entityType = ? LIMIT 1");
 			selectCityID = con.prepareStatement("SELECT id FROM city WHERE name = ? ");
+			selectEntityTypes = con.prepareStatement("SELECT id, name FROM entitytype");
 			updateEntityIDF = con.prepareStatement("UPDATE entity SET idf = ? WHERE id = ?");
 			insertCity = con.prepareStatement("INSERT INTO city (name, latitude, longitude) VALUES (?, ?, ?)");
 			insertEntity = con.prepareStatement("INSERT INTO entity (name, entityType, counter) VALUES (?, (SELECT id FROM entitytype WHERE name = ?), ?)");
@@ -71,7 +74,7 @@ public class WikiNerConnector {
 			insertCityEntityCon = con.prepareStatement("INSERT INTO cityentityconnection (cityid, entityid, counter) VALUES (?, ?, ?)");
 			countCities = con.prepareStatement("SELECT COUNT(id) FROM city");
 			countEntityConn = con.prepareStatement("SELECT COUNT(entityid) FROM cityentityconnection WHERE entityid = ?");
-			maximumEntityCountCity = con.prepareStatement("SELECT MAX(counter) FROM cityentityconnection WHERE cityid = (SELECT id FROM city WHERE name = ?)");
+			maximumEntityCountCity = con.prepareStatement("SELECT MAX(counter) FROM cityentityconnection WHERE cityid = ?");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -117,14 +120,14 @@ public class WikiNerConnector {
 		return rs.getInt(1);
 	}
 
-	public Entity getEntity(String name, String type) throws SQLException {
+	public Entity getEntity(String name, int typeID) throws SQLException {
 		ResultSet rs;
 		int id;
 		int counter;
 		double idf;
 
 		selectEntity.setString(1, name);
-		selectEntity.setString(2, type.toUpperCase());
+		selectEntity.setInt(2, typeID);
 		rs = selectEntity.executeQuery();
 
 		rs.next();
@@ -141,7 +144,6 @@ public class WikiNerConnector {
 	public City[] getCities(int entityID) throws SQLException {
 		ArrayList<City> temp = new ArrayList<City>();
 		ArrayList<Integer> cityIDs = new ArrayList<Integer>();
-		Statement st;
 		ResultSet rs = null;
 		String name;
 		double latitude, longitude;
@@ -152,11 +154,9 @@ public class WikiNerConnector {
 		rs.beforeFirst();
 		while(rs.next()) {
 			cityIDs.add(rs.getInt(1));
-			System.out.println("cityid from entityid");
 		}
 
 		for (int i = 0; i < cityIDs.size(); i++) {
-			System.out.println("ids: " + cityIDs.get(i));
 			selectCity.setInt(1, cityIDs.get(i));
 			rs = selectCity.executeQuery();
 			rs.next();
@@ -164,11 +164,10 @@ public class WikiNerConnector {
 			latitude = rs.getDouble(2);
 			longitude = rs.getDouble(3);
 
-			temp.add(new City(name, latitude, longitude));
+			temp.add(new City(cityIDs.get(i), name, latitude, longitude));
 		}
 		
 		City[] rc = temp.toArray(new City[temp.size()]) ;
-		System.out.println(rc.length);
 		return rc;
 	}
 
@@ -231,15 +230,11 @@ public class WikiNerConnector {
 		insertCityEntityCon.executeUpdate();
 	}
 
-	public int getCityEntityCounter(String name, int entityid) throws SQLException {
+	public int getCityEntityCounter(int cityID, int entityID) throws SQLException {
 		ResultSet rs;
 		
-		selectCityID.setString(1, name);
-		rs = selectCityID.executeQuery();
-		rs.next();
-		
-		selectCityEntCounter.setInt(1, rs.getInt(1));
-		selectCityEntCounter.setInt(2, entityid);
+		selectCityEntCounter.setInt(1, cityID);
+		selectCityEntCounter.setInt(2, entityID);
 		rs = selectCityEntCounter.executeQuery();
 		rs.next();
 		return rs.getInt(1);
@@ -264,14 +259,27 @@ public class WikiNerConnector {
 		return rs.getInt(1);
 	}
 
-	public int getMaxEntity(String name) throws SQLException {
+	public int getMaxEntity(int i) throws SQLException {
 		ResultSet rs;
 		
-		maximumEntityCountCity.setString(1, name);
+		maximumEntityCountCity.setInt(1, i);
 		rs = maximumEntityCountCity.executeQuery();
 		rs.next();
 		
 		return rs.getInt(1);
+	}
+
+	public EntityType[] getEntityTypes() throws SQLException {
+		ArrayList<EntityType> rc = new ArrayList<EntityType>();
+		ResultSet rs;
+		
+		rs = selectEntityTypes.executeQuery();
+		rs.afterLast();
+		rs.beforeFirst();
+		while(rs.next()){
+			rc.add(new EntityType(rs.getInt(1), rs.getString(2)));
+		}
+		return rc.toArray(new EntityType[rc.size()]);
 	}
 
 }

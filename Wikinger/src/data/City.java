@@ -6,9 +6,11 @@ public class City implements Comparable<City>{
 	private double longi;
 	private double lati;
 	private double score;
+	private int id;
 	private int counter;
 	
-	public City(String name, double latitude, double longitude){
+	public City(int id, String name, double latitude, double longitude){
+		setId(id);
 		setName(name);
 		setLongi(longitude);
 		setLati(latitude);
@@ -67,6 +69,14 @@ public class City implements Comparable<City>{
 	public int compareTo(City o) {
 		if(this.score > o.score) return 1;
 		else return -1;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }
