@@ -6,6 +6,7 @@ import part.offline.data.Gazetteer;
 import data.control.FileOutput;
 import data.control.StanfordNER;
 import data.database.connection.WikiNerConnector;
+import data.database.connection.WikiNerGraphConnector;
 import data.database.connection.WikipediaConnector;
 
 public class OfflineController {
@@ -102,7 +103,10 @@ public class OfflineController {
 		int crawlerOutPutFileCount;
 		Thread[] threadList;
 		WikiNerConnector[] connectors;
+		WikiNerGraphConnector connector;
 		String fileDest;
+		
+		connector = new WikiNerGraphConnector();
 		
 		fileDest = directory + "CrawlerOutPut";
 		crawlerOutPutFileCount = new File(directory).listFiles().length; 
@@ -116,7 +120,7 @@ public class OfflineController {
 		}
 		
 		for (int i = 0; i < threadList.length; i++) {
-			DBWriterUnit temp = new DBWriterUnit(i, fileDest+i+".txt", connectors[i], ";#/", ";");
+			DBWriterUnit temp = new DBWriterUnit(i, fileDest+i+".txt", connector, ";#/", ";");
 			threadList[i] = new Thread(temp);
 			threadList[i].start();
 		}
