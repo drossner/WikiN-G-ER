@@ -30,7 +30,7 @@ public class WeightingSystem {
 		ArrayList<City> resultCities = new ArrayList<City>();
 		Map<String, EntityType> entityTypes = new HashMap<String, EntityType>();
 		int start = 0;
-		int step = 10;
+		int step = 15;
 
 		connector.init(host, port, database, user, passwd);
 		try {
@@ -58,7 +58,7 @@ public class WeightingSystem {
 		executor.shutdown();
 		
 		try {
-			executor.awaitTermination(100, TimeUnit.MINUTES);
+			executor.awaitTermination(200, TimeUnit.MINUTES);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

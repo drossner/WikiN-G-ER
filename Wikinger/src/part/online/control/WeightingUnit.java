@@ -44,11 +44,10 @@ public class WeightingUnit extends Thread {
 
 		try {
 			for (int i = start; i <= end && i < entities.length; i++) {
-				System.out.println(i + " / " + entities.length);
 				et = entityWeighting.get( entities[i].getType());
 				entity = connector.getEntity(entities[i].getName(), et.getId());
 				if (entity == null) {
-					System.out.println("null bei : " + entities[i].getName()+ " " + entities[i].getType());
+					
 				} else {
 					cityArr = connector.getCities(entity.getId());
 					for (int j = 0; j < cityArr.length; j++) {
@@ -74,6 +73,7 @@ public class WeightingUnit extends Thread {
 			temp.setScore(temp.getScore() / temp.getCounter());
 			resultCities.add(temp);
 		}
+		System.out.println(Thread.class.getName() + " ist fertig mit rechenen !");
 	}
 
 	private void addToHashMap(HashMap<String, City> cities, City city) {
