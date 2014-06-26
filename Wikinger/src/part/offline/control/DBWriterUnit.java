@@ -41,8 +41,8 @@ public class DBWriterUnit extends Thread{
 		String[] dataArr = in.loadCompleteFile();
 		
 		for (int i = 0; i < dataArr.length; i++) {
-			//status.setWorkForEachDone(i, id);
 			System.out.println(i + " / " + dataArr.length);
+			//status.setWorkForEachDone(i, id);
 			try{
 				entities = dataArr[i].split(entitySplitSymbol);
 				cityArr = entities[0].split(coordsSplitSymbol);
@@ -50,6 +50,7 @@ public class DBWriterUnit extends Thread{
 				city = connector.createCity(new City(cityArr[0], cityArr[1], cityArr[2]));
 				
 				for (int j = 1; j < entities.length; j++) {
+					System.out.println("Entities" + j + " / " + entities.length);
 					temp = new Entity(entities[j], entities[++j], entities[++j]);
 					entity = connector.createEntity(temp);
 				

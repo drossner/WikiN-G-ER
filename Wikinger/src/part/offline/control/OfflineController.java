@@ -102,7 +102,7 @@ public class OfflineController {
 	public void startWritingToDatabase(String database, String directory){
 		int crawlerOutPutFileCount;
 		Thread[] threadList;
-		WikiNerConnector[] connectors;
+//		WikiNerConnector[] connectors;
 		WikiNerGraphConnector connector;
 		String fileDest;
 		
@@ -112,18 +112,16 @@ public class OfflineController {
 		crawlerOutPutFileCount = new File(directory).listFiles().length; 
 		
 		threadList = new Thread[crawlerOutPutFileCount];
-		connectors = new WikiNerConnector[crawlerOutPutFileCount];
+//		connectors = new WikiNerConnector[crawlerOutPutFileCount];
+//		
+//		for (int i = 0; i < connectors.length; i++) {
+//			connectors[i] = new WikiNerConnector();
+//			connectors[i].init(host, port, database, user, passwd);
+//		}
 		
-		for (int i = 0; i < connectors.length; i++) {
-			connectors[i] = new WikiNerConnector();
-			connectors[i].init(host, port, database, user, passwd);
-		}
-		
-		for (int i = 0; i < threadList.length; i++) {
-			DBWriterUnit temp = new DBWriterUnit(i, fileDest+i+".txt", connector, ";#/", ";");
-			threadList[i] = new Thread(temp);
-			threadList[i].start();
-		}
+		DBWriterUnit temp = new DBWriterUnit(0, fileDest+0+".txt", connector, ";#/", ";");
+		threadList[0] = new Thread(temp);
+		threadList[0].start();
 		
 		for (int i = 0; i < threadList.length; i++) {
 			try {
@@ -132,6 +130,7 @@ public class OfflineController {
 				e.printStackTrace();
 			}
 		}
+		connector.shutdown();
 	}
 	
 	public void createInverseDocFrequency(String database){

@@ -16,8 +16,8 @@ public class CrawlingTest {
 			//Thread t = new Thread(lg);
 			//t.start();
 			//c.startCrawling();
-			//c.startWritingToDatabase("wikinger2", "./temp/");
-			c.createInverseDocFrequency("wikinger2");
+			c.startWritingToDatabase("wikinger2", "./temp/");
+			//c.createInverseDocFrequency("wikingermem");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
