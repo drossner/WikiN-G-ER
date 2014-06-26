@@ -65,7 +65,7 @@ public class CityCreator {
 		}
 		
 		if(coords != null){
-			city = new City("", coords[0], coords[1]);
+			city = new City(-1, "", coords[0], coords[1]);
 			rc = new DataDump(city, temp);
 		}
 		
