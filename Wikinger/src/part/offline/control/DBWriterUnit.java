@@ -40,7 +40,7 @@ public class DBWriterUnit extends Thread{
 		Node city, entity;
 		String[] dataArr = in.loadCompleteFile();
 		
-		for (int i = 0; i < dataArr.length; i++) {
+		for (int i = 0; i < 100; i++) {
 			System.out.println(i + " / " + dataArr.length);
 			//status.setWorkForEachDone(i, id);
 			try{
