@@ -75,8 +75,7 @@ public class City implements Comparable<City>{
 	}
 
 	public int compareTo(City o) {
-		if(this.score > o.score) return 1;
-		else return -1;
+		return Double.compare(o.score, this.score);
 	}
 
 	public int getId() {
