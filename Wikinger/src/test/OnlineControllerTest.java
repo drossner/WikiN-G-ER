@@ -59,7 +59,7 @@ public class OnlineControllerTest {
 		long end = System.currentTimeMillis();
 		System.out.println("\n" + result.length + "\n");
 		for (int i = 0; i < 20; i++) {
-			System.out.println(i + ": " + result[i].getName());
+			System.out.println(i + ": " + result[i].getName() + " ; " + result[i].getScore());
 		}
 		System.out.println(end - start);
 	}

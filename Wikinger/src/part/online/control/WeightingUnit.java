@@ -45,18 +45,18 @@ public class WeightingUnit extends Thread {
 			et = entityWeighting.get( entities[i].getType());
 			dpArr = connector.getDataEntity(entities[i]);
 			
-			if (dpArr != null) {
+			if (dpArr != null && et.getWeighting() != 0.0) {
 				for (int j = 0; j < dpArr.length; j++) {
 					if (dpArr[j].getCounter() > maximumEntity)
 						maximumEntity = dpArr[j].getCounter();
 				}
 
 				for (int j = 0; j < dpArr.length; j++) {
-					score = et.getWeighting()
-							* Math.log(entities[i].getCount())
-							* ((dpArr[j].getCounter() * 1.0) / maximumEntity)
-							* dpArr[j].getIdf();
-
+					score = et.getWeighting() * entities[i].getCount() * dpArr[j].getIdf();
+//					if(et.getWeighting() != 0.0){
+//						System.out.println(et.getName() + ": " + et.getWeighting() + " , " + maximumEntity + " , " + dpArr[j].getIdf() + " , " + dpArr[j].getCounter() + " , " + entities[i].getCount());
+//						System.out.println(score);
+//					}
 					dpArr[j].getCity().setScore(score);
 					addToHashMap(cities, dpArr[j].getCity());
 				}
@@ -66,6 +66,7 @@ public class WeightingUnit extends Thread {
 		while (it.hasNext()) {
 			
 			temp = it.next();
+			if(Double.isInfinite(temp.getScore() / temp.getCounter())) System.out.println(temp.getScore() + " , " + temp.getCounter());
 			temp.setScore(temp.getScore() / temp.getCounter());
 			resultCities.add(temp);
 		}
@@ -83,11 +84,12 @@ public class WeightingUnit extends Thread {
 		if (cities.containsKey(hashMapKey.toString())) {
 			cityTemp = cities.get(hashMapKey.toString());
 			score = cityTemp.getScore();
-			score = score + city.getScore(); // Hier müssen wir vll noch etwas
+			score += city.getScore(); 			// Hier müssen wir vll noch etwas
 												// verändern!
 			counter = cityTemp.getCounter();
 			cityTemp.setCounter(++counter);
 			cityTemp.setScore(score);
+//			System.out.println(city.getName() + ": Score: " + score + " counter: " + counter);
 		} else {
 			cities.put(hashMapKey.toString(), city);
 		}
