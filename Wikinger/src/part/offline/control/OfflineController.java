@@ -6,6 +6,7 @@ import part.offline.data.Gazetteer;
 import data.control.FileOutput;
 import data.control.StanfordNER;
 import data.database.connection.WikiNerConnector;
+import data.database.connection.WikiNerGraphConnector;
 import data.database.connection.WikipediaConnector;
 
 public class OfflineController {
@@ -101,25 +102,26 @@ public class OfflineController {
 	public void startWritingToDatabase(String database, String directory){
 		int crawlerOutPutFileCount;
 		Thread[] threadList;
-		WikiNerConnector[] connectors;
+//		WikiNerConnector[] connectors;
+		WikiNerGraphConnector connector;
 		String fileDest;
+		
+		connector = new WikiNerGraphConnector();
 		
 		fileDest = directory + "CrawlerOutPut";
 		crawlerOutPutFileCount = new File(directory).listFiles().length; 
 		
 		threadList = new Thread[crawlerOutPutFileCount];
-		connectors = new WikiNerConnector[crawlerOutPutFileCount];
+//		connectors = new WikiNerConnector[crawlerOutPutFileCount];
+//		
+//		for (int i = 0; i < connectors.length; i++) {
+//			connectors[i] = new WikiNerConnector();
+//			connectors[i].init(host, port, database, user, passwd);
+//		}
 		
-		for (int i = 0; i < connectors.length; i++) {
-			connectors[i] = new WikiNerConnector();
-			connectors[i].init(host, port, database, user, passwd);
-		}
-		
-		for (int i = 0; i < threadList.length; i++) {
-			DBWriterUnit temp = new DBWriterUnit(i, fileDest+i+".txt", connectors[i], ";#/", ";");
-			threadList[i] = new Thread(temp);
-			threadList[i].start();
-		}
+		DBWriterUnit temp = new DBWriterUnit(0, fileDest+0+".txt", connector, ";#/", ";");
+		threadList[0] = new Thread(temp);
+		threadList[0].start();
 		
 		for (int i = 0; i < threadList.length; i++) {
 			try {
@@ -128,6 +130,7 @@ public class OfflineController {
 				e.printStackTrace();
 			}
 		}
+		connector.shutdown();
 	}
 	
 	public void createInverseDocFrequency(String database){

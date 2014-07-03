@@ -7,6 +7,8 @@ public class DataDump{
 	
 	private City city;
 	private Entity[] entityList;
+	private int counter;
+	private double idf;
 	
 	public DataDump(City city, ArrayList<Entity> entities){
 		this.setCity(city);
@@ -15,6 +17,12 @@ public class DataDump{
 	
 	public DataDump(ArrayList<Entity> entities){
 		extractEntities(entities);
+	}
+	
+	public DataDump(City city, int counter, double idf){
+		this.city = city;
+		this.setCounter(counter);
+		this.setIdf(idf);
 	}
 
 	/**
@@ -57,6 +65,22 @@ public class DataDump{
 
 	public void setEntityList(Entity[] entityList) {
 		this.entityList = entityList;
+	}
+
+	public int getCounter() {
+		return counter;
+	}
+
+	public void setCounter(int counter) {
+		this.counter = counter;
+	}
+
+	public double getIdf() {
+		return idf;
+	}
+
+	public void setIdf(double idf) {
+		this.idf = idf;
 	}
 
 }

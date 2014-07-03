@@ -1,21 +1,24 @@
 package part.offline.control;
 
+import org.neo4j.graphdb.Node;
+
 import data.City;
 import data.Entity;
 import data.control.FileInput;
 import data.database.connection.WikiNerConnector;
+import data.database.connection.WikiNerGraphConnector;
 
 public class DBWriterUnit extends Thread{
 	
 	private String fileName;
 	private String entitySplitSymbol;
 	private String coordsSplitSymbol;
-	private WikiNerConnector connector;
+	private WikiNerGraphConnector connector;
 	private FileInput in;
 	private int id;
 	private Status status;
 	
-	public DBWriterUnit(int id, String fileName, WikiNerConnector connector, String entitySplitSymbol, String coordsSplitSymbol) {
+	public DBWriterUnit(int id, String fileName, WikiNerGraphConnector connector, String entitySplitSymbol, String coordsSplitSymbol) {
 		this.connector = connector;
 		this.coordsSplitSymbol = coordsSplitSymbol;
 		this.entitySplitSymbol = entitySplitSymbol;
@@ -31,25 +34,27 @@ public class DBWriterUnit extends Thread{
 	}
 	
 	public void run(){
-		String[] city;
+		String[] cityArr;
 		String[] entities;		
 		Entity temp;
-		int cityID, entityID;
+		Node city, entity;
 		String[] dataArr = in.loadCompleteFile();
 		
-		for (int i = 0; i < dataArr.length; i++) {
+		for (int i = 0; i < 100; i++) {
+			System.out.println(i + " / " + dataArr.length);
 			//status.setWorkForEachDone(i, id);
 			try{
 				entities = dataArr[i].split(entitySplitSymbol);
-				city = entities[0].split(coordsSplitSymbol);
+				cityArr = entities[0].split(coordsSplitSymbol);
 			
-				cityID = connector.writeCity(new City(city[0], city[1], city[2]));
+				city = connector.createCity(new City(cityArr[0], cityArr[1], cityArr[2]));
 				
 				for (int j = 1; j < entities.length; j++) {
+					System.out.println("Entities" + j + " / " + entities.length);
 					temp = new Entity(entities[j], entities[++j], entities[++j]);
-					entityID = connector.writeEntity(temp);
+					entity = connector.createEntity(temp);
 				
-					connector.writeConnection(cityID, entityID, temp.getCount());
+					connector.createConnection(city, entity, temp.getCount());
 				}
 		
 			}catch(Exception e){

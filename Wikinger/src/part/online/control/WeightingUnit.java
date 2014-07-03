@@ -1,27 +1,27 @@
 package part.online.control;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import data.City;
+import data.DataDump;
 import data.Entity;
 import data.EntityType;
-import data.database.connection.WikiNerConnector;
+import data.database.connection.WikiNerGraphConnector;
 
 public class WeightingUnit extends Thread {
 
 	private int start;
 	private int end;
 	private Entity[] entities;
-	private WikiNerConnector connector;
+	private WikiNerGraphConnector connector;
 	private ArrayList<City> resultCities;
 	private Map<String, EntityType> entityWeighting;
 
 	public WeightingUnit(int start, int end, Entity[] entities,
-			WikiNerConnector connector, ArrayList<City> resultCities,
+			WikiNerGraphConnector connector, ArrayList<City> resultCities,
 			Map<String, EntityType> entitiesWeighting) {
 		this.start = start;
 		this.end = end;
@@ -32,41 +32,36 @@ public class WeightingUnit extends Thread {
 	}
 
 	public void run() {
-		Entity entity;
 		HashMap<String, City> cities = new HashMap<String, City>();
-		City[] cityArr = null;
-		int counter;
-		int maximumEntity;
+		DataDump[] dpArr;
+		int maximumEntity = 0;
 		double score;
 		City temp;
 		Iterator<City> it;
 		EntityType et = null;
 
-		try {
-			for (int i = start; i <= end && i < entities.length; i++) {
-				System.out.println(i + " / " + entities.length);
-				et = entityWeighting.get( entities[i].getType());
-				entity = connector.getEntity(entities[i].getName(), et.getId());
-				if (entity == null) {
-					System.out.println("null bei : " + entities[i].getName()+ " " + entities[i].getType());
-				} else {
-					cityArr = connector.getCities(entity.getId());
-					for (int j = 0; j < cityArr.length; j++) {
-						counter = connector.getCityEntityCounter(cityArr[j].getId(), entity.getId());
-						maximumEntity = connector.getMaxEntity(cityArr[j].getId());
-						score = et.getWeighting() 
-								* Math.log(entity.getCount())
-								* ((counter * 1.0) / maximumEntity)
-								* entity.getIdf();
-						cityArr[j].setScore(score);
-						addToHashMap(cities, cityArr[j]);
-					}
+		for (int i = start; i <= end && i < entities.length; i++) {
+			System.out.println(i + " / " + entities.length);
+			et = entityWeighting.get( entities[i].getType());
+			dpArr = connector.getDataEntity(entities[i]);
+			
+			if (dpArr != null) {
+				for (int j = 0; j < dpArr.length; j++) {
+					if (dpArr[j].getCounter() > maximumEntity)
+						maximumEntity = dpArr[j].getCounter();
+				}
+
+				for (int j = 0; j < dpArr.length; j++) {
+					score = et.getWeighting()
+							* Math.log(entities[i].getCount())
+							* ((dpArr[j].getCounter() * 1.0) / maximumEntity)
+							* dpArr[j].getIdf();
+
+					dpArr[j].getCity().setScore(score);
+					addToHashMap(cities, dpArr[j].getCity());
 				}
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
-
 		it = cities.values().iterator();
 		while (it.hasNext()) {
 			
@@ -74,6 +69,7 @@ public class WeightingUnit extends Thread {
 			temp.setScore(temp.getScore() / temp.getCounter());
 			resultCities.add(temp);
 		}
+		System.out.println(Thread.class.getName() + " ist fertig mit rechnen !");
 	}
 
 	private void addToHashMap(HashMap<String, City> cities, City city) {

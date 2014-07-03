@@ -54,13 +54,14 @@ public class OnlineControllerTest {
 		entities = umwandler.getEntityList();
 		
 		System.out.println("\n" + entities.length + "\n");
-		
+		long start = System.currentTimeMillis();
 		result = ws.calculateCity(entities, "localhost", 3306, "wikinger2", "root", "");
-		
+		long end = System.currentTimeMillis();
 		System.out.println("\n" + result.length + "\n");
 		for (int i = 0; i < 20; i++) {
-			System.out.println(i + ": " + result[i].getName());
+			System.out.println(i + ": " + result[i].getName()+"\t"+result[i].getScore());
 		}
+		System.out.println(end - start);
 	}
 
 	public OnlineControllerTest() {
