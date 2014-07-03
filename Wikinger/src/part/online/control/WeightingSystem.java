@@ -24,9 +24,8 @@ public class WeightingSystem {
 		this.entitiesWeighting = entitiesWeighting;
 	}
 
-	public City[] calculateCity(Entity[] entities, String host, int port,
-			String database, String user, String passwd) {
-		WikiNerGraphConnector connector = new WikiNerGraphConnector();
+	public City[] calculateCity(Entity[] entities, String dbDir) {
+		WikiNerGraphConnector connector = WikiNerGraphConnector.getInstance(dbDir);
 		WeightingUnit unit;
 		double maxWeight = 0;
 		ExecutorService executor = Executors.newCachedThreadPool();

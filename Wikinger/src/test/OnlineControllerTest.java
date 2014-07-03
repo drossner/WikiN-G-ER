@@ -55,7 +55,7 @@ public class OnlineControllerTest {
 		
 		System.out.println("\n" + entities.length + "\n");
 		long start = System.currentTimeMillis();
-		result = ws.calculateCity(entities, "localhost", 3306, "wikinger2", "root", "");
+		result = ws.calculateCity(entities, "./database/");
 		long end = System.currentTimeMillis();
 		System.out.println("\n" + result.length + "\n");
 		for (int i = 0; i < 20; i++) {
