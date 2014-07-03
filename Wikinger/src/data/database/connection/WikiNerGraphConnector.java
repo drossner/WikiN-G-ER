@@ -50,8 +50,12 @@ public class WikiNerGraphConnector {
 		schema = graphDb.schema();
 		IndexManager index = graphDb.index();
 		entities = index.forNodes(entityLabel.name());
-	    //indexDefinition = schema.indexFor( entityLabel ).on( "nameType" ).create();
 		cities = index.forNodes(cityLabel.name());
+		try{
+			 indexDefinition = schema.indexFor( entityLabel ).on( "nameType" ).create();
+		}catch(Exception e){
+			
+		}
 		
 		tx.success();
 		tx.close();
