@@ -41,7 +41,6 @@ public class WeightingUnit extends Thread {
 		EntityType et = null;
 
 		for (int i = start; i <= end && i < entities.length; i++) {
-			System.out.println(i + " / " + entities.length);
 			et = entityWeighting.get( entities[i].getType());
 			dpArr = connector.getDataEntity(entities[i]);
 			
@@ -52,7 +51,7 @@ public class WeightingUnit extends Thread {
 				}
 
 				for (int j = 0; j < dpArr.length; j++) {
-					score = et.getWeighting() * entities[i].getCount() * dpArr[j].getIdf();
+					score = ((entities[i].getCount() * 1.0) / entities.length) * dpArr[j].getIdf() * et.getWeighting();
 //					if(et.getWeighting() != 0.0){
 //						System.out.println(et.getName() + ": " + et.getWeighting() + " , " + maximumEntity + " , " + dpArr[j].getIdf() + " , " + dpArr[j].getCounter() + " , " + entities[i].getCount());
 //						System.out.println(score);
