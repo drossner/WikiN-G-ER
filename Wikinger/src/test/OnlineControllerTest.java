@@ -14,6 +14,7 @@ import data.Entity;
 import data.EntityType;
 import data.control.FileInput;
 import data.control.StanfordNER;
+import data.database.connection.WikiNerGraphConnector;
 
 public class OnlineControllerTest {
 	
@@ -33,6 +34,7 @@ public class OnlineControllerTest {
 		String[] file;
 		ArrayList<Entity> ent = null;
 		City[] result;
+		WikiNerGraphConnector connector = WikiNerGraphConnector.getInstance("./database");
 		
 		file = in.loadCompleteFile();
 		for (int i = 0; i < file.length; i++) {
@@ -58,10 +60,12 @@ public class OnlineControllerTest {
 		result = ws.calculateCity(entities, "./database/");
 		long end = System.currentTimeMillis();
 		System.out.println("\n" + result.length + "\n");
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i< result.length && i < 5; i++) {
 			System.out.println(i + ": " + result[i].getName() + " ; " + result[i].getScore());
 		}
 		System.out.println(end - start);
+		
+		connector.shutdown();
 	}
 
 	public OnlineControllerTest() {
@@ -73,9 +77,9 @@ public class OnlineControllerTest {
 			e.printStackTrace();
 		}
 		
-		entiWeig[0] = new EntityType("ORGANIZATION", 3.0);
-		entiWeig[1] = new EntityType("PERSON", 2.0);
-		entiWeig[2] = new EntityType("LOCATION", 4.0);
+		entiWeig[0] = new EntityType("ORGANIZATION", 1.0);
+		entiWeig[1] = new EntityType("PERSON", 0.0);
+		entiWeig[2] = new EntityType("LOCATION", 2.0);
 		entiWeig[3] = new EntityType("MISC", 0.0);
 		entiWeig[4] = new EntityType("TIME", 0.0);
 		entiWeig[5] = new EntityType("MONEY", 0.0);

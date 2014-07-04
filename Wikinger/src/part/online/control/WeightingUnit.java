@@ -61,7 +61,7 @@ public class WeightingUnit extends Thread {
 				}
 			}
 		}
-		it = cities.values().iterator();
+		it = cities.values().iterator();;
 		while (it.hasNext()) {
 			
 			temp = it.next();
