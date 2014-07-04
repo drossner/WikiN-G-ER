@@ -2,6 +2,9 @@ package main;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -47,7 +50,9 @@ public class OnlineStarter {
 		JLabel label = new JLabel(icon);
 		label.setOpaque(false);
 		wait.add(label);
-		//wait.setIconImage(new ImageIcon("./NERICO.ico"));
+		wait.setIconImage(Toolkit.getDefaultToolkit().getImage("./icon.png"));
+		
+		
 		wait.setVisible(true);
 	}
 	
