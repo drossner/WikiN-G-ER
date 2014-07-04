@@ -9,11 +9,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class FileOpener implements ActionListener{
 
-	private JTextField textField;
+	private JTextField fileTextField;
 	
-	
-	public FileOpener(JTextField textFeld){
-		this.textField = textFeld;
+	public FileOpener(JTextField fileTextFeld){
+		this.fileTextField = fileTextFeld;
 	}
 
 	@Override
@@ -38,7 +37,7 @@ public class FileOpener implements ActionListener{
 		
 		if(resultOpen == JFileChooser.APPROVE_OPTION){
 			String absPath = chooser.getSelectedFile().getAbsolutePath();
-			textField.setText(absPath);
+			fileTextField.setText(absPath);
 		}
 		else if(resultOpen == JFileChooser.CANCEL_OPTION){
 			chooser.cancelSelection();
@@ -48,4 +47,3 @@ public class FileOpener implements ActionListener{
 	
 
 }
-

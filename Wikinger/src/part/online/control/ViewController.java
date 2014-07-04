@@ -13,52 +13,53 @@ import data.Entity;
 import data.control.FileInput;
 import data.control.StanfordNER;
 
-public class ViewController{
+public class ViewController {
 
-	//TODO: ViewController soll den Prozess initialisieren!
-	private String filePath;
-	private String classifierPath;
-	private FileInput fileReader;
-	private String[] fileContent;
-	private StanfordNER ner;
-	private OnlineView view;
-	
-	public ViewController(){
-		view = new OnlineView();
-	}
-	
-	public ViewController(String incPath, String classifierPath){
-		this.filePath = incPath;
-		this.classifierPath = classifierPath;
-		ner = new StanfordNER(classifierPath);
+    private String filePath;
+    private String classifierPath;
+    private FileInput fileReader;
+    private String[] fileContent;
+    private StanfordNER ner;
 
+    /**
+     * 
+     * @param incPath
+     * @param classifierPath
+     */
+    public ViewController(String incPath, String classifierPath) {
+	this.filePath = incPath;
+	this.classifierPath = classifierPath;
+	ner = new StanfordNER(classifierPath);
+
+    }
+
+    /**
+     * reads the inputted .txt File
+     */
+    public void readIncTextFile() {
+	try {
+	    fileReader = new FileInput(filePath);
+	    fileContent = fileReader.loadCompleteFile();
+	} catch (Exception e) {
+	    e.printStackTrace();
 	}
-	
-	public void readIncTextFile(){
-		try{
-			fileReader = new FileInput(filePath);
-//			System.out.println(filePath);
-			fileContent = fileReader.loadCompleteFile();
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+    }
+
+    /**
+     * calls the chosen Classifier and extracts the Entities
+     */
+    public void handleEntities() {
+	ArrayList<Entity> allEntities;
+	String incText = Arrays.toString(fileContent);
+	try {
+	    allEntities = ner.extractEntities(incText);
+
+	    for (Entity entity : allEntities) {
+		System.out.println(entity.toString());
+	    }
+	} catch (IOException | ParserConfigurationException | SAXException e) {
+	    e.printStackTrace();
 	}
-	
-	public void handleEntities(){
-		ArrayList<Entity> allEntities;
-		String incText = new String(Arrays.toString(fileContent));
-		try{
-			allEntities = ner.extractEntities(incText);
-			
-			for (Entity entity : allEntities){
-				System.out.println(entity.toString());
-			}
-		} catch (IOException | ParserConfigurationException | SAXException e){
-			e.printStackTrace();
-		}
-	}
-	
+    }
 
 }
-
