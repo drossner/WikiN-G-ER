@@ -33,7 +33,7 @@ public class ReaderAction implements ActionListener {
 			JOptionPane.ERROR_MESSAGE);
 	    } else
 		//TODO: Classifier Path löschen!!! Sonst NullPointer!!!
-		//viewController.calculate(classifierConfig, incPath)
+		viewController.calculate(classifierConfig, outPath);
 		System.out.println("Null");
 	}
     }
