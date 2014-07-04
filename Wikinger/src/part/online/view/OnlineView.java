@@ -42,6 +42,7 @@ import java.awt.geom.Point2D;
 
 import javax.swing.JSpinner;
 import javax.swing.ImageIcon;
+import javax.swing.SpinnerNumberModel;
 
 public class OnlineView {
 
@@ -49,21 +50,24 @@ public class OnlineView {
 	private JTextField fileTextField;
 	private JTextField classifierTextField;
 	private JInternalFrame internalFrame;
-	private JTextField entityWeightTextfield;
 	private JXMapKit openMap;
 	private ReaderAction read;
 	private FileOpener open;
-	private JTextField databaseTextfield;
-	private JTextField passwordTextfield;
-	private JTextField portTextfield;
-	private JTextField usernameTextfield;
-	private JTextField hostnameTextfield;
+	private JSpinner organizationSpinner;
+	private JSpinner personSpinner;
+	private JSpinner locationSpinner;
+	private JSpinner miscSpinner;
+	private JSpinner timeSpinner;
+	private JSpinner percentSpinner;
+	private JSpinner dateSpinner;
+	private JSpinner moneySpinner;
+	private ImageIcon icon;
 
 	/**
-	 * Create the application.
+	 * Creates the Frame for the Online-Part
 	 */
-	public OnlineView(ViewController viewC) {
-		//read = new ReaderAction(this, viewC)
+	public OnlineView(ViewController viewController) {
+		read = new ReaderAction(this, viewController);
 		initialize();
 	}
 
@@ -77,7 +81,9 @@ public class OnlineView {
 		frmWikinerOnlinepart.setBounds(100, 100, 618, 516);
 		frmWikinerOnlinepart.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmWikinerOnlinepart.setVisible(true);
-
+		icon = new ImageIcon("./NERICO.ico");
+		frmWikinerOnlinepart.setIconImage(icon.getImage());
+		
 		JLabel lblWelcomeToWikiner = new JLabel("Welcome to Wiki-NER Online!");
 		lblWelcomeToWikiner.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		frmWikinerOnlinepart.getContentPane().add(lblWelcomeToWikiner,
@@ -150,6 +156,7 @@ public class OnlineView {
 		FileOpener openClf = new FileOpener(classifierTextField);
 
 		JButton btnReadClassifier = new JButton("Read Classifier");
+		btnReadClassifier.setEnabled(false);
 		btnReadClassifier.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		GridBagConstraints gbc_btnReadClassifier = new GridBagConstraints();
 		gbc_btnReadClassifier.insets = new Insets(0, 0, 5, 0);
@@ -160,12 +167,12 @@ public class OnlineView {
 		btnReadClassifier.setActionCommand("readclassifier");
 		btnReadClassifier.addActionListener(openClf);
 
-		JSeparator separator_1 = new JSeparator();
+		JSeparator seperator1 = new JSeparator();
 		GridBagConstraints gbc_separator_1 = new GridBagConstraints();
 		gbc_separator_1.insets = new Insets(0, 0, 5, 5);
 		gbc_separator_1.gridx = 0;
 		gbc_separator_1.gridy = 4;
-		mainPanel.add(separator_1, gbc_separator_1);
+		mainPanel.add(seperator1, gbc_separator_1);
 
 		JLabel lblFileReadAnd = new JLabel("File read and processing...");
 		lblFileReadAnd.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -184,7 +191,6 @@ public class OnlineView {
 		mainPanel.add(btnStartProcess, gbc_btnStartProcess);
 
 		// adding action to btnReadFile
-		read = new ReaderAction(this);
 		btnStartProcess.setActionCommand("startProcess");
 		btnStartProcess.addActionListener(read);
 
@@ -198,194 +204,154 @@ public class OnlineView {
 		gbc_internalFrame.gridx = 1;
 		gbc_internalFrame.gridy = 6;
 		mainPanel.add(internalFrame, gbc_internalFrame);
-		this.setMap();
-
-		JPanel settingsPanel = new JPanel();
-		tabbedPane.addTab("Settings", null, settingsPanel, null);
-		GridBagLayout gbl_settingsPanel = new GridBagLayout();
-		gbl_settingsPanel.columnWidths = new int[] { 68, 0, 0, 0, 288, 0 };
-		gbl_settingsPanel.rowHeights = new int[] { 24, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_settingsPanel.columnWeights = new double[] { 0.0, 1.0, 0.0, 0.0,
-				1.0, Double.MIN_VALUE };
-		gbl_settingsPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, Double.MIN_VALUE };
-		settingsPanel.setLayout(gbl_settingsPanel);
-
-		JLabel lblEnterYourSpecific = new JLabel(
-				"Enter your specific Configuration for the loaded Classifier:");
-		lblEnterYourSpecific.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		GridBagConstraints gbc_lblEnterYourSpecific = new GridBagConstraints();
-		gbc_lblEnterYourSpecific.fill = GridBagConstraints.HORIZONTAL;
-		gbc_lblEnterYourSpecific.gridwidth = 4;
-		gbc_lblEnterYourSpecific.insets = new Insets(0, 0, 5, 0);
-		gbc_lblEnterYourSpecific.gridx = 1;
-		gbc_lblEnterYourSpecific.gridy = 1;
-		settingsPanel.add(lblEnterYourSpecific, gbc_lblEnterYourSpecific);
-
-		JLabel lblLocation = new JLabel("Classifier Configuration");
+		
+		
+		JPanel panel = new JPanel();
+		tabbedPane.addTab("Config", null, panel, null);
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panel.setLayout(gbl_panel);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Mario\\Dropbox\\Projektordner\\Semester 6\\Wikiner\\StanfordNLP.jpg"));
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel.gridx = 6;
+		gbc_lblNewLabel.gridy = 0;
+		panel.add(lblNewLabel, gbc_lblNewLabel);
+		
+		JLabel lblOrganizaion = new JLabel("Organization");
+		GridBagConstraints gbc_lblOrganizaion = new GridBagConstraints();
+		gbc_lblOrganizaion.anchor = GridBagConstraints.EAST;
+		gbc_lblOrganizaion.insets = new Insets(0, 0, 5, 5);
+		gbc_lblOrganizaion.gridx = 4;
+		gbc_lblOrganizaion.gridy = 1;
+		panel.add(lblOrganizaion, gbc_lblOrganizaion);
+		
+		organizationSpinner = new JSpinner();
+		organizationSpinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
+		GridBagConstraints gbc_organizationSpinner = new GridBagConstraints();
+		gbc_organizationSpinner.fill = GridBagConstraints.HORIZONTAL;
+		gbc_organizationSpinner.insets = new Insets(0, 0, 5, 5);
+		gbc_organizationSpinner.gridx = 6;
+		gbc_organizationSpinner.gridy = 1;
+		panel.add(organizationSpinner, gbc_organizationSpinner);
+		
+		JLabel lblPerson = new JLabel("Person");
+		GridBagConstraints gbc_lblPerson = new GridBagConstraints();
+		gbc_lblPerson.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPerson.gridx = 4;
+		gbc_lblPerson.gridy = 2;
+		panel.add(lblPerson, gbc_lblPerson);
+		
+		personSpinner = new JSpinner();
+		personSpinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
+		GridBagConstraints gbc_personSpinner = new GridBagConstraints();
+		gbc_personSpinner.fill = GridBagConstraints.HORIZONTAL;
+		gbc_personSpinner.insets = new Insets(0, 0, 5, 5);
+		gbc_personSpinner.gridx = 6;
+		gbc_personSpinner.gridy = 2;
+		panel.add(personSpinner, gbc_personSpinner);
+		
+		JLabel lblLocation = new JLabel("Location");
 		GridBagConstraints gbc_lblLocation = new GridBagConstraints();
-		gbc_lblLocation.anchor = GridBagConstraints.EAST;
 		gbc_lblLocation.insets = new Insets(0, 0, 5, 5);
-		gbc_lblLocation.gridx = 1;
-		gbc_lblLocation.gridy = 2;
-		settingsPanel.add(lblLocation, gbc_lblLocation);
-
-		JSpinner classifierConfigSpinner = new JSpinner();
-		GridBagConstraints gbc_classifierConfigSpinner = new GridBagConstraints();
-		gbc_classifierConfigSpinner.gridwidth = 2;
-		gbc_classifierConfigSpinner.fill = GridBagConstraints.HORIZONTAL;
-		gbc_classifierConfigSpinner.insets = new Insets(0, 0, 5, 5);
-		gbc_classifierConfigSpinner.gridx = 2;
-		gbc_classifierConfigSpinner.gridy = 2;
-		settingsPanel.add(classifierConfigSpinner, gbc_classifierConfigSpinner);
-
-		JLabel lblEntityWeighting = new JLabel("Entity Weighting");
-		GridBagConstraints gbc_lblEntityWeighting = new GridBagConstraints();
-		gbc_lblEntityWeighting.insets = new Insets(0, 0, 5, 5);
-		gbc_lblEntityWeighting.anchor = GridBagConstraints.EAST;
-		gbc_lblEntityWeighting.gridx = 1;
-		gbc_lblEntityWeighting.gridy = 3;
-		settingsPanel.add(lblEntityWeighting, gbc_lblEntityWeighting);
-
-		entityWeightTextfield = new JTextField();
-		GridBagConstraints gbc_entityWeightTextfield = new GridBagConstraints();
-		gbc_entityWeightTextfield.gridwidth = 2;
-		gbc_entityWeightTextfield.insets = new Insets(0, 0, 5, 5);
-		gbc_entityWeightTextfield.fill = GridBagConstraints.HORIZONTAL;
-		gbc_entityWeightTextfield.gridx = 2;
-		gbc_entityWeightTextfield.gridy = 3;
-		settingsPanel.add(entityWeightTextfield, gbc_entityWeightTextfield);
-		entityWeightTextfield.setColumns(10);
-
-		JLabel iconLabel = new JLabel("");
-		iconLabel
-				.setIcon(new ImageIcon(
-						"C:\\Users\\Mario\\Dropbox\\Projektordner\\Semester 6\\Wikiner\\StanfordNLP.jpg"));
-		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
-		gbc_lblNewLabel_1.gridwidth = 2;
-		gbc_lblNewLabel_1.gridheight = 4;
-		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_1.gridx = 2;
-		gbc_lblNewLabel_1.gridy = 4;
-		settingsPanel.add(iconLabel, gbc_lblNewLabel_1);
-
-		JLabel label_1 = new JLabel(
-				"Enter your Configuration for the connected Database");
-		label_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		GridBagConstraints gbc_label_1 = new GridBagConstraints();
-		gbc_label_1.gridwidth = 4;
-		gbc_label_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_label_1.insets = new Insets(0, 0, 5, 0);
-		gbc_label_1.gridx = 1;
-		gbc_label_1.gridy = 8;
-		settingsPanel.add(label_1, gbc_label_1);
-
-		JLabel databaseLabel = new JLabel("Database");
-		GridBagConstraints gbc_databaseLabel = new GridBagConstraints();
-		gbc_databaseLabel.anchor = GridBagConstraints.EAST;
-		gbc_databaseLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_databaseLabel.gridx = 1;
-		gbc_databaseLabel.gridy = 9;
-		settingsPanel.add(databaseLabel, gbc_databaseLabel);
-
-		databaseTextfield = new JTextField();
-		databaseTextfield.setColumns(10);
-		GridBagConstraints gbc_databaseTextfield = new GridBagConstraints();
-		gbc_databaseTextfield.gridwidth = 2;
-		gbc_databaseTextfield.insets = new Insets(0, 0, 5, 5);
-		gbc_databaseTextfield.fill = GridBagConstraints.HORIZONTAL;
-		gbc_databaseTextfield.gridx = 2;
-		gbc_databaseTextfield.gridy = 9;
-		settingsPanel.add(databaseTextfield, gbc_databaseTextfield);
-
-		JLabel passwordLabel = new JLabel("Password");
-		GridBagConstraints gbc_passwordLabel = new GridBagConstraints();
-		gbc_passwordLabel.anchor = GridBagConstraints.EAST;
-		gbc_passwordLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_passwordLabel.gridx = 1;
-		gbc_passwordLabel.gridy = 10;
-		settingsPanel.add(passwordLabel, gbc_passwordLabel);
-
-		passwordTextfield = new JTextField();
-		passwordTextfield.setColumns(10);
-		GridBagConstraints gbc_passwordTextfield = new GridBagConstraints();
-		gbc_passwordTextfield.gridwidth = 2;
-		gbc_passwordTextfield.insets = new Insets(0, 0, 5, 5);
-		gbc_passwordTextfield.fill = GridBagConstraints.HORIZONTAL;
-		gbc_passwordTextfield.gridx = 2;
-		gbc_passwordTextfield.gridy = 10;
-		settingsPanel.add(passwordTextfield, gbc_passwordTextfield);
-
-		JLabel usernameLabel = new JLabel("Username");
-		GridBagConstraints gbc_usernameLabel = new GridBagConstraints();
-		gbc_usernameLabel.anchor = GridBagConstraints.EAST;
-		gbc_usernameLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_usernameLabel.gridx = 1;
-		gbc_usernameLabel.gridy = 11;
-		settingsPanel.add(usernameLabel, gbc_usernameLabel);
-
-		usernameTextfield = new JTextField();
-		usernameTextfield.setColumns(10);
-		GridBagConstraints gbc_usernameTextfield = new GridBagConstraints();
-		gbc_usernameTextfield.gridwidth = 2;
-		gbc_usernameTextfield.insets = new Insets(0, 0, 5, 5);
-		gbc_usernameTextfield.fill = GridBagConstraints.HORIZONTAL;
-		gbc_usernameTextfield.gridx = 2;
-		gbc_usernameTextfield.gridy = 11;
-		settingsPanel.add(usernameTextfield, gbc_usernameTextfield);
-
-		JLabel hostnameLabel = new JLabel("Hostname");
-		GridBagConstraints gbc_hostnameLabel = new GridBagConstraints();
-		gbc_hostnameLabel.anchor = GridBagConstraints.EAST;
-		gbc_hostnameLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_hostnameLabel.gridx = 1;
-		gbc_hostnameLabel.gridy = 12;
-		settingsPanel.add(hostnameLabel, gbc_hostnameLabel);
-
-		hostnameTextfield = new JTextField();
-		hostnameTextfield.setColumns(10);
-		GridBagConstraints gbc_hostnameTextfield = new GridBagConstraints();
-		gbc_hostnameTextfield.gridwidth = 2;
-		gbc_hostnameTextfield.insets = new Insets(0, 0, 5, 5);
-		gbc_hostnameTextfield.fill = GridBagConstraints.HORIZONTAL;
-		gbc_hostnameTextfield.gridx = 2;
-		gbc_hostnameTextfield.gridy = 12;
-		settingsPanel.add(hostnameTextfield, gbc_hostnameTextfield);
-
-		JLabel portLabel = new JLabel("Port");
-		GridBagConstraints gbc_portLabel = new GridBagConstraints();
-		gbc_portLabel.anchor = GridBagConstraints.EAST;
-		gbc_portLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_portLabel.gridx = 1;
-		gbc_portLabel.gridy = 13;
-		settingsPanel.add(portLabel, gbc_portLabel);
-
-		portTextfield = new JTextField();
-		portTextfield.setColumns(10);
-		GridBagConstraints gbc_portTextfield = new GridBagConstraints();
-		gbc_portTextfield.gridwidth = 2;
-		gbc_portTextfield.insets = new Insets(0, 0, 5, 5);
-		gbc_portTextfield.fill = GridBagConstraints.HORIZONTAL;
-		gbc_portTextfield.gridx = 2;
-		gbc_portTextfield.gridy = 13;
-		settingsPanel.add(portTextfield, gbc_portTextfield);
-
-		JButton btnSubmit = new JButton("Submit Values");
-		btnSubmit.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		GridBagConstraints gbc_btnSubmit = new GridBagConstraints();
-		gbc_btnSubmit.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnSubmit.gridwidth = 2;
-		gbc_btnSubmit.gridheight = 2;
-		gbc_btnSubmit.insets = new Insets(0, 0, 5, 5);
-		gbc_btnSubmit.gridx = 2;
-		gbc_btnSubmit.gridy = 15;
-		settingsPanel.add(btnSubmit, gbc_btnSubmit);
-
-		// add action to buttonSubmit
-		btnSubmit.setActionCommand("submitSettingValues");
-		btnSubmit.addActionListener(read);
+		gbc_lblLocation.gridx = 4;
+		gbc_lblLocation.gridy = 3;
+		panel.add(lblLocation, gbc_lblLocation);
+		
+		locationSpinner = new JSpinner();
+		locationSpinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
+		GridBagConstraints gbc_locationSpinner = new GridBagConstraints();
+		gbc_locationSpinner.fill = GridBagConstraints.HORIZONTAL;
+		gbc_locationSpinner.insets = new Insets(0, 0, 5, 5);
+		gbc_locationSpinner.gridx = 6;
+		gbc_locationSpinner.gridy = 3;
+		panel.add(locationSpinner, gbc_locationSpinner);
+		
+		JLabel lblMisc = new JLabel("Misc");
+		GridBagConstraints gbc_lblMisc = new GridBagConstraints();
+		gbc_lblMisc.insets = new Insets(0, 0, 5, 5);
+		gbc_lblMisc.gridx = 4;
+		gbc_lblMisc.gridy = 4;
+		panel.add(lblMisc, gbc_lblMisc);
+		
+		miscSpinner = new JSpinner();
+		miscSpinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
+		GridBagConstraints gbc_miscSpinner = new GridBagConstraints();
+		gbc_miscSpinner.fill = GridBagConstraints.HORIZONTAL;
+		gbc_miscSpinner.insets = new Insets(0, 0, 5, 5);
+		gbc_miscSpinner.gridx = 6;
+		gbc_miscSpinner.gridy = 4;
+		panel.add(miscSpinner, gbc_miscSpinner);
+		
+		JLabel lblTime = new JLabel("Time");
+		GridBagConstraints gbc_lblTime = new GridBagConstraints();
+		gbc_lblTime.insets = new Insets(0, 0, 5, 5);
+		gbc_lblTime.gridx = 4;
+		gbc_lblTime.gridy = 5;
+		panel.add(lblTime, gbc_lblTime);
+		
+		timeSpinner = new JSpinner();
+		timeSpinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
+		GridBagConstraints gbc_timeSpinner = new GridBagConstraints();
+		gbc_timeSpinner.fill = GridBagConstraints.HORIZONTAL;
+		gbc_timeSpinner.insets = new Insets(0, 0, 5, 5);
+		gbc_timeSpinner.gridx = 6;
+		gbc_timeSpinner.gridy = 5;
+		panel.add(timeSpinner, gbc_timeSpinner);
+		
+		JLabel lblMoney = new JLabel("Money");
+		GridBagConstraints gbc_lblMoney = new GridBagConstraints();
+		gbc_lblMoney.insets = new Insets(0, 0, 5, 5);
+		gbc_lblMoney.gridx = 4;
+		gbc_lblMoney.gridy = 6;
+		panel.add(lblMoney, gbc_lblMoney);
+		
+		moneySpinner = new JSpinner();
+		moneySpinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
+		GridBagConstraints gbc_moneySpinner = new GridBagConstraints();
+		gbc_moneySpinner.fill = GridBagConstraints.HORIZONTAL;
+		gbc_moneySpinner.insets = new Insets(0, 0, 5, 5);
+		gbc_moneySpinner.gridx = 6;
+		gbc_moneySpinner.gridy = 6;
+		panel.add(moneySpinner, gbc_moneySpinner);
+		
+		JLabel lblPerson_1 = new JLabel("Percent");
+		GridBagConstraints gbc_lblPerson_1 = new GridBagConstraints();
+		gbc_lblPerson_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPerson_1.gridx = 4;
+		gbc_lblPerson_1.gridy = 7;
+		panel.add(lblPerson_1, gbc_lblPerson_1);
+		
+		percentSpinner = new JSpinner();
+		percentSpinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
+		GridBagConstraints gbc_percentSpinner = new GridBagConstraints();
+		gbc_percentSpinner.fill = GridBagConstraints.HORIZONTAL;
+		gbc_percentSpinner.insets = new Insets(0, 0, 5, 5);
+		gbc_percentSpinner.gridx = 6;
+		gbc_percentSpinner.gridy = 7;
+		panel.add(percentSpinner, gbc_percentSpinner);
+		
+		JLabel lblDate = new JLabel("Date");
+		GridBagConstraints gbc_lblDate = new GridBagConstraints();
+		gbc_lblDate.insets = new Insets(0, 0, 0, 5);
+		gbc_lblDate.gridx = 4;
+		gbc_lblDate.gridy = 8;
+		panel.add(lblDate, gbc_lblDate);
+		
+		dateSpinner = new JSpinner();
+		dateSpinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
+		GridBagConstraints gbc_dateSpinner = new GridBagConstraints();
+		gbc_dateSpinner.fill = GridBagConstraints.HORIZONTAL;
+		gbc_dateSpinner.insets = new Insets(0, 0, 0, 5);
+		gbc_dateSpinner.gridx = 6;
+		gbc_dateSpinner.gridy = 8;
+		panel.add(dateSpinner, gbc_dateSpinner);
+		this.setMap();
 
 		internalFrame.setVisible(true);
 	}
@@ -451,46 +417,6 @@ public class OnlineView {
 		});
 	}
 
-	public JTextField getUsernameTextfield() {
-		return usernameTextfield;
-	}
-
-	public void setUsernameTextfield(JTextField usernameTextfield) {
-		this.usernameTextfield = usernameTextfield;
-	}
-
-	public JTextField getPasswordTextfield() {
-		return passwordTextfield;
-	}
-
-	public void setPasswordTextfield(JTextField passwordTextfield) {
-		this.passwordTextfield = passwordTextfield;
-	}
-
-	public JTextField getHostnameTextfield() {
-		return hostnameTextfield;
-	}
-
-	public void setHostnameTextfield(JTextField hostnameTextfield) {
-		this.hostnameTextfield = hostnameTextfield;
-	}
-
-	public JTextField getPortTextfield() {
-		return portTextfield;
-	}
-
-	public void setPortTextfield(JTextField portTextfield) {
-		this.portTextfield = portTextfield;
-	}
-
-	public JTextField getDatabaseTextfield() {
-		return databaseTextfield;
-	}
-
-	public void setDatabaseTextfield(JTextField databaseTextfield) {
-		this.databaseTextfield = databaseTextfield;
-	}
-
 	public JTextField getClassifierTextField() {
 		return classifierTextField;
 	}
@@ -505,5 +431,69 @@ public class OnlineView {
 
 	public void setFileTextField(JTextField fileTextField) {
 		this.fileTextField = fileTextField;
+	}
+	
+	public JSpinner getOrganizationSpinner() {
+	    return organizationSpinner;
+	}
+
+	public void setOrganizationSpinner(JSpinner organizationSpinner) {
+	    this.organizationSpinner = organizationSpinner;
+	}
+
+	public JSpinner getPersonSpinner() {
+	    return personSpinner;
+	}
+
+	public void setPersonSpinner(JSpinner personSpinner) {
+	    this.personSpinner = personSpinner;
+	}
+
+	public JSpinner getLocationSpinner() {
+	    return locationSpinner;
+	}
+
+	public void setLocationSpinner(JSpinner locationSpinner) {
+	    this.locationSpinner = locationSpinner;
+	}
+
+	public JSpinner getMiscSpinner() {
+	    return miscSpinner;
+	}
+
+	public void setMiscSpinner(JSpinner miscSpinner) {
+	    this.miscSpinner = miscSpinner;
+	}
+
+	public JSpinner getTimeSpinner() {
+	    return timeSpinner;
+	}
+
+	public void setTimeSpinner(JSpinner timeSpinner) {
+	    this.timeSpinner = timeSpinner;
+	}
+
+	public JSpinner getPercentSpinner() {
+	    return percentSpinner;
+	}
+
+	public void setPercentSpinner(JSpinner percentSpinner) {
+	    this.percentSpinner = percentSpinner;
+	}
+
+	public JSpinner getDateSpinner() {
+	    return dateSpinner;
+	}
+
+	public void setDateSpinner(JSpinner dateSpinner) {
+	    this.dateSpinner = dateSpinner;
+	}
+	
+	public JSpinner getMoneySpinner() {
+	    return moneySpinner;
+	}
+
+	public void setMoneySpinner(JSpinner moneySpinner) {
+	    this.moneySpinner = moneySpinner;
 	}
 }
