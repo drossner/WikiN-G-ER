@@ -14,20 +14,24 @@ public class City implements Comparable<City>{
 		setName(name);
 		setLongi(longitude);
 		setLati(latitude);
+		setCounter(1);
+		setScore(1);
 	}
 	
 	public City( String name, double latitude, double longitude){
 		setName(name);
 		setLongi(longitude);
 		setLati(latitude);
-		setCounter(0);
+		setCounter(1);
+		setScore(1);
 	}
 	
 	public City(String name, String latitude, String longitude) {
 		setName(name);
 		setLati(Double.parseDouble(latitude));
 		setLongi(Double.parseDouble(longitude));
-		setCounter(0);
+		setCounter(1);
+		setScore(1);
 	}
 
 	public String cityToString(){

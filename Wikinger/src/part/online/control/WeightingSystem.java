@@ -24,9 +24,8 @@ public class WeightingSystem {
 		this.entitiesWeighting = entitiesWeighting;
 	}
 
-	public City[] calculateCity(Entity[] entities, String host, int port,
-			String database, String user, String passwd) {
-		WikiNerGraphConnector connector = new WikiNerGraphConnector();
+	public City[] calculateCity(Entity[] entities, String dbDir) {
+		WikiNerGraphConnector connector = WikiNerGraphConnector.getInstance(dbDir);
 		WeightingUnit unit;
 		double maxWeight = 0;
 		ExecutorService executor = Executors.newCachedThreadPool();
@@ -58,13 +57,42 @@ public class WeightingSystem {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		connector.shutdown();
 		
+		long st = System.currentTimeMillis();
 		resultCities = packArray(resultCities);
+		System.out.println("Pack: "+(System.currentTimeMillis()-st));
+		//Collections.sort(resultCities); ersetzt durch ausgeben der top 10
 		
-		Collections.sort(resultCities);
+		return top10(resultCities);
+	}
 
-		return resultCities.toArray(new City[resultCities.size()]);
+	private City[] top10(ArrayList<City> resultCities) {
+		//testZeit
+		long start = System.currentTimeMillis();
+		City[] rc;
+		
+		int collectionSize = resultCities.size();
+		if(collectionSize >= 10){
+			rc = new City[10];
+		} else {
+			rc = new City[collectionSize];
+		}
+		
+		for(int i = 0; i < rc.length; i++){
+			double max = resultCities.get(0).getScore();
+			int maxInd = 0;
+			for (int j = 1; j < resultCities.size(); j++) {
+				if(resultCities.get(j).getScore() > max){
+					max = resultCities.get(j).getScore();
+					maxInd = j;
+				}
+			}
+			rc[i] = resultCities.get(maxInd);
+			resultCities.remove(maxInd);
+		}
+		
+		System.out.println("Top 10: "+(System.currentTimeMillis() - start));
+		return rc;
 	}
 
 	private ArrayList<City> packArray(ArrayList<City> resultCities) {

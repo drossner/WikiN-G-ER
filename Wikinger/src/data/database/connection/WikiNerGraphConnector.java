@@ -25,6 +25,7 @@ import data.RelTypes;
 
 public class WikiNerGraphConnector {
 
+	private static WikiNerGraphConnector connector;
 	private GraphDatabaseService graphDb;
 	private Label cityLabel = DynamicLabel.label("City");
 	private Label entityLabel = DynamicLabel.label("Entity");
@@ -33,7 +34,14 @@ public class WikiNerGraphConnector {
 	private String dbDir = "./database/";
 	private Index<Node> test;
 	
-	public WikiNerGraphConnector() {
+	public static WikiNerGraphConnector getInstance(String dbDir){
+		if(connector == null){
+			connector = new WikiNerGraphConnector(dbDir);
+		}
+		return connector;
+	}
+	
+	private WikiNerGraphConnector(String dbDir) {
 		graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(dbDir);
 		IndexDefinition indexDefinition;
 		Schema schema;
@@ -42,8 +50,12 @@ public class WikiNerGraphConnector {
 		schema = graphDb.schema();
 		IndexManager index = graphDb.index();
 		entities = index.forNodes(entityLabel.name());
-	    //indexDefinition = schema.indexFor( entityLabel ).on( "nameType" ).create();
 		cities = index.forNodes(cityLabel.name());
+		try{
+			 indexDefinition = schema.indexFor( entityLabel ).on( "nameType" ).create();
+		}catch(Exception e){
+			
+		}
 		
 		tx.success();
 		tx.close();
