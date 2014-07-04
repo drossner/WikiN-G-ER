@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -81,8 +82,7 @@ public class OnlineView {
 		frmWikinerOnlinepart.setBounds(100, 100, 618, 516);
 		frmWikinerOnlinepart.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmWikinerOnlinepart.setVisible(true);
-		icon = new ImageIcon("./NERICO.ico");
-		frmWikinerOnlinepart.setIconImage(icon.getImage());
+		frmWikinerOnlinepart.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("./NERICO.ico")));
 		
 		JLabel lblWelcomeToWikiner = new JLabel("Welcome to Wiki-NER Online!");
 		lblWelcomeToWikiner.setFont(new Font("Tahoma", Font.PLAIN, 17));
