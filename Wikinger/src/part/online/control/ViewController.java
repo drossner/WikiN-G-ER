@@ -9,57 +9,92 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import part.online.view.OnlineView;
+import data.City;
+import data.DataDump;
 import data.Entity;
+import data.EntityType;
 import data.control.FileInput;
 import data.control.StanfordNER;
+import data.database.connection.WikiNerGraphConnector;
 
 public class ViewController {
 
-    private String filePath;
-    private String classifierPath;
-    private FileInput fileReader;
-    private String[] fileContent;
-    private StanfordNER ner;
+	private StanfordNER ner;
+	private WikiNerGraphConnector connector;
 
-    /**
-     * 
-     * @param incPath
-     * @param classifierPath
-     */
-    public ViewController(String incPath, String classifierPath) {
-	this.filePath = incPath;
-	this.classifierPath = classifierPath;
-	ner = new StanfordNER(classifierPath);
-
-    }
-
-    /**
-     * reads the inputted .txt File
-     */
-    public void readIncTextFile() {
-	try {
-	    fileReader = new FileInput(filePath);
-	    fileContent = fileReader.loadCompleteFile();
-	} catch (Exception e) {
-	    e.printStackTrace();
+	public ViewController() {
+		ner = new StanfordNER(
+				"./classifiers/english.muc.7class.distsim.crf.ser.gz");
+		connector = WikiNerGraphConnector.getInstance("./database");
 	}
-    }
 
-    /**
-     * calls the chosen Classifier and extracts the Entities
-     */
-    public void handleEntities() {
-	ArrayList<Entity> allEntities;
-	String incText = Arrays.toString(fileContent);
-	try {
-	    allEntities = ner.extractEntities(incText);
+	public City[] calculate(double[] weightings, String inFilePath) {
+		// Gewichtungen werden gesetzt
+		EntityType[] entiWeig = new EntityType[8];
 
-	    for (Entity entity : allEntities) {
-		System.out.println(entity.toString());
-	    }
-	} catch (IOException | ParserConfigurationException | SAXException e) {
-	    e.printStackTrace();
+		entiWeig[0] = new EntityType("ORGANIZATION", weightings[0]);
+		entiWeig[1] = new EntityType("PERSON", 0.0);
+		entiWeig[2] = new EntityType("LOCATION", 2.0);
+		entiWeig[3] = new EntityType("MISC", 0.0);
+		entiWeig[4] = new EntityType("TIME", 0.0);
+		entiWeig[5] = new EntityType("MONEY", 0.0);
+		entiWeig[6] = new EntityType("PERCENT", 0.0);
+		entiWeig[7] = new EntityType("DATE", 0.0);
+		// WeightingSystem erzeugen
+		WeightingSystem ws = new WeightingSystem(entiWeig);
+
+		// inFile aufbauen
+		String text = readIncTextFile(inFilePath);
+		
+		//Entities extrahieren
+		Entity[] extractedEntities;
+		ArrayList<Entity> tempEntList = new ArrayList<Entity>();
+		
+		try{
+			tempEntList = ner.extractEntities(text);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+		
+		DataDump umwandler = new DataDump(tempEntList); // Mehrfache Entities werden zusammengefasst
+		extractedEntities = umwandler.getEntityList();
+		
+		//Result anlegen und zurückliefern
+		City[] result = ws.calculateCity(extractedEntities, "./database");
+		
+		return result;
+		
 	}
-    }
 
+	/**
+	 * reads the inputed .txt File
+	 */
+	public String readIncTextFile(String inFilePath) {
+		String[] fileContent = null;
+		StringBuffer text = new StringBuffer();
+		try {
+			FileInput fileReader = new FileInput(inFilePath);
+			fileContent = fileReader.loadCompleteFile();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		for (int i = 0; i < fileContent.length && fileContent != null; i++) {
+			text.append(fileContent[i]);
+			text.append(System.lineSeparator());
+		}
+		
+		return text.toString();
+	}
+	
+	/**
+	 * Beendet die Datenbank-Verbindung
+	 */
+	public void endConnection(){
+		connector.shutdown();
+	}
 }
