@@ -18,6 +18,8 @@ import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
 
 import java.awt.Insets;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -82,7 +84,6 @@ public class OnlineView {
 		frmWikinerOnlinepart.setBounds(100, 100, 618, 516);
 		frmWikinerOnlinepart.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmWikinerOnlinepart.setVisible(true);
-		frmWikinerOnlinepart.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("./NERICO.ico")));
 		
 		JLabel lblWelcomeToWikiner = new JLabel("Welcome to Wiki-NER Online!");
 		lblWelcomeToWikiner.setFont(new Font("Tahoma", Font.PLAIN, 17));
