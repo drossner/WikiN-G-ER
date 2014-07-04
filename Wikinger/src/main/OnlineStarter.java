@@ -28,8 +28,7 @@ public class OnlineStarter {
 		ViewController control = new ViewController();
 		terminateWaitScreen();
 		
-		OnlineView view = new OnlineView(control);
-		
+		OnlineView view = new OnlineView(control);	
 	}
 
 	private void terminateWaitScreen() {
