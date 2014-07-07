@@ -236,7 +236,7 @@ public class OnlineView {
 		panel.add(lblOrganizaion, gbc_lblOrganizaion);
 		
 		organizationSpinner = new JSpinner();
-		organizationSpinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(0)));
+		organizationSpinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
 		GridBagConstraints gbc_organizationSpinner = new GridBagConstraints();
 		gbc_organizationSpinner.fill = GridBagConstraints.HORIZONTAL;
 		gbc_organizationSpinner.insets = new Insets(0, 0, 5, 5);
