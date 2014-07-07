@@ -30,7 +30,7 @@ public class FileOpener implements ActionListener{
 
 	private void showFileChooser(FileNameExtensionFilter filter){
 		JFileChooser chooser = new JFileChooser("./");
-		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(filter);
 		
 		int resultOpen = chooser.showOpenDialog(null);

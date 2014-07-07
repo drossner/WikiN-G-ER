@@ -4,7 +4,9 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -18,8 +20,6 @@ import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
 
 import java.awt.Insets;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,6 +37,7 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.jdesktop.swingx.mapviewer.Waypoint;
 import org.jdesktop.swingx.mapviewer.WaypointPainter;
 
+import data.City;
 import part.online.control.ViewController;
 
 import java.awt.event.MouseEvent;
@@ -65,6 +66,7 @@ public class OnlineView {
 	private JSpinner dateSpinner;
 	private JSpinner moneySpinner;
 	private ImageIcon icon;
+	private Set<Waypoint> geopositions;
 
 	/**
 	 * Creates the Frame for the Online-Part
@@ -78,10 +80,11 @@ public class OnlineView {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+	    	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 		frmWikinerOnlinepart = new JFrame();
-		frmWikinerOnlinepart.setLocationRelativeTo(null);
 		frmWikinerOnlinepart.setTitle("Wiki-NER --- OnlinePart");
-		frmWikinerOnlinepart.setBounds(100, 100, 618, 516);
+		frmWikinerOnlinepart.setSize(new Dimension(800, 600));
+		frmWikinerOnlinepart.setLocation(screen.width/2-400, screen.height/2-300);
 		frmWikinerOnlinepart.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmWikinerOnlinepart.setVisible(true);
 		
@@ -233,7 +236,7 @@ public class OnlineView {
 		panel.add(lblOrganizaion, gbc_lblOrganizaion);
 		
 		organizationSpinner = new JSpinner();
-		organizationSpinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
+		organizationSpinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(0)));
 		GridBagConstraints gbc_organizationSpinner = new GridBagConstraints();
 		gbc_organizationSpinner.fill = GridBagConstraints.HORIZONTAL;
 		gbc_organizationSpinner.insets = new Insets(0, 0, 5, 5);
@@ -360,38 +363,13 @@ public class OnlineView {
 	private void setMap() {
 		openMap = new JXMapKit();
 		openMap.setDefaultProvider(DefaultProviders.OpenStreetMaps);
-		// openMap.setAddressLocation(new GeoPosition(50.241111, 11.328056));
-		openMap.setCenterPosition(new GeoPosition(50.241111, 11.328056));
-
-		Set<Waypoint> geopositions = new HashSet<Waypoint>();
-		geopositions.add(new Waypoint(41.881944, -87.627778));
-		geopositions.add(new Waypoint(40.716667, -74));
-		geopositions.add(new Waypoint(50.241111, 11.328056));
-		geopositions.add(new Waypoint(72.0000, 40.0000));
-
-		WaypointPainter<JXMapViewer> painter = new WaypointPainter<JXMapViewer>();
-		Iterator<Waypoint> it = geopositions.iterator();
-		while (it.hasNext()) {
-			Waypoint wp = (Waypoint) it.next();
-			painter.getWaypoints().add(wp);
-		}
-		painter.setWaypoints(geopositions);
-		openMap.getMainMap().setOverlayPainter(painter);
-		final ArrayList<Waypoint> points = new ArrayList<>(geopositions);
-		for (int i = 0; i < points.size(); i++) {
-			JLabel hoverLabel = new JLabel(points.get(i).getPosition()
-					.toString());
-			hoverLabel.setFont(new Font(Font.DIALOG_INPUT, Font.BOLD, 14));
-			hoverLabel.setVisible(true);
-			openMap.getMainMap().add(hoverLabel);
-
-			createMouseListener(points.get(i).getPosition(), hoverLabel);
-		}
+		openMap.setAddressLocationShown(false);
+		openMap.setZoom(15);
+		geopositions = new HashSet<Waypoint>();
 		internalFrame.getContentPane().add(openMap);
 	}
 
-	private void createMouseListener(final GeoPosition currentGP,
-			final JLabel hoverLabel) {
+	private void createMouseListener(final GeoPosition currentGP, final JLabel hoverLabel) {
 		openMap.getMainMap().addMouseMotionListener(new MouseMotionListener() {
 			public void mouseMoved(MouseEvent e) {
 				JXMapViewer map = openMap.getMainMap();
@@ -402,7 +380,6 @@ public class OnlineView {
 				Rectangle rect = map.getViewportBounds();
 				Point converted_gp_pt = new Point((int) gp_pt.getX() - rect.x,
 						(int) gp_pt.getY() - rect.y);
-
 				// check if near the mouse
 				if (converted_gp_pt.distance(e.getPoint()) < 10) {
 					hoverLabel.setLocation(converted_gp_pt);
@@ -411,11 +388,34 @@ public class OnlineView {
 					hoverLabel.setVisible(false);
 				}
 			}
-
 			@Override
 			public void mouseDragged(MouseEvent e) {
 			}
 		});
+	}
+	
+	public void setCitiesToMap(City[] cities) {
+	    geopositions.add(new Waypoint(cities[0].getLati(), cities[0].getLongi()));
+	    geopositions.add(new Waypoint(cities[1].getLati(), cities[1].getLongi()));
+	    geopositions.add(new Waypoint(cities[2].getLati(), cities[2].getLongi()));
+	    
+	    WaypointPainter<JXMapViewer> painter = new WaypointPainter<JXMapViewer>();
+		Iterator<Waypoint> it = geopositions.iterator();
+		while (it.hasNext()) {
+			Waypoint wp = (Waypoint) it.next();
+			painter.getWaypoints().add(wp);
+		}
+		painter.setWaypoints(geopositions);
+		openMap.getMainMap().setOverlayPainter(painter);
+		final ArrayList<Waypoint> points = new ArrayList<>(geopositions);
+		for (int i = 0; i < points.size(); i++) {
+			JLabel hoverLabel = new JLabel("Geopositions: " + points.get(i).getPosition().toString());
+			hoverLabel.setFont(new Font(Font.DIALOG_INPUT, Font.BOLD, 14));
+			hoverLabel.setVisible(true);
+			openMap.getMainMap().add(hoverLabel);
+
+			createMouseListener(points.get(i).getPosition(), hoverLabel);
+		}
 	}
 
 	public JTextField getClassifierTextField() {

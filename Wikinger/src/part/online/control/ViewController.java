@@ -2,13 +2,10 @@ package part.online.control;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import part.online.view.OnlineView;
 import data.City;
 import data.DataDump;
 import data.Entity;
