@@ -36,7 +36,7 @@ public class ReaderAction implements ActionListener {
 			JOptionPane.ERROR_MESSAGE);
 	    } else
 		//TODO: Classifier Path löschen!!! Sonst NullPointer!!!
-		onlineView.setProcessLabel(new JLabel());
+		onlineView.setProcessLabelVisible();
 		outCities = viewController.calculate(classifierConfig, outPath);
 	    
 	    	if(outCities.length != 0) {

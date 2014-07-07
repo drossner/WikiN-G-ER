@@ -68,6 +68,7 @@ public class OnlineView {
 	private ImageIcon icon;
 	private Set<Waypoint> geopositions;
 	private JPanel mainPanel;
+	private JLabel processLabel;
 
 	/**
 	 * Creates the Frame for the Online-Part
@@ -88,6 +89,7 @@ public class OnlineView {
 		frmWikinerOnlinepart.setLocation(screen.width/2-400, screen.height/2-300);
 		frmWikinerOnlinepart.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmWikinerOnlinepart.setVisible(true);
+		frmWikinerOnlinepart.setIconImage(Toolkit.getDefaultToolkit().getImage("./icon.png"));
 		
 		JLabel lblWelcomeToWikiner = new JLabel("Welcome to Wiki-NER Online!");
 		lblWelcomeToWikiner.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -178,7 +180,7 @@ public class OnlineView {
 		gbc_separator_1.gridx = 0;
 		gbc_separator_1.gridy = 4;
 		mainPanel.add(seperator1, gbc_separator_1);
-
+		
 		JButton btnStartProcess = new JButton("Start Process");
 		btnStartProcess.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		GridBagConstraints gbc_btnStartProcess = new GridBagConstraints();
@@ -190,6 +192,16 @@ public class OnlineView {
 		// adding action to btnReadFile
 		btnStartProcess.setActionCommand("startProcess");
 		btnStartProcess.addActionListener(read);
+		
+		processLabel = new JLabel();
+		processLabel.setText("Files read and processed...");
+		processLabel.setVisible(false);
+		processLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		GridBagConstraints gbc_lblFileReadAnd = new GridBagConstraints();
+		gbc_lblFileReadAnd.insets = new Insets(0, 0, 5, 5);
+		gbc_lblFileReadAnd.gridx = 1;
+		gbc_lblFileReadAnd.gridy = 5;
+		mainPanel.add(processLabel, gbc_lblFileReadAnd);
 
 		internalFrame = new JInternalFrame("Result in OpenStreetMap");
 		internalFrame.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,
@@ -411,14 +423,8 @@ public class OnlineView {
 		}
 	}
 
-	public void setProcessLabel(JLabel processLabel) {
-	    processLabel.setText("Files read and processing...");
-	    processLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
-	    GridBagConstraints gbc_lblFileReadAnd = new GridBagConstraints();
-	    gbc_lblFileReadAnd.insets = new Insets(0, 0, 5, 5);
-	    gbc_lblFileReadAnd.gridx = 1;
-	    gbc_lblFileReadAnd.gridy = 5;
-	    mainPanel.add(processLabel, gbc_lblFileReadAnd);
+	public void setProcessLabelVisible() {
+	    processLabel.setVisible(true);
 	}
 	
 	public JTextField getClassifierTextField() {
