@@ -77,9 +77,9 @@ public class OnlineControllerTest {
 			e.printStackTrace();
 		}
 		
-		entiWeig[0] = new EntityType("ORGANIZATION", 1.0);
+		entiWeig[0] = new EntityType("ORGANIZATION", 0.0);
 		entiWeig[1] = new EntityType("PERSON", 0.0);
-		entiWeig[2] = new EntityType("LOCATION", 2.0);
+		entiWeig[2] = new EntityType("LOCATION", 1.0);
 		entiWeig[3] = new EntityType("MISC", 0.0);
 		entiWeig[4] = new EntityType("TIME", 0.0);
 		entiWeig[5] = new EntityType("MONEY", 0.0);

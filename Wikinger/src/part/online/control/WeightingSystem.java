@@ -35,8 +35,8 @@ public class WeightingSystem {
 		int step = 15;
 
 		for (int i = 0; i < entitiesWeighting.length; i++) {
-			if (maxWeight < entitiesWeighting[i].getWeighting())
-				maxWeight = entitiesWeighting[i].getWeighting();
+			if (maxWeight < Math.abs(entitiesWeighting[i].getWeighting()))
+				maxWeight = Math.abs(entitiesWeighting[i].getWeighting());
 		}
 
 		for (int i = 0; i < entitiesWeighting.length; i++) {

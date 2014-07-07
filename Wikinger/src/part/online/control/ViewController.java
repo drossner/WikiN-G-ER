@@ -33,13 +33,13 @@ public class ViewController {
 		EntityType[] entiWeig = new EntityType[8];
 
 		entiWeig[0] = new EntityType("ORGANIZATION", weightings[0]);
-		entiWeig[1] = new EntityType("PERSON", 0.0);
-		entiWeig[2] = new EntityType("LOCATION", 2.0);
-		entiWeig[3] = new EntityType("MISC", 0.0);
-		entiWeig[4] = new EntityType("TIME", 0.0);
-		entiWeig[5] = new EntityType("MONEY", 0.0);
-		entiWeig[6] = new EntityType("PERCENT", 0.0);
-		entiWeig[7] = new EntityType("DATE", 0.0);
+		entiWeig[1] = new EntityType("PERSON", weightings[1]);
+		entiWeig[2] = new EntityType("LOCATION", weightings[2]);
+		entiWeig[3] = new EntityType("MISC", weightings[3]);
+		entiWeig[4] = new EntityType("TIME", weightings[4]);
+		entiWeig[5] = new EntityType("MONEY", weightings[5]);
+		entiWeig[6] = new EntityType("PERCENT", weightings[6]);
+		entiWeig[7] = new EntityType("DATE", weightings[7]);
 		// WeightingSystem erzeugen
 		WeightingSystem ws = new WeightingSystem(entiWeig);
 
@@ -65,7 +65,10 @@ public class ViewController {
 		
 		//Result anlegen und zurückliefern
 		City[] result = ws.calculateCity(extractedEntities, "./database");
-		
+		System.out.println(result.length);
+		for(int i = 0 ; i < 5 && i < result.length; i++){
+			System.out.println(result[i].getName()+"\t"+result[i].getScore());
+		}
 		return result;
 		
 	}

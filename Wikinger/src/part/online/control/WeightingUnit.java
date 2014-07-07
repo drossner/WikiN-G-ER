@@ -67,7 +67,9 @@ public class WeightingUnit extends Thread {
 			temp = it.next();
 			if(Double.isInfinite(temp.getScore() / temp.getCounter())) System.out.println(temp.getScore() + " , " + temp.getCounter());
 			temp.setScore(temp.getScore() / temp.getCounter());
-			resultCities.add(temp);
+			synchronized(resultCities){
+				resultCities.add(temp);
+			}
 		}
 		System.out.println(Thread.class.getName() + " ist fertig mit rechnen !");
 	}
