@@ -373,6 +373,30 @@ public class OnlineView {
 		geopositions = new HashSet<Waypoint>();
 		internalFrame.getContentPane().add(openMap);
 	}
+	
+	public void setCitiesToMap(City[] cities) {
+	    geopositions.add(new Waypoint(cities[0].getLati(), cities[0].getLongi()));
+	    geopositions.add(new Waypoint(cities[1].getLati(), cities[1].getLongi()));
+	    geopositions.add(new Waypoint(cities[2].getLati(), cities[2].getLongi()));
+	    
+	    WaypointPainter<JXMapViewer> painter = new WaypointPainter<JXMapViewer>();
+		Iterator<Waypoint> it = geopositions.iterator();
+		while (it.hasNext()) {
+			Waypoint wp = (Waypoint) it.next();
+			painter.getWaypoints().add(wp);
+		}
+		painter.setWaypoints(geopositions);
+		openMap.getMainMap().setOverlayPainter(painter);
+		final ArrayList<Waypoint> points = new ArrayList<>(geopositions);
+		for (int i = 0; i < points.size(); i++) {
+			JLabel hoverLabel = new JLabel("Geopositions: " + points.get(i).getPosition().toString());
+			hoverLabel.setFont(new Font(Font.DIALOG_INPUT, Font.BOLD, 14));
+			hoverLabel.setVisible(true);
+			openMap.getMainMap().add(hoverLabel);
+
+			createMouseListener(points.get(i).getPosition(), hoverLabel);
+		}
+	}
 
 	private void createMouseListener(final GeoPosition currentGP, final JLabel hoverLabel) {
 		openMap.getMainMap().addMouseMotionListener(new MouseMotionListener() {
@@ -397,30 +421,6 @@ public class OnlineView {
 			public void mouseDragged(MouseEvent e) {
 			}
 		});
-	}
-	
-	public void setCitiesToMap(City[] cities) {
-	    geopositions.add(new Waypoint(cities[0].getLati(), cities[0].getLongi()));
-	    geopositions.add(new Waypoint(cities[1].getLati(), cities[1].getLongi()));
-	    geopositions.add(new Waypoint(cities[2].getLati(), cities[2].getLongi()));
-	    
-	    WaypointPainter<JXMapViewer> painter = new WaypointPainter<JXMapViewer>();
-		Iterator<Waypoint> it = geopositions.iterator();
-		while (it.hasNext()) {
-			Waypoint wp = (Waypoint) it.next();
-			painter.getWaypoints().add(wp);
-		}
-		painter.setWaypoints(geopositions);
-		openMap.getMainMap().setOverlayPainter(painter);
-		final ArrayList<Waypoint> points = new ArrayList<>(geopositions);
-		for (int i = 0; i < points.size(); i++) {
-			JLabel hoverLabel = new JLabel("Geopositions: " + points.get(i).getPosition().toString());
-			hoverLabel.setFont(new Font(Font.DIALOG_INPUT, Font.BOLD, 14));
-			hoverLabel.setVisible(true);
-			openMap.getMainMap().add(hoverLabel);
-
-			createMouseListener(points.get(i).getPosition(), hoverLabel);
-		}
 	}
 
 	public void setProcessLabelVisible() {
