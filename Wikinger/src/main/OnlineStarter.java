@@ -51,7 +51,6 @@ public class OnlineStarter {
 		wait.add(label);
 		wait.setIconImage(Toolkit.getDefaultToolkit().getImage("./icon.png"));
 		
-		
 		wait.setVisible(true);
 	}
 	
