@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import data.City;
@@ -35,6 +36,7 @@ public class ReaderAction implements ActionListener {
 			JOptionPane.ERROR_MESSAGE);
 	    } else
 		//TODO: Classifier Path löschen!!! Sonst NullPointer!!!
+		onlineView.setProcessLabel(new JLabel());
 		outCities = viewController.calculate(classifierConfig, outPath);
 	    
 	    	if(outCities.length != 0) {

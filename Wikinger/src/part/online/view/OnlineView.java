@@ -67,6 +67,7 @@ public class OnlineView {
 	private JSpinner moneySpinner;
 	private ImageIcon icon;
 	private Set<Waypoint> geopositions;
+	private JPanel mainPanel;
 
 	/**
 	 * Creates the Frame for the Online-Part
@@ -97,7 +98,7 @@ public class OnlineView {
 		frmWikinerOnlinepart.getContentPane().add(tabbedPane,
 				BorderLayout.CENTER);
 
-		JPanel mainPanel = new JPanel();
+		mainPanel = new JPanel();
 		tabbedPane.addTab("General", null, mainPanel, null);
 		GridBagLayout gbl_mainPanel = new GridBagLayout();
 		gbl_mainPanel.columnWidths = new int[] { 0, 0, 0, 0 };
@@ -177,14 +178,6 @@ public class OnlineView {
 		gbc_separator_1.gridx = 0;
 		gbc_separator_1.gridy = 4;
 		mainPanel.add(seperator1, gbc_separator_1);
-
-		JLabel lblFileReadAnd = new JLabel("File read and processing...");
-		lblFileReadAnd.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		GridBagConstraints gbc_lblFileReadAnd = new GridBagConstraints();
-		gbc_lblFileReadAnd.insets = new Insets(0, 0, 5, 5);
-		gbc_lblFileReadAnd.gridx = 1;
-		gbc_lblFileReadAnd.gridy = 5;
-		mainPanel.add(lblFileReadAnd, gbc_lblFileReadAnd);
 
 		JButton btnStartProcess = new JButton("Start Process");
 		btnStartProcess.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -418,6 +411,16 @@ public class OnlineView {
 		}
 	}
 
+	public void setProcessLabel(JLabel processLabel) {
+	    processLabel.setText("Files read and processing...");
+	    processLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
+	    GridBagConstraints gbc_lblFileReadAnd = new GridBagConstraints();
+	    gbc_lblFileReadAnd.insets = new Insets(0, 0, 5, 5);
+	    gbc_lblFileReadAnd.gridx = 1;
+	    gbc_lblFileReadAnd.gridy = 5;
+	    mainPanel.add(processLabel, gbc_lblFileReadAnd);
+	}
+	
 	public JTextField getClassifierTextField() {
 		return classifierTextField;
 	}
