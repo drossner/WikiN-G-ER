@@ -395,9 +395,11 @@ public class OnlineView {
 	}
 	
 	public void setCitiesToMap(City[] cities) {
-	    geopositions.add(new Waypoint(cities[0].getLati(), cities[0].getLongi()));
-	    geopositions.add(new Waypoint(cities[1].getLati(), cities[1].getLongi()));
-	    geopositions.add(new Waypoint(cities[2].getLati(), cities[2].getLongi()));
+		for (int i = 0; i < cities.length; i++) {
+			geopositions.add(new Waypoint(cities[i].getLati(), cities[i].getLongi()));
+		}
+	    
+	   
 	    
 	    WaypointPainter<JXMapViewer> painter = new WaypointPainter<JXMapViewer>();
 		Iterator<Waypoint> it = geopositions.iterator();

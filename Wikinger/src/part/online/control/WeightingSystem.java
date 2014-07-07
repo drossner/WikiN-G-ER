@@ -63,17 +63,17 @@ public class WeightingSystem {
 		System.out.println("Pack: "+(System.currentTimeMillis()-st));
 		//Collections.sort(resultCities); ersetzt durch ausgeben der top 10
 		
-		return top10(resultCities);
+		return top100(resultCities);
 	}
 
-	private City[] top10(ArrayList<City> resultCities) {
+	private City[] top100(ArrayList<City> resultCities) {
 		//testZeit
 		long start = System.currentTimeMillis();
 		City[] rc;
 		
 		int collectionSize = resultCities.size();
-		if(collectionSize >= 10){
-			rc = new City[10];
+		if(collectionSize >= 100){
+			rc = new City[100];
 		} else {
 			rc = new City[collectionSize];
 		}
@@ -92,6 +92,22 @@ public class WeightingSystem {
 		}
 		
 		System.out.println("Top 10: "+(System.currentTimeMillis() - start));
+		//testforschleifefuckmylife
+		/*
+		double lonSum = 0, latSum = 0;
+		double scoreSum = 0;
+		int sum = rc.length;
+		for (int i = 0; i < rc.length; i++) {
+			lonSum += rc[i].getLongi()*rc[i].getScore();
+			latSum += rc[i].getLati()*rc[i].getScore();
+			scoreSum += rc[i].getScore();
+		}
+		
+		rc = new City[1];
+		rc[0] = new City("haha", latSum/scoreSum, lonSum/scoreSum);
+		*/
+		
+		
 		return rc;
 	}
 
