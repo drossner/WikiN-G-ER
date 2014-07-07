@@ -106,7 +106,7 @@ public class OfflineController {
 		WikiNerGraphConnector connector;
 		String fileDest;
 		
-		connector = new WikiNerGraphConnector();
+		connector = WikiNerGraphConnector.getInstance(database);
 		
 		fileDest = directory + "CrawlerOutPut";
 		crawlerOutPutFileCount = new File(directory).listFiles().length; 
