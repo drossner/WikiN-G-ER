@@ -3,9 +3,10 @@ package part.online.view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import data.City;
 import part.online.control.ViewController;
 
 public class ReaderAction implements ActionListener {
@@ -13,6 +14,7 @@ public class ReaderAction implements ActionListener {
     private OnlineView onlineView;
     private ViewController viewController;
     private double[] classifierConfig;
+    private City[] outCities;
 
     public ReaderAction(OnlineView onlineView, ViewController viewController) {
 	this.onlineView = onlineView;
@@ -33,8 +35,14 @@ public class ReaderAction implements ActionListener {
 			JOptionPane.ERROR_MESSAGE);
 	    } else
 		//TODO: Classifier Path löschen!!! Sonst NullPointer!!!
-		viewController.calculate(classifierConfig, outPath);
-		System.out.println("Null");
+		outCities = viewController.calculate(classifierConfig, outPath);
+	    
+	    	if(outCities.length != 0) {
+	    	    onlineView.setCitiesToMap(outCities);
+	    	}else {
+	    	    JOptionPane.showMessageDialog(new JFrame(), 
+	    		    "No Cities found!", "WikiNer Error", JOptionPane.ERROR_MESSAGE);
+	    	}
 	}
     }
 
