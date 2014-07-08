@@ -390,7 +390,7 @@ public class OnlineView {
 	    openMap.getMainMap().setOverlayPainter(painter);
 	    final ArrayList<Waypoint> points = new ArrayList<>(geopositions);
 	    for (int i = 0; i < points.size(); i++) {
-		JLabel hoverLabel = new JLabel("Geopositions: " + points.get(i).getPosition().toString());
+		JLabel hoverLabel = new JLabel("Rank: " + i + " Geopositions: " + points.get(i).getPosition().toString());
 		hoverLabel.setFont(new Font(Font.DIALOG_INPUT, Font.BOLD, 14));
 		hoverLabel.setVisible(true);
 		openMap.getMainMap().add(hoverLabel);
