@@ -41,6 +41,8 @@ public class ReaderAction implements ActionListener {
 	    
 	    	if(outCities.length != 0) {
 	    	    onlineView.setCitiesToMap(outCities);
+	    	    int count = (Integer) onlineView.getResultSizeSpinner().getValue();
+	    	    onlineView.setErgebnisCount(count);
 	    	}else {
 	    	    JOptionPane.showMessageDialog(new JFrame(), 
 	    		    "No Cities found!", "WikiNer Error", JOptionPane.ERROR_MESSAGE);

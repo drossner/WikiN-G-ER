@@ -69,6 +69,8 @@ public class OnlineView {
 	private Set<Waypoint> geopositions;
 	private JPanel mainPanel;
 	private JLabel processLabel;
+	private JSpinner resultSizeSpinner;
+	private int ergebnisCount;
 
 	/**
 	 * Creates the Frame for the Online-Part
@@ -368,7 +370,7 @@ public class OnlineView {
 		gbc_lblResultSize.gridy = 11;
 		panel.add(lblResultSize, gbc_lblResultSize);
 		
-		JSpinner resultSizeSpinner = new JSpinner();
+		resultSizeSpinner = new JSpinner();
 		resultSizeSpinner.setModel(new SpinnerNumberModel(new Integer(3), new Integer(1), null, new Integer(1)));
 		GridBagConstraints gbc_resultSizeSpinner = new GridBagConstraints();
 		gbc_resultSizeSpinner.fill = GridBagConstraints.HORIZONTAL;
@@ -379,6 +381,10 @@ public class OnlineView {
 		this.setMap();
 
 		internalFrame.setVisible(true);
+	}
+
+	public JSpinner getResultSizeSpinner() {
+		return resultSizeSpinner;
 	}
 
 	private void setMap() {
@@ -405,7 +411,7 @@ public class OnlineView {
 	    painter.setWaypoints(geopositions);
 	    openMap.getMainMap().setOverlayPainter(painter);
 	    final ArrayList<Waypoint> points = new ArrayList<>(geopositions);
-	    for (int i = 0; i < points.size(); i++) {
+	    for (int i = 0; i < ergebnisCount && i < points.size(); i++) {
 		JLabel hoverLabel = new JLabel("Rank: " + i + " Geopositions: " + points.get(i).getPosition().toString());
 		hoverLabel.setFont(new Font(Font.DIALOG_INPUT, Font.BOLD, 14));
 		hoverLabel.setVisible(true);
@@ -521,5 +527,9 @@ public class OnlineView {
 
 	public void setMoneySpinner(JSpinner moneySpinner) {
 	    this.moneySpinner = moneySpinner;
+	}
+
+	public void setErgebnisCount(int count) {
+		this.ergebnisCount = count;
 	}
 }
