@@ -36,13 +36,15 @@ public class ReaderAction implements ActionListener {
 			JOptionPane.ERROR_MESSAGE);
 	    } else
 		//TODO: Classifier Path löschen!!! Sonst NullPointer!!!
-		onlineView.setProcessLabelVisible();
+		onlineView.setProcessLabelText();
 		outCities = viewController.calculate(classifierConfig, outPath);
 	    
 	    	if(outCities.length != 0) {
-	    	    onlineView.setCitiesToMap(outCities);
-	    	    int count = (Integer) onlineView.getResultSizeSpinner().getValue();
+	    		int count = (Integer) onlineView.getResultSizeSpinner().getValue();
+	    		System.out.println("Count: " + count);
 	    	    onlineView.setErgebnisCount(count);
+	    	    onlineView.setCitiesToMap(outCities);
+	    	    
 	    	}else {
 	    	    JOptionPane.showMessageDialog(new JFrame(), 
 	    		    "No Cities found!", "WikiNer Error", JOptionPane.ERROR_MESSAGE);

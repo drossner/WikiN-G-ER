@@ -23,6 +23,7 @@ import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -196,8 +197,8 @@ public class OnlineView {
 		btnStartProcess.addActionListener(read);
 		
 		processLabel = new JLabel();
-		processLabel.setText("Files read and processed...");
-		processLabel.setVisible(false);
+		processLabel.setText("The first run may take several minutes!");
+		processLabel.setVisible(true);
 		processLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		GridBagConstraints gbc_lblFileReadAnd = new GridBagConstraints();
 		gbc_lblFileReadAnd.insets = new Insets(0, 0, 5, 5);
@@ -227,7 +228,7 @@ public class OnlineView {
 		panel.setLayout(gbl_panel);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Mario\\Dropbox\\Projektordner\\Semester 6\\Wikiner\\StanfordNLP.jpg"));
+		lblNewLabel.setIcon(new ImageIcon("./StanfordNLP.jpg"));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridx = 6;
@@ -392,26 +393,29 @@ public class OnlineView {
 		openMap.setDefaultProvider(DefaultProviders.OpenStreetMaps);
 		openMap.setAddressLocationShown(false);
 		openMap.setZoom(15);
-		geopositions = new HashSet<Waypoint>();
+		geopositions = new LinkedHashSet<Waypoint>();
 		internalFrame.getContentPane().add(openMap);
 	}
 	
 	public void setCitiesToMap(City[] cities) {
-	    for (int i = 0; i < cities.length; i++) {
+		geopositions.clear();
+		openMap.setZoom(15);
+	    for (int i = 0; i < ergebnisCount && i < cities.length; i++) {
 		geopositions.add(new Waypoint(cities[i].getLati(), cities[i].getLongi()));
 	    }
-		
+	    
 	    WaypointPainter<JXMapViewer> painter = new WaypointPainter<JXMapViewer>();
-	    Iterator<Waypoint> it = geopositions.iterator();
-	    while (it.hasNext()) {
-		Waypoint wp = (Waypoint) it.next();
-		painter.getWaypoints().add(wp);
-	    }
+//	    Iterator<Waypoint> it = geopositions.iterator();
+//	    while (it.hasNext()) {
+//		Waypoint wp = it.next();
+//		painter.getWaypoints().add(wp);
+//	    }
 	  
 	    painter.setWaypoints(geopositions);
 	    openMap.getMainMap().setOverlayPainter(painter);
 	    final ArrayList<Waypoint> points = new ArrayList<>(geopositions);
-	    for (int i = 0; i < ergebnisCount && i < points.size(); i++) {
+	    
+	    for (int i = 0; i < points.size(); i++) {
 		JLabel hoverLabel = new JLabel("Rank: " + i + " Geopositions: " + points.get(i).getPosition().toString());
 		hoverLabel.setFont(new Font(Font.DIALOG_INPUT, Font.BOLD, 14));
 		hoverLabel.setVisible(true);
@@ -445,8 +449,8 @@ public class OnlineView {
 		});
 	}
 
-	public void setProcessLabelVisible() {
-	    processLabel.setVisible(true);
+	public void setProcessLabelText() {
+	    processLabel.setText("Files read and processed");
 	}
 	
 	public JTextField getClassifierTextField() {
