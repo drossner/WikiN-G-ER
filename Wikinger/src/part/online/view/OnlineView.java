@@ -92,7 +92,7 @@ public class OnlineView {
 		frmWikinerOnlinepart.setLocation(screen.width/2-400, screen.height/2-300);
 		frmWikinerOnlinepart.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmWikinerOnlinepart.setVisible(true);
-		frmWikinerOnlinepart.setIconImage(Toolkit.getDefaultToolkit().getImage("./icon.png"));
+		frmWikinerOnlinepart.setIconImage(Toolkit.getDefaultToolkit().getImage("./Icons/icon.png"));
 		
 		JLabel lblWelcomeToWikiner = new JLabel("Welcome to Wiki-NER Online!");
 		lblWelcomeToWikiner.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -228,7 +228,7 @@ public class OnlineView {
 		panel.setLayout(gbl_panel);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("./StanfordNLP.jpg"));
+		lblNewLabel.setIcon(new ImageIcon("./Icons/StanfordNLP.jpg"));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridx = 6;

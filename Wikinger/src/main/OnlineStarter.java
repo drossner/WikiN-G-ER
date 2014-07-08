@@ -45,11 +45,11 @@ public class OnlineStarter {
 		wait.setLocationRelativeTo(null);
 		wait.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
-		ImageIcon icon = new ImageIcon("./splash.png");
+		ImageIcon icon = new ImageIcon("./Icons/splash.png");
 		JLabel label = new JLabel(icon);
 		label.setOpaque(false);
 		wait.add(label);
-		wait.setIconImage(Toolkit.getDefaultToolkit().getImage("./icon.png"));
+		wait.setIconImage(Toolkit.getDefaultToolkit().getImage("./Icons/icon.png"));
 		
 		wait.setVisible(true);
 	}
