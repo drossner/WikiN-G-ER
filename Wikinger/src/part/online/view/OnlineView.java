@@ -219,9 +219,9 @@ public class OnlineView {
 		tabbedPane.addTab("Config", null, panel, null);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 		
 		JLabel lblNewLabel = new JLabel("");
@@ -241,7 +241,7 @@ public class OnlineView {
 		panel.add(lblOrganizaion, gbc_lblOrganizaion);
 		
 		organizationSpinner = new JSpinner();
-		organizationSpinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
+		organizationSpinner.setModel(new SpinnerNumberModel(new Double(1), null, null, new Double(1)));
 		GridBagConstraints gbc_organizationSpinner = new GridBagConstraints();
 		gbc_organizationSpinner.fill = GridBagConstraints.HORIZONTAL;
 		gbc_organizationSpinner.insets = new Insets(0, 0, 5, 5);
@@ -273,7 +273,7 @@ public class OnlineView {
 		panel.add(lblLocation, gbc_lblLocation);
 		
 		locationSpinner = new JSpinner();
-		locationSpinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
+		locationSpinner.setModel(new SpinnerNumberModel(new Double(2), null, null, new Double(1)));
 		GridBagConstraints gbc_locationSpinner = new GridBagConstraints();
 		gbc_locationSpinner.fill = GridBagConstraints.HORIZONTAL;
 		gbc_locationSpinner.insets = new Insets(0, 0, 5, 5);
@@ -347,7 +347,7 @@ public class OnlineView {
 		
 		JLabel lblDate = new JLabel("Date");
 		GridBagConstraints gbc_lblDate = new GridBagConstraints();
-		gbc_lblDate.insets = new Insets(0, 0, 0, 5);
+		gbc_lblDate.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDate.gridx = 4;
 		gbc_lblDate.gridy = 8;
 		panel.add(lblDate, gbc_lblDate);
@@ -356,10 +356,26 @@ public class OnlineView {
 		dateSpinner.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
 		GridBagConstraints gbc_dateSpinner = new GridBagConstraints();
 		gbc_dateSpinner.fill = GridBagConstraints.HORIZONTAL;
-		gbc_dateSpinner.insets = new Insets(0, 0, 0, 5);
+		gbc_dateSpinner.insets = new Insets(0, 0, 5, 5);
 		gbc_dateSpinner.gridx = 6;
 		gbc_dateSpinner.gridy = 8;
 		panel.add(dateSpinner, gbc_dateSpinner);
+		
+		JLabel lblResultSize = new JLabel("Result Size");
+		GridBagConstraints gbc_lblResultSize = new GridBagConstraints();
+		gbc_lblResultSize.insets = new Insets(0, 0, 0, 5);
+		gbc_lblResultSize.gridx = 4;
+		gbc_lblResultSize.gridy = 11;
+		panel.add(lblResultSize, gbc_lblResultSize);
+		
+		JSpinner resultSizeSpinner = new JSpinner();
+		resultSizeSpinner.setModel(new SpinnerNumberModel(new Integer(3), new Integer(1), null, new Integer(1)));
+		GridBagConstraints gbc_resultSizeSpinner = new GridBagConstraints();
+		gbc_resultSizeSpinner.fill = GridBagConstraints.HORIZONTAL;
+		gbc_resultSizeSpinner.insets = new Insets(0, 0, 0, 5);
+		gbc_resultSizeSpinner.gridx = 6;
+		gbc_resultSizeSpinner.gridy = 11;
+		panel.add(resultSizeSpinner, gbc_resultSizeSpinner);
 		this.setMap();
 
 		internalFrame.setVisible(true);
