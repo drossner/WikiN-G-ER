@@ -22,6 +22,7 @@ import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -68,6 +69,8 @@ public class OnlineView {
 	private JPanel mainPanel;
 	private JLabel processLabel;
 	private ArrayList<JLabel> labels = new ArrayList<JLabel>();
+	private JSpinner resultSizeSpinner;
+	private int ergebnisCount;
 
 	/**
 	 * Creates the Frame for the Online-Part
@@ -88,7 +91,7 @@ public class OnlineView {
 		frmWikinerOnlinepart.setLocation(screen.width/2-400, screen.height/2-300);
 		frmWikinerOnlinepart.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmWikinerOnlinepart.setVisible(true);
-		frmWikinerOnlinepart.setIconImage(Toolkit.getDefaultToolkit().getImage("./icon.png"));
+		frmWikinerOnlinepart.setIconImage(Toolkit.getDefaultToolkit().getImage("./Icons/icon.png"));
 		
 		JLabel lblWelcomeToWikiner = new JLabel("Welcome to Wiki-NER Online!");
 		lblWelcomeToWikiner.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -193,8 +196,8 @@ public class OnlineView {
 		btnStartProcess.addActionListener(read);
 		
 		processLabel = new JLabel();
-		processLabel.setText("Files read and processed...");
-		processLabel.setVisible(false);
+		processLabel.setText("The first run may take several minutes!");
+		processLabel.setVisible(true);
 		processLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		GridBagConstraints gbc_lblFileReadAnd = new GridBagConstraints();
 		gbc_lblFileReadAnd.insets = new Insets(0, 0, 5, 5);
@@ -224,7 +227,7 @@ public class OnlineView {
 		panel.setLayout(gbl_panel);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Mario\\Dropbox\\Projektordner\\Semester 6\\Wikiner\\StanfordNLP.jpg"));
+		lblNewLabel.setIcon(new ImageIcon("./Icons/StanfordNLP.jpg"));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridx = 6;
@@ -367,7 +370,7 @@ public class OnlineView {
 		gbc_lblResultSize.gridy = 11;
 		panel.add(lblResultSize, gbc_lblResultSize);
 		
-		JSpinner resultSizeSpinner = new JSpinner();
+		resultSizeSpinner = new JSpinner();
 		resultSizeSpinner.setModel(new SpinnerNumberModel(new Integer(3), new Integer(1), null, new Integer(1)));
 		GridBagConstraints gbc_resultSizeSpinner = new GridBagConstraints();
 		gbc_resultSizeSpinner.fill = GridBagConstraints.HORIZONTAL;
@@ -380,26 +383,32 @@ public class OnlineView {
 		internalFrame.setVisible(true);
 	}
 
+	public JSpinner getResultSizeSpinner() {
+		return resultSizeSpinner;
+	}
+
 	private void setMap() {
 		openMap = new JXMapKit();
 		openMap.setDefaultProvider(DefaultProviders.OpenStreetMaps);
 		openMap.setAddressLocationShown(false);
 		openMap.setZoom(15);
-		geopositions = new HashSet<Waypoint>();
+		geopositions = new LinkedHashSet<Waypoint>();
 		internalFrame.getContentPane().add(openMap);
 	}
 	
 	public void setCitiesToMap(City[] cities) {
-	    for (int i = 0; i < cities.length; i++) {
+		geopositions.clear();
+		openMap.setZoom(15);
+	    for (int i = 0; i < ergebnisCount && i < cities.length; i++) {
 		geopositions.add(new Waypoint(cities[i].getLati(), cities[i].getLongi()));
 	    }
-		
+	    
 	    WaypointPainter<JXMapViewer> painter = new WaypointPainter<JXMapViewer>();
-	    Iterator<Waypoint> it = geopositions.iterator();
-	    while (it.hasNext()) {
-		Waypoint wp = (Waypoint) it.next();
-		painter.getWaypoints().add(wp);
-	    }
+//	    Iterator<Waypoint> it = geopositions.iterator();
+//	    while (it.hasNext()) {
+//		Waypoint wp = it.next();
+//		painter.getWaypoints().add(wp);
+//	    }
 	  
 	    painter.setWaypoints(geopositions);
 	    openMap.getMainMap().setOverlayPainter(painter);
@@ -445,8 +454,8 @@ public class OnlineView {
 		});
 	}
 
-	public void setProcessLabelVisible() {
-	    processLabel.setVisible(true);
+	public void setProcessLabelText() {
+	    processLabel.setText("Files read and processed");
 	}
 	
 	public JTextField getClassifierTextField() {
@@ -527,5 +536,9 @@ public class OnlineView {
 
 	public void setMoneySpinner(JSpinner moneySpinner) {
 	    this.moneySpinner = moneySpinner;
+	}
+
+	public void setErgebnisCount(int count) {
+		this.ergebnisCount = count;
 	}
 }
