@@ -6,7 +6,6 @@ import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -65,10 +64,10 @@ public class OnlineView {
 	private JSpinner percentSpinner;
 	private JSpinner dateSpinner;
 	private JSpinner moneySpinner;
-	private ImageIcon icon;
 	private Set<Waypoint> geopositions;
 	private JPanel mainPanel;
 	private JLabel processLabel;
+	private ArrayList<JLabel> labels = new ArrayList<JLabel>();
 
 	/**
 	 * Creates the Frame for the Online-Part
@@ -405,10 +404,17 @@ public class OnlineView {
 	    painter.setWaypoints(geopositions);
 	    openMap.getMainMap().setOverlayPainter(painter);
 	    final ArrayList<Waypoint> points = new ArrayList<>(geopositions);
+	    
+	    for (int i = 0; i < labels.size(); i++) {
+		openMap.getMainMap().remove(labels.get(i));
+		labels.remove(i);
+	    }
+	    
 	    for (int i = 0; i < points.size(); i++) {
 		JLabel hoverLabel = new JLabel("Rank: " + i + " Geopositions: " + points.get(i).getPosition().toString());
 		hoverLabel.setFont(new Font(Font.DIALOG_INPUT, Font.BOLD, 14));
 		hoverLabel.setVisible(true);
+		labels.add(hoverLabel);
 		openMap.getMainMap().add(hoverLabel);
 		createMouseListener(points.get(i).getPosition(), hoverLabel);
 	    }
