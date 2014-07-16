@@ -108,22 +108,13 @@ public class OfflineGui extends JFrame {
 		JTextPane textPane = new JTextPane();
 
 		startButton.setActionCommand("start");
-		chooseClassifier.setActionCommand("browse");
-		chooseClassifier.addActionListener(new FileOpener(textfields[DBInformations.CLASSIFIER])); // TODO:
-																					// Package
-																					// des
-																					// FileOpeners
-																					// ändern
-																					// ->
-																					// Momentan
-																					// in
-																					// Online
-																					// Vierqw
-																					// HIER
-																					// Offline!
-																					// ihr
-																					// penner
-
+		chooseClassifier.setActionCommand("readclassifier");
+		chooseClassifier.addActionListener(new FileOpener(textfields[DBInformations.CLASSIFIER])); 
+		chooseClassifier.setEnabled(false);
+		textfields[DBInformations.CLASSIFIER].setText("Standard Classifier verwendet");
+		textfields[DBInformations.CLASSIFIER].setEnabled(false);
+		
+		
 		scrollPane.setViewportView(textPane);
 
 		lblWelcomeToWiki.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -414,11 +405,13 @@ public class OfflineGui extends JFrame {
 		for (int i = 0; i < textfields.length; i++) {
 			textfields[i].setEditable(true);
 		}
-		chooseClassifier.setEnabled(true);
+//		chooseClassifier.setEnabled(true);
+		textfields[DBInformations.CLASSIFIER].setEnabled(false);
 		startButton.setText("Start Process");
 		startButton.setBackground(null);
 		startButton.setForeground(null);
 		startButton.setActionCommand("start");
+		System.exit(0);
 	}
 	
 	public String[] getInformations(){

@@ -78,13 +78,13 @@ public class OfflineController {
 		int rest = textCount%threads;
 		
 		for (int i = 0; i < threads-1; i++) {
-			CrawlerUnit temp = new CrawlerUnit(textIDs, counter, counter+step-1, connectors[i], ner, i, new FileOutput(true, "CrawlerOutPut" + i +".txt"), status);
+			CrawlerUnit temp = new CrawlerUnit(textIDs, counter, counter+step-1, connectors[i], ner, i, new FileOutput(true, "./temp/CrawlerOutPut" + i +".txt"), status);
 			threadList[i] = new Thread(temp);
 			threadList[i].start();
 			counter += step;	
 		}
 		
-		CrawlerUnit temp = new CrawlerUnit(textIDs, counter, counter+step-1+rest, connectors[threads-1], ner, threads-1, new FileOutput(true, "CrawlerOutPut" + (threads-1) +".txt"), status);
+		CrawlerUnit temp = new CrawlerUnit(textIDs, counter, counter+step-1+rest, connectors[threads-1], ner, threads-1, new FileOutput(true, "./temp/CrawlerOutPut" + (threads-1) +".txt"), status);
 		threadList[threads-1] = new Thread(temp);
 		threadList[threads-1].start();
 			
